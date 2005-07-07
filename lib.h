@@ -1,7 +1,7 @@
 #pragma once
 
 #ifdef _DEBUG
-#pragma comment(lib , "plug_defs_d")
+#pragma comment(lib , "konnekt_api_d")
 #else
-#pragma comment(lib , "plug_defs")
+#pragma comment(lib , "konnekt_api")
 #endif
