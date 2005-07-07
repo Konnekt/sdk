@@ -2,8 +2,9 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="7.10"
-	Name="_plug_defs"
+	Name="_KonnektAPI"
 	ProjectGUID="{5646B5BC-8FB1-4CCD-80D7-E5BD27CD9C2E}"
+	RootNamespace="_KonnektAPI"
 	Keyword="Win32Proj">
 	<Platforms>
 		<Platform
@@ -12,13 +13,14 @@
 	<Configurations>
 		<Configuration
 			Name="Debug|Win32"
-			OutputDirectory="../../__libs/"
-			IntermediateDirectory="../../_temp/plug_defs/debug/"
+			OutputDirectory="."
+			IntermediateDirectory="../../_temp/$(ProjectName)/$(ConfigurationName)/"
 			ConfigurationType="4"
 			CharacterSet="2">
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
+				AdditionalIncludeDirectories="..\"
 				PreprocessorDefinitions="WIN32;_DEBUG;_LIB"
 				MinimalRebuild="TRUE"
 				BasicRuntimeChecks="3"
@@ -31,7 +33,7 @@
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLibrarianTool"
-				OutputFile="$(OutDir)/plug_defs_d.lib"
+				OutputFile="$(OutDir)/konnekt_api_d.lib"
 				IgnoreAllDefaultLibraries="TRUE"/>
 			<Tool
 				Name="VCMIDLTool"/>
@@ -54,8 +56,8 @@
 		</Configuration>
 		<Configuration
 			Name="Release|Win32"
-			OutputDirectory="../../__libs/"
-			IntermediateDirectory="../../_temp/plug_defs/release/"
+			OutputDirectory="."
+			IntermediateDirectory="../../_temp/$(ProjectName)/$(ConfigurationName)/"
 			ConfigurationType="4"
 			CharacterSet="2">
 			<Tool
@@ -63,6 +65,7 @@
 				Optimization="2"
 				InlineFunctionExpansion="1"
 				OmitFramePointers="TRUE"
+				AdditionalIncludeDirectories="..\"
 				PreprocessorDefinitions="WIN32;NDEBUG;_LIB"
 				StringPooling="TRUE"
 				RuntimeLibrary="2"
@@ -74,7 +77,7 @@
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLibrarianTool"
-				OutputFile="$(OutDir)/plug_defs.lib"/>
+				OutputFile="$(OutDir)/konnekt_api.lib"/>
 			<Tool
 				Name="VCMIDLTool"/>
 			<Tool
@@ -102,7 +105,7 @@
 			Name="Source Files"
 			Filter="cpp;c;cxx;def;odl;idl;hpj;bat;asm">
 			<File
-				RelativePath="..\plug_defs.cpp">
+				RelativePath=".\konnekt_defs.cpp">
 			</File>
 		</Filter>
 		<Filter
