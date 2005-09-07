@@ -5,7 +5,6 @@
 #include "core_tables.h"
 
 
-
 /**Klasa s³u¿¹ca do komunikowania siê z "rdzeniem" systemu wtyczek.
 
 Adres tej struktury (zaalokowanej w rdzeniu) przekazywany jest
@@ -87,7 +86,7 @@ public:
 	\return wartoœæ (lub adres do wartoœci jeœli typ != DT_CT_INT)
 	\attention W #DTMSG mo¿na zapisywaæ tylko w okreœlonych okolicznoœciach!
 	*/
-	virtual bool __stdcall DTget(tTable db , unsigned int row , unsigned int col , Tables::Value * value)=0;
+	virtual bool __stdcall DTget(tTable db , unsigned int row , unsigned int col , Stamina::DT::OldValue * value)=0;
 	/** Ustawia wartosc wiersza z tablicy danych z konwersj¹ typów.
 	Konwersja odbywa siê gdy Tables::Value::type jest ró¿ny od DT_CT_UNKNOWN. W
 	przeciwnym wypadku jako typ przyjmowany jest typ kolumny.
@@ -97,7 +96,7 @@ public:
 	\param value Struktura do której zostanie zapisana wartoœæ.
 	\attention Do odczytu danych z #DTMSG przygotowane s¹ inne funkcje!
 	*/
-	virtual bool __stdcall DTset(tTable db , unsigned int row , unsigned int col , Tables::Value * value)=0;
+	virtual bool __stdcall DTset(tTable db , unsigned int row , unsigned int col , Stamina::DT::OldValue * value)=0;
 	/** Blokuje dostêp do wiersza w tablicy dla innych w¹tków. Zaraz po
 	wykorzystaniu zabezpieczonych danych trzeba wywo³aæ cCtrl::DTunlock z tymi
 	samymi parametrami!
@@ -188,9 +187,9 @@ public:
 	Unique::tDomainId getDomainId(const char * name) {return (Unique::tDomainId) this->getId(Unique::domainDomain, name);}
 	Unique::tRangeId getRangeId(const char * name) {return (Unique::tRangeId) this->getId(Unique::domainRange, name);}
 	virtual bool __stdcall idInRange(Unique::tDomainId domainId, Unique::tRangeId rangeId, Unique::tId id) = 0;
-	virtual Unique::tRangeId __stdcall idInRange(Unique::tDomainId domainId, Unique::tId id, Unique::Range::enType check = Unique::Range::typeBoth) = 0;
+	virtual Unique::tRangeId __stdcall idInRange(Unique::tDomainId domainId, Unique::tId id, Unique::iRange::enType check = Unique::iRange::typeBoth) = 0;
 
-	virtual Tables::oTable __stdcall DT(Tables::tTableId tableId)=0;
+	virtual Tables::oTable __stdcall getTable(Tables::tTableId tableId)=0;
 	/** Zwraca obiekt wtyczki.
 	@param pluginId identyfikator, indeks, lub pluginNotFound je¿eli chcemy uzyskaæ obiekt przypisany do cCtrl.
 	*/

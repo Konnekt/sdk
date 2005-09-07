@@ -130,6 +130,9 @@
 				RelativePath="..\konnekt\core_tables.h">
 			</File>
 			<File
+				RelativePath=".\core_tables_defs.h">
+			</File>
+			<File
 				RelativePath="..\konnekt\core_unique.h">
 			</File>
 			<File

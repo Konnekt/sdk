@@ -11,6 +11,8 @@
 #include <commctrl.h>
 #include <string>
 
+#include <Stamina/Lib.h>
+
 #include "konnekt/plug.h"
 #include "konnekt/core_assert.h"
 
@@ -24,6 +26,16 @@ using namespace Konnekt;
 // ___________________________________________________
 // plug_export.h
 // ---------------------------------------------------
+extern "C" __declspec(dllexport) void __stdcall KonnektApiVersions(fApiVersionCompare cmp) {
+	using namespace Stamina;
+	cmp(iObject::staticClassInfo().getModuleVersion());
+	cmp(iSharedObject::staticClassInfo().getModuleVersion());
+	cmp(iLockableObject::staticClassInfo().getModuleVersion());
+	cmp(Stamina::Lib::version);
+	cmp(Konnekt::apiVersion);
+}
+
+
 
 int IMessage(unsigned int  id , signed int net , unsigned int type , int p1 , int p2) {
 
@@ -330,7 +342,6 @@ bool cCtrl::DTsetInt64(tTable db , unsigned int row , unsigned int col , __int64
 
 int cCtrl::BeginThreadAndWait(const char * name, void *security, unsigned stack_size, cCtrl::fBeginThread start_address,	void *arglist, unsigned initflag, unsigned *thrdaddr) {
 	HANDLE th = (HANDLE) this->BeginThread(name, security , stack_size , start_address , arglist , CREATE_SUSPENDED | initflag , thrdaddr);
-    unsigned long ec;
 	if (!th) return 0;
 	ResumeThread(th);
 /*    while (MsgWaitForMultipleObjectsEx(1 , &th , 250 , QS_ALLINPUT | QS_ALLPOSTMESSAGE , MWMO_ALERTABLE | MWMO_INPUTAVAILABLE) - WAIT_OBJECT_0 != 0) {
@@ -792,40 +803,6 @@ unsigned int ShowBits::getAllBits() {
 
 #ifndef KONNEKT_SDK_BUILD_CORE
 
-bool Unique::domainExists(Unique::tDomainId domainId) {
-	Unique::IM::_rangeIM im (Unique::IM::domainExists);
-	im.domainId = domainId;
-	return Ctrl->IMessage(&im) != 0;
-}
-bool Unique::removeDomain(Unique::tDomainId domainId) {
-	Unique::IM::_rangeIM im (Unique::IM::removeDomain);
-	im.domainId = domainId;
-	return Ctrl->IMessage(&im) != 0;
-}
-bool Unique::addRange(Unique::tDomainId domainId, const Unique::Range & range, bool setAsDefault) {
-	Unique::IM::_addRange im (domainId, range, setAsDefault);
-	return Ctrl->IMessage(&im) != 0;
-}
-bool Unique::registerId(Unique::tDomainId domainId, Unique::tId id, const char * name) {
-	Unique::IM::_rangeIM im (Unique::IM::registerId);
-	im.domainId = domainId;
-	im.identifier = id;
-	im.name = name;
-	return Ctrl->IMessage(&im) != 0;
-}
-Unique::tId Unique::registerName(Unique::tDomainId domainId, const char * name, Unique::tRangeId rangeId) {
-	Unique::IM::_rangeIM im (Unique::IM::registerName);
-	im.domainId = domainId;
-	im.name = name;
-	im.rangeId = rangeId;
-	return (Unique::tId) Ctrl->IMessage(&im);
-}
-bool Unique::unregister(Unique::tDomainId domainId, Unique::tId id) {
-	Unique::IM::_rangeIM im (Unique::IM::unregister);
-	im.domainId = domainId;
-	im.identifier = id;
-	return Ctrl->IMessage(&im) != 0;
-}
 #endif
 
 Tables::tTableId Tables::getTableId(const char * tableName) {
@@ -839,22 +816,21 @@ Tables::oTable Tables::registerTable(cCtrl * ctrl, Tables::tTableId tableId, con
 	} else if (name && *name) {
 		Unique::registerId(Unique::domainTable, tableId, name);
 	}
-	IM::_registerTable rt(tableId, tableOpts);
+	IM::RegisterTable rt(tableId, tableOpts);
 	int registerTableSuccess = ctrl->IMessage(&rt);
 	K_ASSERT(registerTableSuccess);
 	return rt.table;
 }
 void Tables::oTable::setById(Tables::tTableId tableId) {
-	this->set(Ctrl->DT(tableId));
-	//KObject<iTable>::set(Ctrl->DT(tableId));
+	this->set(Ctrl->getTable(tableId));
 }
 
 
 Tables::tColId Tables::iTable::setColumn(Tables::tColId id , Tables::tColType type  , int def  , const char * name) {
 	return this->setColumn(Ctrl->getPlugin(), id , type , def , name);
 }
-Tables::tColId Tables::iTable::setColumn(Tables::tColId id , Tables::tColType type , const char * def  , const char * name) {
-	return this->setColumn(Ctrl->getPlugin(), id , type , def , name);
+Tables::tColId Tables::iTable::setColumn(Tables::tColId id , Tables::tColType type , DataEntry def  , const char * name) {
+	return this->setColumn(Ctrl->getPlugin(), id , type , (DataEntry)def , name);
 }
 
 
@@ -875,14 +851,14 @@ bool Tables::iTable::setInt(Tables::tRowId row , Tables::tColId col , int val , 
         return set(row , col, v); 
     }
 }
-char * Tables::iTable::getStr(Tables::tRowId row , Tables::tColId col , char * buff , unsigned int size){
+char * Tables::iTable::getCh(Tables::tRowId row , Tables::tColId col , char * buff , unsigned int size){
     Value v(DT_CT_PCHAR); 
     v.vChar = buff;
     v.buffSize = size;
     get(row , col, v); 
     return v.vChar;
 }
-bool Tables::iTable::setStr(Tables::tRowId row , Tables::tColId col , const char * val){
+bool Tables::iTable::setCh(Tables::tRowId row , Tables::tColId col , const char * val){
     Value v(DT_CT_PCHAR);
     v.vCChar = val;
     return set(row , col, v); 
@@ -905,24 +881,6 @@ bool Tables::iTable::setInt64(Tables::tRowId row , Tables::tColId col , __int64 
 }
 
 
-int Tables::iTable::getInt(unsigned int row , const char * name) {
-	return this->getInt(row , this->getColId(name));
-}
-bool Tables::iTable::setInt(unsigned int row , const char * name , int value , int mask) {
-	return this->setInt(row , this->getColId(name), value , mask);
-}
-char * Tables::iTable::getStr(unsigned int row , const char * name , char * buff , unsigned int size) {
-	return this->getStr(row , this->getColId(name), buff , size);
-}
-bool Tables::iTable::setStr(unsigned int row , const char * name , const char * value) {
-	return this->setStr(row , this->getColId(name), value);
-}
-__int64 Tables::iTable::getInt64(unsigned int row , const char * name) {
-	return this->getInt64(row , this->getColId(name));
-}
-bool Tables::iTable::setInt64(unsigned int row , const char * name , __int64 value , __int64 mask) {
-	return this->setInt64(row , this->getColId(name), value, mask);
-}
 
 
 // ---------------------------------------------------------

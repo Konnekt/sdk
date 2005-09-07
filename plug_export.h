@@ -12,7 +12,9 @@ Dodatkowo kilka funkcji / makr dla Waszej wygody :)
 #ifndef PLUGEXPORTH
 #define PLUGEXPORTH
 
+#include <Stamina/Version.h>
 #include "plug.h"
+
 #pragma pack(push, 1)
 
 extern cCtrl * Ctrl;
@@ -29,7 +31,12 @@ Funkcje eksportowane
 */
 extern "C"
    __declspec(dllexport) int __stdcall IMessageProc(sIMessage_base * msgBase);
+
+extern "C"
+	__declspec(dllexport) void __stdcall KonnektApiVersions(fApiVersionCompare cmp);
+
 #endif
+
 
 /*
   Wszystkie nastepne funkcje sa funkcjami TYLKO pomocniczymi ... Mozna je usunac , ale

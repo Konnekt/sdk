@@ -27,15 +27,27 @@ Nag³ówek powinien byæ do³¹czony do kodu wtyczki poprzez plug_export.h .
   #define IMPARAM int
   #define tIMP IMPARAM
 
+#include <Stamina/Version.h>
+
+typedef void (__stdcall *fApiVersionCompare)(const Stamina::ModuleVersion& v);
+
 // przysz³oœciowo...
 namespace Konnekt {
+	const Stamina::ModuleVersion apiVersion = Stamina::ModuleVersion(Stamina::versionAPI, "Konnekt", Stamina::Version(3,0,0,0));
+	STAMINA_REGISTER_VERSION(Konnekt, apiVersion);
 };
+
+
 
 using namespace Konnekt;
 
 class cCtrl;
 typedef unsigned int tIMid;
+typedef unsigned int tIMCid;
+typedef unsigned int tIMIid;
 typedef unsigned int tCntId;
+
+typedef char tTable;
 
 /** Struktura u¿ywana podczas przesy³ania wiadomoœci.
     Jest u¿ywana jako bazowa dla wiêkszych struktur...
@@ -119,7 +131,6 @@ typedef unsigned int tCntId;
 #include "core_exception.h"
 
   typedef signed int tNet;
-  typedef char tTable;
 
 
 // -----------------------------------------------------------------------------------------------
@@ -2138,8 +2149,8 @@ Obs³uguje komunikaty WM_KEYDOWN i WM_SYSKEYDOWN
 /** @} */
 
 
-#include "core_ctrl.h"
 
+#include "core_ctrl.h"
 
  #pragma pack(pop)
 

@@ -39,7 +39,7 @@ namespace kSound {
 	class sIMessage_SoundRegister: public sIMessage_base {
 	public:
 
-		const static int minimumSize; /**< rozmiar poprzedniej wersji... */
+		const static int minimumSize = 16; /**< rozmiar poprzedniej wersji... */
 
 		int colID; ///< konkretny identyfikator kolumny, lub -1
 		const char * name; ///< Jednoznaczna nazwa dŸwiêku (nazwa kolumny w konfiguracji i pola w XMLu)
@@ -52,8 +52,6 @@ namespace kSound {
 			type = IMT_CONFIG;
 		}
 	};
-
-	const int sIMessage_SoundRegister::minimumSize = sizeof(sIMessage_SoundRegister) - 4; /**< rozmiar poprzedniej wersji... */
 
 	namespace flags {
 		const char contacts=1; ///< Dla ka¿dego kontaktu przechowywane jest osobne ustawienie.
