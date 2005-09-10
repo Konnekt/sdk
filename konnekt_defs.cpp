@@ -805,80 +805,6 @@ unsigned int ShowBits::getAllBits() {
 
 #endif
 
-Tables::tTableId Tables::getTableId(const char * tableName) {
-	return (tTableId)Ctrl->getId(Unique::domainTable, tableName);
-}
-
-Tables::oTable Tables::registerTable(cCtrl * ctrl, Tables::tTableId tableId, const char * name, enTableOptions tableOpts) {
-	if (!ctrl) ctrl = Ctrl;
-	if (tableId == Tables::tableNotFound && name && *name) {
-		tableId = (tTableId) Unique::registerName(Unique::domainTable, name);
-	} else if (name && *name) {
-		Unique::registerId(Unique::domainTable, tableId, name);
-	}
-	IM::RegisterTable rt(tableId, tableOpts);
-	int registerTableSuccess = ctrl->IMessage(&rt);
-	K_ASSERT(registerTableSuccess);
-	return rt.table;
-}
-void Tables::oTable::setById(Tables::tTableId tableId) {
-	this->set(Ctrl->getTable(tableId));
-}
-
-
-Tables::tColId Tables::iTable::setColumn(Tables::tColId id , Tables::tColType type  , int def  , const char * name) {
-	return this->setColumn(Ctrl->getPlugin(), id , type , def , name);
-}
-Tables::tColId Tables::iTable::setColumn(Tables::tColId id , Tables::tColType type , DataEntry def  , const char * name) {
-	return this->setColumn(Ctrl->getPlugin(), id , type , (DataEntry)def , name);
-}
-
-
-
-int Tables::iTable::getInt(Tables::tRowId row , Tables::tColId col) {
-    Value v(DT_CT_INT); 
-    get(row , col, v); 
-    return v.vInt;
-}
-bool Tables::iTable::setInt(Tables::tRowId row , Tables::tColId col , int val , int mask){
-    Value v(DT_CT_INT);
-    if (mask != -1) { // maskowanie
-        get(row , col, v);
-        v.vInt = (v.vInt & ~mask) | val;
-        return set(row , col, v);
-    } else {
-        v.vInt = val;
-        return set(row , col, v); 
-    }
-}
-char * Tables::iTable::getCh(Tables::tRowId row , Tables::tColId col , char * buff , unsigned int size){
-    Value v(DT_CT_PCHAR); 
-    v.vChar = buff;
-    v.buffSize = size;
-    get(row , col, v); 
-    return v.vChar;
-}
-bool Tables::iTable::setCh(Tables::tRowId row , Tables::tColId col , const char * val){
-    Value v(DT_CT_PCHAR);
-    v.vCChar = val;
-    return set(row , col, v); 
-}
-__int64 Tables::iTable::getInt64(Tables::tRowId row , Tables::tColId col) {
-    Value v(DT_CT_64); 
-    get(row , col, v); 
-    return v.vInt64;
-}
-bool Tables::iTable::setInt64(Tables::tRowId row , Tables::tColId col , __int64 val , __int64 mask) {
-    Value v(DT_CT_64);
-    if (mask != -1) { // maskowanie
-        get(row , col, v);
-        v.vInt64 = (v.vInt64 & ~mask) | val;
-        return set(row , col, v);
-    } else {
-        v.vInt64 = val;
-        return set(row , col, v); 
-    }
-}
 
 
 
@@ -887,22 +813,22 @@ bool Tables::iTable::setInt64(Tables::tRowId row , Tables::tColId col , __int64 
 
 
 
-void testResult(const char * title, int should, int got, bool swap) {
+void testResult(const StringRef& title, int should, int got, bool swap) {
 	bool failed = should != got;
 	if (swap) failed = !failed;
 	if (failed) {
-		IMDEBUG(DBG_TEST_FAILED, "%s Failed - %x != %x", title, got, should);
+		IMDEBUG(DBG_TEST_FAILED, "%s Failed - %x != %x", title.a_str(), got, should);
 	} else {
-		IMDEBUG(DBG_TEST_PASSED, "%s Passed - %x", title, got);
+		IMDEBUG(DBG_TEST_PASSED, "%s Passed - %x", title.a_str(), got);
 	}
 }
-void testResult(const char * title, const char * should, const char * got, bool swap) {
-	bool failed = strcmp(should, got) != 0;
+void testResult(const StringRef& title, const StringRef& should, const StringRef& got, bool swap) {
+	bool failed = (should != got);
 	if (swap) failed = !failed;
 	if (failed) {
-		IMDEBUG(DBG_TEST_FAILED, "%s Failed - \"%s\" != \"%s\"", title, got, should);
+		IMDEBUG(DBG_TEST_FAILED, "%s Failed - \"%s\" != \"%s\"", title.a_str(), got.a_str(), should.a_str());
 	} else {
-		IMDEBUG(DBG_TEST_PASSED, "%s Passed - \"%s\"", title, got);
+		IMDEBUG(DBG_TEST_PASSED, "%s Passed - \"%s\"", title.a_str(), got.a_str());
 	}
 }
 

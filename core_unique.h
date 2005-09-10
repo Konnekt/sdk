@@ -12,7 +12,7 @@ namespace Konnekt {
 
 		namespace IMC {
 
-			/** Zwraca wskaŸnik do g³ównego obiektu Unique. Je¿eli wtyczka nie linkuje siê ze stamina.lib statycznie, powinna ustawiæ Unique::setInstance na zwrócony tutaj wskaŸnik. */
+			/** Zwraca wskaŸnik do g³ównego obiektu Unique. Je¿eli wtyczka linkuje siê ze stamina.lib statycznie, powinna ustawiæ Unique::setInstance na zwrócony tutaj wskaŸnik. */
 			const tIMCid getMainInstance = 500;
 
 		};

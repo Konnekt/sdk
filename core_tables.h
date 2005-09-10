@@ -18,8 +18,16 @@
 
 
 namespace Konnekt { 
+
+/** Przestrzeñ obs³ugi tablic z danymi.
+
+@warning Obs³uga tablic opiera siê na bibliotece Stamina::DT (DataTable). Dlatego wiele klas, enumeracji etc. korzysta z tej przestrzeni nazw.
+*/
 namespace Tables {
 	using namespace ::Stamina::DT;
+	using ::Stamina::String;
+	using ::Stamina::StringRef;
+	using ::Stamina::ByteBuffer;
 
 	enum enTableId {
 		tableConfig = 0,
@@ -90,7 +98,7 @@ namespace Tables {
 	class iTable: public ::Stamina::iSharedObject {
 	public:
 
-		STAMINA_OBJECT_CLASS_VERSION(Konnekt::Tables::iTable, ::Stamina::iSharedObject, Version(1, 1, 0, 0));
+		STAMINA_OBJECT_CLASS_VERSION(Konnekt::Tables::iTable, ::Stamina::iSharedObject, ::Stamina::Version(1, 1, 0, 0));
 
 
         /** Zamienia (lub nie) identyfikator na numer wiersza.*/
@@ -121,61 +129,34 @@ namespace Tables {
 			 return this->_findRow(startPos, 3, &f1, &f2, &f3);
 		 }
 
-		 /** Zwraca typ i flagi kolumny.
-		 */
-		 virtual enColumnFlag __stdcall getColFlags(tColId colId)=0;
-
-		 enColumnFlag getColType(tColId colId) {
-			 return (enColumnFlag) (getColFlags(colId) & ctypeMask);
-		 }
-
 		 /** Zwraca iloœæ wierszy w tablicy.*/
          virtual unsigned int __stdcall getRowCount()=0;
+
 		 int getCount() {
 			 return this->getRowCount();
 		 }
-         /** Zwraca identyfikator kolumny o podanej nazwie.
-         @param name nazwa kolumny
-		 @return Identyfikator lub colNotFound.
-         */
-         virtual tColId __stdcall getColId(const char * colName)=0;
-         /** Pobiera nazwê kolumny o podanym identyfikatorze.
-         @param colId Identyfikator kolumny
-		 @return Zarejestrowana nazwa kolumny, lub ""
-         */
-         virtual const char * __stdcall getColName(tColId colId)=0;
+
+		 /** Zwraca obiekt kolumny o podanym identyfikatorze.
+		 @warning Zawsze zwraca jakiœ obiekt! Istnienie kolumny nale¿y sprawdziæ funkcj¹ iColumn::isUndefined()
+		 */
+		 virtual oColumn __stdcall getColumn(tColId colId)=0;
+
+		 virtual oColumn __stdcall getColumn(const Stamina::StringRef& colName)=0;
+
+		 inline tColId getColumnId(const StringRef& colName) {
+			 return this->getColumn(colName)->getId();
+		 }
 
 		 /** Zwraca liczbê kolumn */
 		 virtual unsigned int __stdcall getColCount()=0;
+
 		 /** Zwraca identyfikator kolumny na wskazanej pozycji lub colNotFound */
-		 virtual tColId __stdcall getColIdByPos(unsigned int colPos)=0;
+		 virtual oColumn __stdcall getColumnByPos(unsigned int colPos)=0;
 
 		 bool columnExists(tColId colId) {
-			 return this->getColType(colId) != ctypeUnknown;
+			 return this->getColumn(colId)->isUndefined() == false;
 		 }
 
-         /** Pobiera wartoœæ wiersza z konwersj¹ typów.
-         Konwersja odbywa siê gdy Value::type jest ró¿ny od ctypeUnknown. 
-		 W przeciwnym wypadku jako typ przyjmowany jest typ kolumny.
-         @param rowId Identyfikator/numer wiersza
-         @param colId Identyfikator kolumny
-         @param value Struktura do której zostanie wpisana wartoœæ
-         @return true je¿eli siê powiod³o
-
-		 Zobacz gotowe funkcje dla poszczególnych typów jak Table::getInt().
-		 */
-		 virtual bool __stdcall get(tRowId rowId , tColId colId , OldValue & value)=0;
-         /** Ustawia wartoœæ wiersza z konwersj¹ typów.
-         Konwersja odbywa siê gdy Value::type jest ró¿ny od ctypeUnknown. 
-		 W przeciwnym wypadku przyjmowany jest typ kolumny.
-         @param rowId Identyfikator/numer wiersza
-         @param colId Identyfikator kolumny
-         @param value Struktura do której zostanie zapisana wartoœæ.
-         @return true je¿eli siê powiod³o
-		 
-		 Zobacz gotowe funkcje dla poszczególnych typów jak Table::setInt().
-         */
-         virtual bool __stdcall set(tRowId rowId , tColId colId , OldValue & value)=0;
          /** Blokuje dostêp do wiersza dla innych w¹tków. 
 		 Zaraz po wykorzystaniu zabezpieczonych danych trzeba wywo³aæ unlockData() z tymi samymi parametrami!
          @param rowId Identyfikator/numer wiersza, lub allRows jeœli chcemy zablokowaæ WSZYSTKIE dane
@@ -198,90 +179,28 @@ namespace Tables {
 		 @param obiekt wtyczki rejestruj¹cej - cCtrl::getPlugin()
 		 @param colId Identyfikator rejestrowanej kolumny, lub colByName je¿eli chcemy odnosiæ siê do niej tylko po nazwie
 		 @param type Typ wartoœci kolumny z flagami (enColumnType | enColumnFlag)
-		 @param def Wartoœæ domyœlna
-		 @warning Typ wartoœci domyœlnej musi byæ @b identyczny z typem kolumny! Dla ctypeInt mo¿emy podaæ tylko liczby 32bitowe, dla ctypeString tylko tekst typu char*, dla ctypeInt64 tylko wskaŸnik do liczby 64 bitowej!!!
+		 @param name Nazwa kolumny. Idnetyfikator kolumny zarejestrowanej tylko po nazwie mo¿na zdobyæ przy pomocy getColId().
+		 @return Obiekt zarejestrowanej kolumny
 
 		 @code
-		 dt->setColumn(..., ctypeInt, 10);
-		 // statyczny tekst mo¿emy podaæ bezpoœrednio
-		 dt->setColumn(..., ctypeString, "Wartoœæ domyœlna");
-		 // do ustawiania dynamicznego tekstu jako wartoœci domyœlnej musimy u¿yæ statycznej wartoœci poœredniej
-		 static std::string def = "Wartoœæ " + inny_tekst;
-		 dt->setColumn(..., ctypeString, (DataEntry)def.c_str());
-		 static __int64 def64 = 10;
-		 dt->setColumn(..., ctypeInt64, &def64);
+		 // zwykla rejestracja
+		 dt->setColumn(identyfikator_kolumny, ctypeInt);
+		 // rejestracja po nazwie
+		 dt->setColumn(DT::colByName, ctypeInt, "NazwaKolumny");
+		 // ustawianie wartosci domyslnej
+		 dt->setColumn(idKolumny, ctypeString)->setString(rowDefault, "Wartoœæ domyœlna");
 		 @endcode
 
-		 @attention WskaŸniki do wartoœci domyœlnej musz¹ "istnieæ" przez ca³y okres istnienia tablicy danych! (np. wskaŸniki do tekstu, lub liczb 64 bitowych)
-
-		 @param name Nazwa kolumny. Idnetyfikator kolumny zarejestrowanej tylko po nazwie mo¿na zdobyæ przy pomocy getColId().
-		 @return Identyfikator zarejestrowanej kolumny
 		 */
-		 virtual tColId __stdcall setColumn(oPlugin plugin, tColId colId , tColType type , DataEntry def = 0 , const char * name=0)=0;
-		 /**
-		 */
- 		 tColId setColumn(oPlugin plugin, tColId id , tColType type , int def  , const char * name=0) {
-			return this->setColumn(plugin, id , type , (DataEntry)def , name);
-		 }
+		 virtual oColumn __stdcall setColumn(const oPlugin& plugin, tColId colId , tColType type , const Stamina::StringRef& name = StringRef())=0;
 
- 		 tColId setColumn(tColId id , tColType type  , int def  , const char * name=0);
- 		 tColId setColumn(tColId id , tColType type , DataEntry def = 0  , const char * name=0);
-
-         // funkcje lokalne, dla ulatwienia
-         int getInt(tRowId row , tColId col);
-         bool setInt(tRowId row , tColId col , int value , int mask = -1);
-         char * getCh(tRowId row , tColId col , char * buff = 0 , unsigned int size = 0);
-         bool setCh(tRowId row , tColId col , const char * value);
-#ifdef _STRING_
-		 inline std::string getStr(tRowId row , tColId col) {
-			 char* buff = getCh(row, col, 0, -1);
-			 std::string str = buff;
-			 // zwalniamy pamiêæ u¿ywaj¹c tego samego modu³u który j¹ zaalokowa³...
-			 this->getClass().getLibInstance().free(buff);
-			 return str;
-		 }
-		 inline bool setStr(tRowId row , tColId col , const std::string& value) {
-			 return setCh(row, col, value.c_str());
-		 }
-#endif
-         __int64 getInt64(tRowId row , tColId col);
-         bool setInt64(tRowId row , tColId col , __int64 value , __int64 mask = -1);
-
-		 inline int getInt(tRowId row , const char * colName) {
-			 return this->getInt(row , this->getColId(colName));
-		 }
-		 inline bool setInt(tRowId row , const char * colName , int value , int mask = -1) {
-			 return this->setInt(row , this->getColId(colName), value , mask);
-		 }
-
-		 inline const char* getCh(tRowId row, const char * colName, char * buff = 0 , unsigned int size = 0) {
-			 return this->getCh(row, this->getColId(colName), buff , size);
-		 }
-		 inline bool setCh(tRowId row, const char * colName, const char * value) {
-			 return this->setCh(row , this->getColId(colName), value);
-		 }
-
-#ifdef _STRING_
-		 inline std::string getStr(tRowId row , const char * colName) {
-			 return this->getStr(row, this->getColId(colName));
-		 }
-		 inline bool setStr(tRowId row , const char * colName , const std::string& value) {
-			 return this->setStr(row , this->getColId(colName), value);
-		 }
-#endif
-		 inline __int64 getInt64(tRowId row , const char * colName) {
-			 return this->getInt64(row , this->getColId(colName));
-		 }
-		 inline bool setInt64(tRowId row , const char * colName , __int64 value , __int64 mask = -1) {
-			 return this->setInt64(row , this->getColId(colName), value, mask);
-		 }
-
+ 		 oColumn setColumn(tColId id, tColType type, const Stamina::StringRef& name = StringRef());
 
 
 		 /** Dodaje wiersz do tablicy.
 		 @warning W wiêkszoœci przypadków to w³aœciciel tablicy dodaje do niej wiersze!
 		 */
-		 virtual tRowId __stdcall addRow(tRowId rowId = rowNotFound)=0;
+		 virtual oRow __stdcall addRow(tRowId rowId = rowNotFound)=0;
 		 /** Usuwa wiersz z tablicy.
 		 @warning W wiêkszoœci przypadków to w³aœciciel tablicy usuwa z niej wiersze!
 		 */
@@ -313,14 +232,14 @@ namespace Tables {
 		  \param filePath £aduje dane z innego pliku ni¿ domyœlny.
 		  \return true je¿eli dane zosta³y za³adowane 
 		  */
-		 virtual enResult __stdcall load(bool force = false, const char * filePath = 0)=0;
+		 virtual enResult __stdcall load(bool force = false, const StringRef& filePath = StringRef())=0;
 		 /** Zapisuje dane do pliku, je¿eli dane uleg³y zmianie.
 		  Je¿eli z tablic¹ nie jest skojarzony ¿aden plik wywo³anie save() nie ma ¿adnego skutku.
 		  \param force Wymusza zapisanie danych.
 		  \param filePath Zapisuje dane do innego pliku ni¿ domyœlny.
 		  \return true je¿eli dane zosta³y zapisane 
 		  */
-		 virtual enResult __stdcall save(bool force = false, const char * filePath = 0)=0;
+		 virtual enResult __stdcall save(bool force = false, const StringRef& filePath = StringRef())=0;
 		 /** Zapis z opóŸnieniem. 
 		 Dane zostan¹ zapisane do domyœlnego pliku, je¿eli przez kilka sekund nie bêdzie wywo³ywana f-cja lateSave.
 		 Dane zapisywane s¹ jednorazowo.
@@ -333,14 +252,19 @@ namespace Tables {
 		 virtual bool __stdcall getOpt(enTableOptions option)=0;
 
 		 /** Ustawia nazwê pliku */
-		 virtual void __stdcall setFilename(const char * filename)=0;
-		 virtual const char * __stdcall _getFilename()=0;
+		 virtual void __stdcall setFilename(const StringRef& filename)=0;
+		 /** Zwraca nazwê pliku (bez œcie¿ki) */
+		 virtual String __stdcall getFilename()=0;
 		 /** Ustawia œcie¿kê katalogu z plikiem.
 		 @param path Nowa œcie¿ka, lub 0 je¿eli chcemy ustawiæ œcie¿kê standardow¹
 		 */
-		 virtual void __stdcall setDirectory(const char * path = 0)=0;
-		 virtual const char * __stdcall _getDirectory()=0;
-		 virtual const char * __stdcall _getTableName()=0;
+		 virtual void __stdcall setDirectory(const StringRef& path = StringRef())=0;
+		 /** Zwraca œcie¿kê do pliku */
+		 virtual String __stdcall getDirectory()=0;
+		 /** Zwraca nazwê tablicy.
+		 Nazwa pobierana jest z Unique::domainTables i tam powinna byæ rejestrowana
+		 */
+		 String getTableName();
 		 virtual tTableId __stdcall getTableId()=0;
 		 virtual oPlugin __stdcall getTableOwner()=0;
 
@@ -352,34 +276,103 @@ namespace Tables {
 		 virtual void* __stdcall getDT()=0;
 #endif
 
- 		 virtual void setTablePassword(const char* password)=0;
+ 		 virtual void setTablePassword(const StringRef& password)=0;
 
 
-#ifdef _STRING_
-		 /** Zwraca nazwê pliku (bez œcie¿ki) */
-		 std::string getFilename() {
-			 this->lock();
-			 std::string str = this->_getFilename();
-			 this->unlock();
-			 return str;
-		 }
-		 /** Zwraca œcie¿kê do pliku */
-		 std::string getDirectory() {
-			 this->lock();
-			 std::string str = this->_getDirectory();
-			 this->unlock();
-			 return str;
-		 }
-		 /** Zwraca nazwê tablicy.
-		 Nazwa pobierana jest z Unique::domainTables i tam powinna byæ rejestrowana
-		 */
-		 std::string getTableName() {
-			 this->lock();
-			 std::string str = this->_getTableName();
-			 this->unlock();
-			 return str;
-		 }
-#endif
+		 // wczytywanie danych
+
+		inline int getInt(tRowId row , tColId id, GetSet flags = gsNone)  {
+			return this->getColumn(id)->getInt( this->getRow(row), flags);
+		}
+		inline bool setInt(tRowId rowId , tColId id , int val, GetSet flags = gsNone) {
+			oRow row = this->getRow(rowId);
+			if (row) {
+				return this->getColumn(id)->setInt(row , val, flags);
+			}
+			return row;
+		}
+		inline String getString(tRowId row , tColId id, GetSet flags = getCopy) {
+			return ::Stamina::PassStringRef( this->getColumn(id)->getString( this->getRow(row), flags ) );
+		}
+		inline bool setString(tRowId rowId , tColId id , const StringRef& val, GetSet flags = gsNone) {
+			oRow row = this->getRow(rowId);
+			if (row) {
+				return this->getColumn(id)->setString(row, val, flags);
+			}
+			return row;
+		}
+
+		inline ByteBuffer getBin(tRowId row , tColId id, GetSet flags = getCopy) {
+			ByteBuffer b;
+			b.swap( this->getColumn(id)->getBin( this->getRow(row), flags ) );
+			return b;
+		}
+		inline bool setBin(tRowId rowId , tColId id , const ByteBuffer& val, GetSet flags = gsNone) {
+			oRow row = this->getRow(rowId);
+			if (row) {
+				return this->getColumn(id)->setBin(row, val, flags);
+			}
+			return row;
+		}
+
+		inline __int64 getInt64(tRowId row , tColId id, GetSet flags = gsNone) {
+			return this->getColumn(id)->getInt64( this->getRow(row), flags );
+		}
+		inline bool setInt64(tRowId rowId , tColId id , __int64 val, GetSet flags = gsNone) {
+			oRow row = this->getRow(rowId);
+			if (row) {
+				return this->getColumn(id)->setInt64(row , val, flags );
+			}
+			return row;
+		}
+
+		inline double getDouble(tRowId row , tColId id, GetSet flags = gsNone) {
+			return this->getColumn(id)->getDouble( this->getRow(row), flags );
+		}
+		inline bool setDouble(tRowId rowId , tColId id , double val, GetSet flags = gsNone) {
+			oRow row = this->getRow(rowId);
+			if (row) {
+				return this->getColumn(id)->setDouble(row , val, flags );
+			}
+			return row;
+		}
+
+// byName
+
+		inline int getInt(tRowId row , const StringRef& colName, GetSet flags = gsNone)  {
+			return this->getInt(row, this->getColumnId(colName), flags);
+		}
+		inline bool setInt(tRowId rowId , const StringRef& colName , int val, GetSet flags = gsNone) {
+			return this->setInt(rowId, this->getColumnId(colName), val, flags);
+		}
+		inline String getString(tRowId row , const StringRef& colName, GetSet flags = getCopy) {
+			return ::Stamina::PassStringRef( this->getString(row, this->getColumnId(colName), flags) );
+		}
+		inline bool setString(tRowId rowId , const StringRef& colName , const StringRef& val, GetSet flags = gsNone) {
+			return this->setString(rowId, this->getColumnId(colName), val, flags);
+		}
+
+		inline ByteBuffer getBin(tRowId row , const StringRef& colName, GetSet flags = getCopy) {
+			return this->getBin(row, this->getColumnId(colName), flags);
+		}
+		inline bool setBin(tRowId rowId , const StringRef& colName , const ByteBuffer& val, GetSet flags = gsNone) {
+			return this->setBin(rowId, this->getColumnId(colName), val, flags);
+		}
+
+		inline __int64 getInt64(tRowId row , const StringRef& colName, GetSet flags = gsNone) {
+			return this->getInt64(row, this->getColumnId(colName), flags);
+		}
+		inline bool setInt64(tRowId rowId , const StringRef& colName , __int64 val, GetSet flags = gsNone) {
+			return this->setInt64(rowId, this->getColumnId(colName), val, flags);
+		}
+
+		inline double getDouble(tRowId row , const StringRef& colName, GetSet flags = gsNone) {
+			return this->getDouble(row, this->getColumnId(colName), flags);
+		}
+		inline bool setDouble(tRowId rowId , const StringRef& colName , double val, GetSet flags = gsNone) {
+			return this->setDouble(rowId, this->getColumnId(colName), val, flags);
+		}
+
 
 	  private:
 		virtual void __stdcall zz_it1(){}
@@ -395,7 +388,7 @@ namespace Tables {
 
 	};
 
-	inline tTableId getTableId(const char * tableName);
+	inline tTableId getTableId(const StringRef& tableName);
 
 
 	/** Obiekt tablicy. */
@@ -404,14 +397,14 @@ namespace Tables {
 		oTable(tTableId tableId) {
 			this->setById(tableId);
 		}
-		oTable(const char * tableName) {
+		oTable(const StringRef& tableName) {
 			this->setById(getTableId(tableName));
 		}
 		oTable(iTable * obj = 0) {
 			this->set(obj);
 		}
 		void setById(tTableId tableId);
-
+/*
 		 oTable & operator |= (enTableOptions option) {
 			 this->get()->setOpt(option, true);
 			 return *this;
@@ -423,14 +416,15 @@ namespace Tables {
 		 bool operator & (enTableOptions option) {
 			 return this->get()->getOpt(option);
 		 }
+		 */
 
 	};
 
-	oTable registerTable(cCtrl * ctrl, tTableId tableId, const char * name, enTableOptions tableOpts = optDefaultSet);
+	oTable registerTable(cCtrl * ctrl, tTableId tableId, const StringRef& name, enTableOptions tableOpts = optDefaultSet);
 	inline oTable registerTable(cCtrl * ctrl, tTableId tableId, enTableOptions tableOpts = optDefaultSet) {
-		return registerTable(ctrl, tableId, 0, tableOpts);
+		return registerTable(ctrl, tableId, tableOpts);
 	}
-	inline oTable registerTable(cCtrl * ctrl, const char * name, enTableOptions tableOpts = optDefaultSet) {
+	inline oTable registerTable(cCtrl * ctrl, const StringRef& name, enTableOptions tableOpts = optDefaultSet) {
 		return registerTable(ctrl, tableByName, name, tableOpts);
 	}
 

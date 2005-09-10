@@ -27,7 +27,7 @@ Nag³ówek powinien byæ do³¹czony do kodu wtyczki poprzez plug_export.h .
   #define IMPARAM int
   #define tIMP IMPARAM
 
-#include <Stamina/Version.h>
+#include <Stamina/VersionControl.h>
 
 typedef void (__stdcall *fApiVersionCompare)(const Stamina::ModuleVersion& v);
 

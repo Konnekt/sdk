@@ -12,6 +12,8 @@
   Musi byæ include'owany po plug_export.h.  
 */
 
+using ::Stamina::StringRef;
+using ::Stamina::String;
 
 /**
 \addtogroup imi_action_
@@ -208,12 +210,12 @@ cMessage * messageDuplicate(cMessage * m);
 /** Zwalnia cMessage (to co zaalokowa³ messageDuplicate. */
 void messageFree(cMessage * m, bool deleteObject = true);
 
-void testResult(const char * title, int should, int got, bool swap = false);
-void testResult(const char * title, const char * should, const char * got, bool swap = false);
+void testResult(const StringRef& title, int should, int got, bool swap = false);
+void testResult(const StringRef& title, const StringRef& should, const StringRef& got, bool swap = false);
 inline void testResult(int should, int got, bool swap = false) {
 	testResult("", should, got, swap);
 }
-inline void testResult(const char * should, const char * got, bool swap = false) {
+inline void testResult(const StringRef& should, const StringRef& got, bool swap = false) {
 	testResult("", should, got, swap);
 }
 
