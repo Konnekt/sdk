@@ -45,8 +45,6 @@ Poni¿szy przyk³ad powinien wszystko wyjaœniæ...
 @{
 */
 
-#pragma once
-
 #pragma pack(push, 1)
 
 /** Zwraca wskaŸnik do sesji libgadu (gg_session) lub 0
@@ -104,22 +102,6 @@ struct sIMessage_GGEvent: public sIMessage_base {
 	} data;
 	sIMessage_GGEvent()
 		:sIMessage_base() {s_size=sizeof(sIMessage_GGEvent);}
-};
-
-#define IM_GG_HTMLTOMSG IM_USER+10010
-#define IM_GG_MSGTOHTML IM_USER+10011
-
-
-struct sIMessage_GGHtmlFormat: public sIMessage_base {
-	sIMessage_GGHtmlFormat(bool fromHtml, const char* body, char* format, int formatSize):body(body), format(format), formatSize(formatSize), result(0) {
-		this->id = fromHtml ? IM_GG_HTMLTOMSG : IM_GG_MSGTOHTML;
-		s_size=sizeof(*this);
-	}
-
-	const char* body;
-	const char* result;
-	char* format;
-	int formatSize;
 };
 
 

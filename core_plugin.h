@@ -8,7 +8,7 @@ namespace Konnekt {
 	};
 	typedef enPluginId tPluginId;
 
-	class iPlugin: public Stamina::iLockableObject {
+	class iPlugin {
 	public:
 		virtual tPluginId __stdcall getPluginId()=0;
 		tPluginId getId() {
@@ -22,12 +22,12 @@ namespace Konnekt {
 		virtual void __stdcall zz_ip5(){}
 	};
 
-	class oPlugin:public Stamina::StaticPtr<iPlugin> {
+	class Plugin:public KStaticObject<iPlugin> {
 	public:
-		oPlugin(tPluginId pluginId) {
+		Plugin(tPluginId pluginId) {
 			setById(pluginId);
 		}
-		oPlugin() {
+		Plugin() {
 		}
 		void setById(tPluginId pluginId);
 	};

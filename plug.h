@@ -35,7 +35,6 @@ using namespace Konnekt;
 
 class cCtrl;
 typedef unsigned int tIMid;
-typedef unsigned int tCntId;
 
 /** Struktura u¿ywana podczas przesy³ania wiadomoœci.
     Jest u¿ywana jako bazowa dla wiêkszych struktur...
@@ -167,7 +166,6 @@ typedef unsigned int tCntId;
      #define NET_YAHOO  61            ///< Wtyczki obs³uguj¹ce protokó³ YAHOO
      #define NET_MSN    62            ///< Wtyczki obs³uguj¹ce protokó³ MSN
      #define NET_TLEN   63            ///< Wtyczki obs³uguj¹ce protokó³ TLEN
-	 
 
 	// sieci tylko do 19 . ich komunikaty to IM_USER + NET * 1000
     // nastêpne od net 60, tak ¿eby komunikaty zaczê³y siê jako NET * 1000
@@ -335,31 +333,18 @@ Komunikat przesy³any jest przy pomocy @b sIMessage_plugArgs .*/
 			}
 			bool argEq(unsigned int i, const char * cmp);
 		};
-
-/** Przekazuje komendê wpisan¹ w oknie @Dev. Komunikat przesy³any jest przy pomocy @b sIMessage_debugCommand. 
-	@return 0
-*/
+		/** Przekazuje komendê wpisan¹ w oknie @Dev. Komunikat przesy³any jest przy pomocy @b sIMessage_debugCommand. 
+		@return 0
+		*/
 		#define IM_DEBUG_COMMAND  IM_BASE+25
 
-/** Je¿eli podczas od³¹czania wtyczki z jakiegoœ wzglêdu nie powinno byæ wywo³ywane FreeLibrary trzeba obs³u¿yæ ten komunikat i zwróciæ 1. */
-		#define IM_PLUG_DONTFREELIBRARY  IM_BASE+26
-
-/** Wszystkie wtyczki zosta³y zainicjalizowane...
-*/
-		#define IM_ALLPLUGINSINITIALIZED IM_BASE + 22 
-
-/** Za chwilê wtyczka o podanym ID zostanie od³¹czona.
-	@param p1 (int) ID wtyczki
-*/
-		 #define IM_PLUG_PLUGOUT IM_BASE + 23     
-        
-/** Ta wersja wtyczki uruchamiana jest w tym profilu po raz pierwszy.
-  @param p1 (int) Poprzednia wersja, lub 0. 
-  Format wersji to w hexie: MNNRRBBB - Major, miNor, Release, Build.
-  W plug_func.h mo¿na znaleŸæ makra do szybkiego wyci¹gania tych wartoœci. 
-*/
-		#define IM_PLUG_UPDATE    IM_BASE+30     
-
+		 #define IM_ALLPLUGINSINITIALIZED IM_BASE + 22 ///< Wszystkie wtyczki zosta³y zainicjalizowane...
+		 #define IM_PLUG_PLUGOUT IM_BASE + 23     ///< Za chwilê wtyczka o podanym ID zostanie od³¹czona.
+													/// @param p1 (int) ID wtyczki
+         #define IM_PLUG_UPDATE    IM_BASE+30     ///< Ta wersja wtyczki uruchamiana jest w tym profilu po raz pierwszy.
+                                                   ///  \param p1 (int) Poprzednia wersja, lub 0. 
+                                                   ///  Format wersji to w hexie: MNNRRBBB - Major, miNor, Release, Build.
+                                                   ///  W plug_func.h mo¿na znaleŸæ makra do szybkiego wyci¹gania tych wartoœci. 
          #define IM_GET_STATUS     IM_SHARE+31    ///< Je¿eli wtyczka obs³uguje sieæ, powinna zwróciæ swój aktualny status.
                                                     /// \return (int) status
          #define IM_GET_STATUSINFO IM_SHARE+32    ///< Je¿eli wtyczka obs³uguje sieæ, powinna zwróciæ swój aktualny opis statusu.
@@ -428,9 +413,7 @@ Komunikat przesy³any jest przy pomocy @b sIMessage_plugArgs .*/
                                                /// \param p1 (cUIActionNotify *) Powiadomienie.
 
          //  IMT_PROTOCOL
-         #define IM_CONNECT       IM_SHARE+3000 /**< Mo¿na zacz¹æ siê ³¹czyæ.
-		 @param p1 (int) Liczba ponowionych prób po³¹czenia
-		 */
+         #define IM_CONNECT       IM_SHARE+3000 ///< Mo¿na zacz¹æ siê ³¹czyæ.
          #define IM_DISCONNECT    IM_SHARE+3001 ///< Trzeba siê roz³¹czyæ.
          #define IM_AWAY          IM_SHARE+3002 ///< Program wchodzi w tryb Auto-Away.
          #define IM_BACK          IM_SHARE+3003 ///< Program powraca z trybu Auto-Away.
@@ -459,27 +442,22 @@ Komunikat przesy³any jest przy pomocy @b sIMessage_plugArgs .*/
 																	1 - info powinno byæ ustawione jako wartoœci odpowiednich akcji w oknie z informacjami o kontakcie (u¿ywaj¹c UIActionCfgSetValue())
 												  */
 
-
-/** Kontakt zaraz zostanie usuniêty.
-	\param p1 (int) ID kontaktu
-	\param p2 (bool) true - usuniêcie zosta³o potwierdzone przez uzytkownika.*/
-		#define IM_CNT_REMOVE    IM_BASE+4002  
-/** Kontakt zosta³ usuniety.
-	\param p1 (int) ID kontaktu
-	\param p2 (bool) true - usuniêcie zosta³o potwierdzone przez uzytkownika.*/
-		#define IM_CNT_REMOVED    IM_BASE+4005 
+         #define IM_CNT_REMOVE    IM_BASE+4002  ///< Kontakt zaraz zostanie usuniêty.
+                                                 ///  \param p1 (int) ID kontaktu
+                                                 ///  \param p2 (bool) true - usuniêcie zosta³o potwierdzone przez uzytkownika.
+         #define IM_CNT_REMOVED    IM_BASE+4005 ///< Kontakt zosta³ usuniety.
+                                                 ///  \param p1 (int) ID kontaktu
+                                                 ///  \param p2 (bool) true - usuniêcie zosta³o potwierdzone przez uzytkownika.
          #define IM_CNT_ADD       IM_BASE+4003  ///< Kontakt zosta³ dodany
                                                  ///  \param p1 (int) ID kontaktu
          #define IM_CNT_ADDING    IM_BASE+4004  ///< Kontakt jest w trakcie tworzenia (które mo¿e zostaæ ew. przerwane)
                                                  ///  Parametry kontaktu nie s¹ jeszcze ustalone.
                                                  ///  \param p1 (int) ID kontaktu
-/** ¯¹danie szukania kontaktu (np. w katalogu sieci)
-	\param p1 (sCNTSEARCH *) parametry wyszukiwania
-	*/
-		#define IM_CNT_SEARCH    IM_BASE+4010  
-/** Któraœ z cech kontaktu (np. UID) zosta³a zmieniona. Przesy³ane przy pomocy sIMessage_CntChanged. Je¿eli przecastujesz to na sIMessage_2params to \a p1 jest ID kontaktu.
-*/
-		#define IM_CNT_CHANGED   IM_BASE+4006  
+         #define IM_CNT_SEARCH    IM_BASE+4010  ///< ¯¹danie szukania kontaktu (np. w katalogu sieci)
+                                                 ///  \param p1 (sCNTSEARCH *) parametry wyszukiwania
+         #define IM_CNT_CHANGED   IM_BASE+4006  ///< Istotna cecha kontaktu (np. UID) zosta³a zmieniona.
+                                                 ///  Przesy³ane przy pomocy sIMessage_CntChanged.
+                                                 ///  Je¿eli przecastujesz to na sIMessage_2params to \a p1 jest ID kontaktu.
 
          /** Struktura do przesy³ania #IM_CNT_CHANGED.*/
             struct sIMessage_CntChanged:public sIMessage_base {
@@ -673,9 +651,7 @@ Przy jego pomocy mo¿na odró¿niæ dwie instancje korzystaj¹ce z ró¿nych profili...
         #define IMC_KONNEKTDIR      IMC_RESTORECURDIR ///< Przywraca aktywn¹ œcie¿kê na katalog programu i j¹ zwraca.
         #define IMC_GETBETALOGIN    25 
         #define IMC_GETBETAPASSMD5  27 
-        #define IMC_GETBETAANONYMOUS 31
-/** Zwraca "numer seryjny" instalacji Konnekta, losowa liczba u¿ywana najczêœciej do rozró¿niania kopii programu w statystykach */
-		#define IMC_GETSERIALNUMBER       33 
+        #define IMC_GETBETAANONYMOUS 31 
 		#define IMC_LOGDIR			29 ///< Zwraca œcie¿kê do katalogu z log'ami.
 										/// @return (char*) œcie¿ka zakoñczona '\\'
 		#define IMC_TEMPDIR			32 ///< Zwraca œcie¿kê do katalogu tymczasowego.
@@ -764,14 +740,10 @@ Przy jego pomocy mo¿na odró¿niæ dwie instancje korzystaj¹ce z ró¿nych profili...
         } sMESSAGEPOP , sMESSAGEWAITING;
         #define sMESSAGEWAITING_V1 22
 
-/** Zwraca ID kontaktu.
-Je¿eli @a net bêdzie ustawiony na NET_NONE w UID mo¿na przekazaæ (tekstem) ID kontaktu. Je¿eli kontakt o danym ID istnieje, ID zostanie zwrócone. Funkcjonalnoœæ ta mo¿e s³u¿yæ g³ównie do "przemycania" bezpoœrednich identyfikatorów kontaktów do f-cji które przyjmuj¹ tylko wartoœci net i uid.
-
-@param p1 (int) net
-@param p2 (char*) UID
-@return (int) ID
-*/
-		#define IMC_FINDCONTACT    200 
+        #define IMC_FINDCONTACT    200 ///< Podaje ID kontaktu.
+                                        ///  \param p1 (int) net
+                                        ///  \param p2 (char*) UID
+                                        ///  \return (int) ID
         #define IMC_PLUG_COUNT    240 ///< Zwraca liczbê wtyczek.
         #define IMC_PLUG_HANDLE    241 ///< Zwraca windowsowy uchwyt do wtyczki.
                                         ///  \param p1 (int) pozycja na liœcie wtyczek.
@@ -836,73 +808,51 @@ Je¿eli @a net bêdzie ustawiony na NET_NONE w UID mo¿na przekazaæ (tekstem) ID ko
                                         ///  \param p2 (char*) UID
                                         ///  \return true jeœli jest.
         #define IMC_CNT_FIND       IMC_FINDCONTACT ///< \no
-
-/**Sprawdza czy kontakt o podanym ID istnieje.
-@param p1 (int) ID.*/
-		#define IMC_CNT_IDEXISTS   233 
-
-/** Dodaje kontakt.
-Po ustawieniu parametrów kontaktu, lub od razu po #IMC_CNT_ADD trzeba wys³aæ #IMC_CNT_CHANGED
-@param p1 (int) sieæ
-@param p2 (int) UID
-@return (int) ID nowego kontaktu
-*/
-		#define IMC_CNT_ADD        230 
-
-/**Usuwa kontakt
-@param p1 (int) ID
-@param p2 (bool) true - u¿ytkownik zostanie zapytany o zgodê.
-*/
-		#define IMC_CNT_REMOVE     231 
-
-/**Zwraca iloœæ kontaktów.
-@return (int) liczba kontaktów.
-*/
-		#define IMC_CNT_COUNT      201 
-
-/** Sprawdza czy podany kontakt znajduje sie w grupie.
-@param p1 (int) ID kontaktu.
-@param p2 (char*) - grupa do sprawdzenia (jeœli == 0 sprawdzi w grupie aktywnej)
-@return (bool) true jeœli znajduje siê...
-*/
-		#define IMC_CNT_INGROUP    305 
-
-
-/** Kontakt zosta³ zmieniony.
-Komunikat powinien byæ wysy³any \b tylko w sytuacji zmiany #CNT_UID, #CNT_NET, lub zaraz po dodaniu!
-Do wszystkich wtyczek z typem #IMT_CONTACT zostanie rozes³ane #IM_CNT_CHANGED, lub #IM_CNT_ADD.
-Nie ma ju¿ potrzeby wysy³ania #IMI_REFRESH_CNT
-@param p1 ID kontaktu.
-*/
-		#define IMC_CNT_CHANGED     232 
+        #define IMC_CNT_IDEXISTS   233 ///< Sprawdza czy kontakt o podanym ID istnieje.
+                                        /// \param p1 (int) ID.
+        #define IMC_CNT_ADD        230 ///< Dodaje kontakt.
+                                        ///  Po ustawieniu parametrów kontaktu, lub od razu po #IMC_CNT_ADD
+                                        ///  trzeba wys³aæ #IMC_CNT_CHANGED
+                                        ///  \param p1 (int) sieæ
+                                        ///  \param p2 (int) UID
+                                        ///  \return (int) ID nowego kontaktu
+        #define IMC_CNT_REMOVE     231 ///< Usuwa kontakt
+                                        ///  \param p1 (int) ID
+                                        ///  \param p2 (bool) true - u¿ytkownik zostanie zapytany o zgodê.
+        #define IMC_CNT_COUNT      201 ///< Zwraca iloœæ kontaktów.
+                                        ///  \return (int) liczba kontaktów.
+        #define IMC_CNT_INGROUP    305 ///< Sprawdza czy podany kontakt znajduje sie w grupie.
+                                        /// \param p1 (int) ID kontaktu.
+                                        /// \param p2 (char*) - grupa do sprawdzenia (jeœli == 0 sprawdzi w grupie aktywnej)
+                                        /// \return (bool) true jeœli znajduje siê...
+        #define IMC_CNT_CHANGED     232 ///< Kontakt zosta³ zmieniony.
+                                        /// Komunikat powinien byæ wysy³any \b tylko w sytuacji zmiany #CNT_UID, #CNT_NET, lub zaraz po dodaniu!
+                                        /// Do wszystkich wtyczek z typem #IMT_CONTACT zostanie rozes³ane
+                                        /// #IM_CNT_CHANGED, lub #IM_CNT_ADD.
+                                        /// Nie ma ju¿ potrzeby wysy³ania #IMI_REFRESH_CNT
+                                        /// \param p1 ID kontaktu.
         #define IMC_CNT_SETSTATUS  234 ///< Zmienia status kontaktu.
                                         ///  sIMessage_StatusChange
 
 
         #define IMC_IGN_FIND       IMC_CNT_IGNORED
-        #define IMC_IGN_ADD        311 /**< Dodaje kontakt do listy ignorowanych.
-                                         \param p1 (int) sieæ
-                                         \param p2 (char*) UID
-										 */
-        #define IMC_IGN_DEL        312 /**< Usuwa kontakt z listy ignorowanych.
-                                          \param p1 (int) sieæ
-                                          \param p2 (char*) UID
-										  */
+        #define IMC_IGN_ADD        311 ///< Dodaje kontakt do listy ignorowanych.
+                                        ///  \param p1 (int) sieæ
+                                        ///  \param p2 (char*) UID
+        #define IMC_IGN_DEL        312 ///< Usuwa kontakt z listy ignorowanych.
+                                        ///  \param p1 (int) sieæ
+                                        ///  \param p2 (char*) UID
 
-        #define IMC_GRP_FIND       300 /**< Sprawdza czy grupa istnieje.
-                                          \param p1 (char*) nazwa grupy.
-                                          \return (bool) true jeœli istnieje.
-										  */
-        #define IMC_GRP_ADD        301 /**< Dodaje grupê.
-                                          \param p1 (char*) nazwa grupy.
-										  */
-        #define IMC_GRP_DEL        302 /**< Usuwa grupê.
-                                          \param p1 (char*) nazwa grupy.
-										  */
-        #define IMC_GRP_RENAME     303 /**< Zmienia nazwê grupy.
-                                          \param p1 (char*) stara nazwa grupy.
-                                          \param p2 (char*) nowa nazwa grupy.
-										  */
+        #define IMC_GRP_FIND       300 ///< Sprawdza czy grupa istnieje.
+                                        ///  \param p1 (char*) nazwa grupy.
+                                        ///  \return (bool) true jeœli istnieje.
+        #define IMC_GRP_ADD        301 ///< Dodaje grupê.
+                                        ///  \param p1 (char*) nazwa grupy.
+        #define IMC_GRP_DEL        302 ///< Usuwa grupê.
+                                        ///  \param p1 (char*) nazwa grupy.
+        #define IMC_GRP_RENAME     303 ///< Zmienia nazwê grupy.
+                                        ///  \param p1 (char*) stara nazwa grupy.
+                                        ///  \param p2 (char*) nowa nazwa grupy.
 
 
         /** Komunikat do rejestrowania kolumn w tablicach.

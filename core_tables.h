@@ -4,12 +4,30 @@
 #include "core_unique.h"
 #include "core_plugin.h"
 
-#include <Stamina/DataTable.h>
-
 #define DTCFG Konnekt::Tables::tableConfig
 #define DTCNT Konnekt::Tables::tableContacts
 #define DTMSG Konnekt::Tables::tableMessages
 #define DTNONE Konnekt::Tables::tableNotFound
+
+
+#define DT_ROWID_MASK 0x40000000  ///< Bit oznaczaj¹cy, ¿e "numer wiersza", jest identyfikatorem wiersza.
+                                /// \sa #ISCNTID #GETCNTID cCtrl::DTgetID()
+
+/** @defgroup dt_ct_ Typy kolumn 
+Typ kolumny sk³ada siê z 8 bitowego typu (jak np. #DT_CT_INT) i flag.
+@{ */
+#define DT_CT_INT 0    ///< 4 bajty (int)
+#define DT_CT_PCHAR 1  ///< Tekst zakoñczony znakiem '0'.
+#define DT_CT_STR DT_CT_PCHAR
+#define DT_CT_64     3 ///< 8 bajtów (__int64, double ...)
+#define DT_CT_UNKNOWN -1  ///< dla sDTValue, typ nieznany (zostanie ustawiony).
+
+#define DT_CF_NOSAVE 0x100  ///< Kolumna nie zostanie zapisana do pliku.
+#define DT_CF_SECRET   0x400       ///< Kolumna mo¿e byæ has³em i powinna byæ odpowiednio strze¿ona...
+#define DT_CF_CXOR      0x01000 ///< Kodowanie kolumn poprzez XORing. Dzia³a tylko jako DT_CT_PCHAR|DT_CT_CXOR.
+
+/** @} */
+
 
 
 namespace Konnekt { namespace Tables {
@@ -49,11 +67,9 @@ namespace Konnekt { namespace Tables {
 	typedef enColumnType tColType;
 	typedef unsigned int tRowId;
 
-//#ifndef _DTABLE_
-    #pragma pack(push, 1)
-
+#ifndef _DTABLE_
     struct Value {
-		short type; ///< Typ przekazywanej wartoœci
+        short type; ///< Typ przekazywanej wartoœci
         union {
             struct {
                 union {
@@ -65,44 +81,18 @@ namespace Konnekt { namespace Tables {
             int vInt;
             __int64 vInt64;
         };
-		Value(tColType type=ctypeUnknown):type(type) {vInt64 = 0;buffSize=0;}
-		Value(char type):type((tColType)type) {vInt64 = 0;buffSize=0;}
-
-		struct sDTValue* dtRef() {
-			return (sDTValue*)this;
-		}
-
+		Value(tColType type=ctypeUnknown):type((short)type) {vInt64 = 0;buffSize=0;}
+		Value(char type):type(type) {vInt64 = 0;buffSize=0;}
     };
-
-    #pragma pack(pop)
-
-//#else
-//	typedef sDTValue Value;
-//#endif  // _DTABLE_
-
-	inline Value ValueStr(const char* value, int buffSize=0) {
-		Value v(ctypeString);
-		v.vCChar = value;
-		v.buffSize = buffSize;
-		return v;
-	}
-	inline Value ValueInt(int value) {
-		Value v(ctypeInt);
-		v.vInt = value;
-		return v;
-	}
-	inline Value ValueInt64(__int64 value) {
-		Value v(ctypeInt64);
-		v.vInt64 = value;
-		return v;
-	}
-
+#else
+	typedef sDTValue Value;
+#endif  // _DTABLE_
 
 	const tRowId rowNotFound = -1;
 	const tRowId allRows = -1;
 	const tColId colNotFound = -1;
 	const tColId colByName = -1;
-	//const tRowId rowIdMask = DT_ROWID_MASK;
+	const tRowId rowIdMask = DT_ROWID_MASK;
 
 
 	enum enTableOptions {
@@ -125,10 +115,9 @@ namespace Konnekt { namespace Tables {
 	};
 
 
-	class iTable: public Stamina::iSharedObject {
+	class iTable: public iSharedObj {
 	public:
 
-		STAMINA_OBJECT_CLASS(Konnekt::Tables::iTable, Stamina::iSharedObject);
 
 		 virtual ~iTable() {};
 
@@ -136,26 +125,6 @@ namespace Konnekt { namespace Tables {
          virtual int __stdcall getRowPos(tRowId rowId)=0;
          /** Zamienia (lub nie) numer wiersza na jego identyfikator.*/
          virtual int __stdcall getRowId(unsigned int rowPos)=0;
-
-		 /** Znajduje wiersz spe³niaj¹cy podane kryteria.
-		 @param startPos - numer wiersza od którego zaczynamy szukanie
-		 @param argCount - liczba przekazywanych struktur Find*, lub -1 je¿eli ostatnie kryterium jest równe 0
-		 @param ... - kolejne kryteria jako struktury Find*, najbezpieczniej dodaæ na koñcu kryterium 0
-
-		 np. Znajduje pierwszy kontakt sieci NET_GG aktywny w ci¹gu ostatniej minuty.
-		 dt->findRow(0, -1, &Find::EqInt(CNT_NET, NET_GG), &Find(Find::gt, CNT_ACTIVITY, ValueInt64(_time64(0) - 60000)), 0);
-		 */
-         virtual tRowId __cdecl findRow(unsigned int startPos, int argCount, ...)=0;
-
-		 inline tRowId findRow(unsigned int startPos, Stamina::DT::Find& f1) {
-			 return this->findRow(startPos, 1, &f1);
-		 }
-		 inline tRowId findRow(unsigned int startPos, Stamina::DT::Find& f1, Stamina::DT::Find& f2) {
-			 return this->findRow(startPos, 2, &f1, &f2);
-		 }
-		 inline tRowId findRow(unsigned int startPos, Stamina::DT::Find& f1, Stamina::DT::Find& f2, Stamina::DT::Find& f3) {
-			 return this->findRow(startPos, 3, &f1, &f2, &f3);
-		 }
 
 		 /** Zwraca typ i flagi kolumny.
 		 ¯eby uzyskaæ sam typ kolumny trzeba pozbyæ siê flag:
@@ -233,11 +202,11 @@ namespace Konnekt { namespace Tables {
 		 @param name Nazwa kolumny. Idnetyfikator kolumny zarejestrowanej tylko po nazwie mo¿na zdobyæ przy pomocy getColId().
 		 @return Identyfikator zarejestrowanej kolumny
 		 */
-		 virtual tColId __stdcall setColumn(oPlugin plugin, tColId colId , tColType type , int def , const char * name=0)=0;
+		 virtual tColId __stdcall setColumn(Plugin plugin, tColId colId , tColType type , int def , const char * name=0)=0;
 		 /**
 		 @attention Tekstowa wartoœæ domyœlna musi "istnieæ" przez ca³y okres istnienia tablicy danych!
 		 */
- 		 tColId setColumn(oPlugin plugin, tColId id , tColType type , const char * def  , const char * name=0) {
+ 		 tColId setColumn(Plugin plugin, tColId id , tColType type , const char * def  , const char * name=0) {
 			return this->setColumn(plugin, id , type , (int)def , name);
 		 }
 
@@ -303,12 +272,11 @@ namespace Konnekt { namespace Tables {
 		  */
 		 virtual bool __stdcall save(bool force = false, const char * filePath = 0)=0;
 		 /** Zapis z opóŸnieniem. 
-		 Dane zostan¹ zapisane do domyœlnego pliku, je¿eli przez kilka sekund nie bêdzie wywo³ywana f-cja lateSave.
+		 Dane zostan¹ zapisane do domyœlnego pliku, je¿eli przez kilka sekund nie bêdzie wywo³ywana f-cja lateSave, ani nie bêd¹ wprowadzane nowe dane.
 		 Dane zapisywane s¹ jednorazowo.
-		 @warning Je¿eli po kilku sekundach od wywo³ania lateSave() zaczniemy zapisywaæ do tablicy dane bez wczeœniejszego wywo³ania lateSave(false) tablica mo¿e zostaæ zapisana ze zmianami wprowadzonymi do po³owy...
 		 @param enabled W³¹cza/wy³¹cza opcjê opóŸnionego zapisu.
 		 */
-		 virtual void __stdcall lateSave(bool enabled=true)=0;
+		 virtual void __stdcall lateSave(bool enabled)=0;
 
 		 virtual bool __stdcall setOpt(enTableOptions option , bool enabled)=0;
 		 virtual bool __stdcall getOpt(enTableOptions option)=0;
@@ -323,9 +291,9 @@ namespace Konnekt { namespace Tables {
 		 virtual const char * __stdcall _getDirectory()=0;
 		 virtual const char * __stdcall _getTableName()=0;
 		 virtual tTableId __stdcall getTableId()=0;
-		 virtual oPlugin __stdcall getTableOwner()=0;
+		 virtual Plugin __stdcall getTableOwner()=0;
 
-		 virtual bool __stdcall unregisterTable()=0;
+		 virtual bool __stdcall unregisterTable(cCtrl * ctrl)=0;
 
 #ifdef _STRING_
 		 /** Zwraca nazwê pliku (bez œcie¿ki) */
@@ -371,24 +339,24 @@ namespace Konnekt { namespace Tables {
 
 
 	/** Obiekt tablicy. */
-	class oTable:public Stamina::SharedPtr<iTable> {
+	class Table:public KObject<iTable> {
 	public:
-		oTable(tTableId tableId) {
+		Table(tTableId tableId) {
 			this->setById(tableId);
 		}
-		oTable(const char * tableName) {
+		Table(const char * tableName) {
 			this->setById(getTableId(tableName));
 		}
-		oTable(iTable * obj = 0) {
+		Table(iTable * obj = 0) {
 			this->set(obj);
 		}
 		void setById(tTableId tableId);
 
-		 oTable & operator |= (enTableOptions option) {
+		 Table & operator |= (enTableOptions option) {
 			 this->get()->setOpt(option, true);
 			 return *this;
 		 }
-		 oTable & operator ^= (enTableOptions option) {
+		 Table & operator ^= (enTableOptions option) {
 			 this->get()->setOpt(option, false);
 			 return *this;
 		 }
@@ -396,19 +364,21 @@ namespace Konnekt { namespace Tables {
 			 return this->get()->getOpt(option);
 		 }
 
+
+		 static Table registerTable(cCtrl * ctrl, tTableId tableId, const char * name, enTableOptions tableOpts = optDefaultSet);
+		 static Table registerTable(cCtrl * ctrl, tTableId tableId, enTableOptions tableOpts = optDefaultSet) {
+			 return registerTable(ctrl, tableId, 0, tableOpts);
+		 }
+		 static Table registerTable(cCtrl * ctrl, const char * name, enTableOptions tableOpts = optDefaultSet) {
+			 return registerTable(ctrl, tableByName, name, tableOpts);
+		 }
+
 	};
 
-	oTable registerTable(cCtrl * ctrl, tTableId tableId, const char * name, enTableOptions tableOpts = optDefaultSet);
-	inline oTable registerTable(cCtrl * ctrl, tTableId tableId, enTableOptions tableOpts = optDefaultSet) {
-		return registerTable(ctrl, tableId, 0, tableOpts);
-	}
-	inline oTable registerTable(cCtrl * ctrl, const char * name, enTableOptions tableOpts = optDefaultSet) {
-		return registerTable(ctrl, tableByName, name, tableOpts);
-	}
 
 	namespace IM {
 		const tIMid registerTable = 600;
-		//const tIMid unregisterTable = 601;
+		const tIMid unregisterTable = 601;
 
 		/** Tablica oczekuje rejestracji kolumn.
 		Po otrzymaniu tego komunikatu, mo¿emy zarejestrowaæ, w tablicy której komunikat dotyczy, w³asne kolumny.
@@ -453,9 +423,9 @@ namespace Konnekt { namespace Tables {
 		class _tableIM: public sIMessage_base {
 		public:
 			/** Obiekt tablicy. */
-			oTable table;
+			Table table;
 
-			_tableIM(tIMid IMid, oTable & table):sIMessage_base(IMid, 0, 0), table(table) {
+			_tableIM(tIMid IMid, Table & table):sIMessage_base(IMid, 0, 0), table(table) {
 				this->s_size = sizeof(*this);
 			}
 		};
@@ -463,14 +433,15 @@ namespace Konnekt { namespace Tables {
 		public:
 			tTableId tableId;
 			enTableOptions tableOpts;
-			_registerTable(tTableId tableId, enTableOptions tableOpts = optDefaultSet):_tableIM(registerTable, oTable()),tableId(tableId),tableOpts(tableOpts) {
+			const char * name;
+			_registerTable(tTableId tableId, const char * name, enTableOptions tableOpts = optDefaultSet):_tableIM(registerTable, Table()),tableId(tableId),name(name), tableOpts(tableOpts) {
 				this->s_size = sizeof(*this);
 			}
 		};
 		class _tableRowIM: public _tableIM {
 		public:
 			tRowId rowId;
-			_tableRowIM(tIMid imId, oTable & table, tRowId rowId):_tableIM(imId, table), rowId(rowId) {
+			_tableRowIM(tIMid imId, Table & table, tRowId rowId):_tableIM(imId, table), rowId(rowId) {
 				this->s_size = sizeof(*this);
 			}
 		};
@@ -479,6 +450,6 @@ namespace Konnekt { namespace Tables {
 };};
 
 #ifndef _DTABLE_
-//typedef Konnekt::Tables::Value sDTValue;
+typedef Konnekt::Tables::Value sDTValue;
 #endif
 

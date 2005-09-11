@@ -78,7 +78,7 @@ public:
 	/// \attention Nie mo¿na zwalniaæ tej pamiêci!
 
 	/** Pobiera wartosc wiersza z tablicy danych z konwersj¹ typów.
-	Konwersja odbywa siê gdy Tables::Value::type jest ró¿ny od DT_CT_UNKNOWN. W
+	Konwersja odbywa siê gdy sDTValue::type jest ró¿ny od DT_CT_UNKNOWN. W
 	przeciwnym wypadku jako typ przyjmowany jest typ kolumny.
 	\param db Identyfikator tabeli
 	\param row Identyfikator/numer wiersza
@@ -87,9 +87,9 @@ public:
 	\return wartoœæ (lub adres do wartoœci jeœli typ != DT_CT_INT)
 	\attention W #DTMSG mo¿na zapisywaæ tylko w okreœlonych okolicznoœciach!
 	*/
-	virtual bool __stdcall DTget(tTable db , unsigned int row , unsigned int col , Tables::Value * value)=0;
+	virtual bool __stdcall DTget(tTable db , unsigned int row , unsigned int col , sDTValue * value)=0;
 	/** Ustawia wartosc wiersza z tablicy danych z konwersj¹ typów.
-	Konwersja odbywa siê gdy Tables::Value::type jest ró¿ny od DT_CT_UNKNOWN. W
+	Konwersja odbywa siê gdy sDTValue::type jest ró¿ny od DT_CT_UNKNOWN. W
 	przeciwnym wypadku jako typ przyjmowany jest typ kolumny.
 	\param db Identyfikator tabeli
 	\param row Identyfikator/numer wiersza
@@ -97,7 +97,7 @@ public:
 	\param value Struktura do której zostanie zapisana wartoœæ.
 	\attention Do odczytu danych z #DTMSG przygotowane s¹ inne funkcje!
 	*/
-	virtual bool __stdcall DTset(tTable db , unsigned int row , unsigned int col , Tables::Value * value)=0;
+	virtual bool __stdcall DTset(tTable db , unsigned int row , unsigned int col , sDTValue * value)=0;
 	/** Blokuje dostêp do wiersza w tablicy dla innych w¹tków. Zaraz po
 	wykorzystaniu zabezpieczonych danych trzeba wywo³aæ cCtrl::DTunlock z tymi
 	samymi parametrami!
@@ -151,7 +151,7 @@ public:
 	i je raportowaæ... U¿ywanie wysoko zalecane!
 	@warn Funkcja zwraca uchwyt w¹tku! Nale¿y go zamkn¹æ przy pomocy CloseHandle()!!!
 	*/
-	virtual HANDLE __stdcall BeginThreadOld(void *security,
+	virtual HANDLE __stdcall BeginThread(void *security,
 		unsigned stack_size,
 		fBeginThread start_address,
 		void *arglist=0,
@@ -161,7 +161,7 @@ public:
 	/** Tworzy w¹tek i czeka a¿ siê skoñczy.
 	Parametry te same co w cCtrl::BeginThread()
 	*/
-	int BeginThreadAndWait(const char * name, void *security,	unsigned stack_size, fBeginThread start_address, void *arglist=0, unsigned initflag=0, unsigned *thrdaddr=0);
+	int BeginThreadAndWait(void *security,	unsigned stack_size, fBeginThread start_address, void *arglist=0, unsigned initflag=0, unsigned *thrdaddr=0);
 
 	/** Pobiera poziom debugowania dla wtyczki */
 	virtual unsigned int __stdcall DebugLevel(enDebugLevel level = DBG_ALL)=0;
@@ -190,31 +190,11 @@ public:
 	virtual bool __stdcall idInRange(Unique::tDomainId domainId, Unique::tRangeId rangeId, Unique::tId id) = 0;
 	virtual Unique::tRangeId __stdcall idInRange(Unique::tDomainId domainId, Unique::tId id, Unique::Range::enType check = Unique::Range::typeBoth) = 0;
 
-	virtual Tables::oTable __stdcall DT(Tables::tTableId tableId)=0;
+	virtual Tables::Table __stdcall DT(Tables::tTableId tableId)=0;
 	/** Zwraca obiekt wtyczki.
 	@param pluginId identyfikator, indeks, lub pluginNotFound je¿eli chcemy uzyskaæ obiekt przypisany do cCtrl.
 	*/
-	virtual Konnekt::oPlugin __stdcall getPlugin(Konnekt::tPluginId pluginId = pluginNotFound)=0;
-
-	virtual HANDLE __stdcall BeginThread(const char* name, void *security,
-		unsigned stack_size,
-		fBeginThread start_address,
-		void *arglist=0,
-		unsigned initflag=0,
-		unsigned *thrdaddr=0
-		)=0;
-
-	/** Nadaje nazwê wykonywanemu w¹tkowi, inicjalizuje bufory tymczasowe i dodaje do listy kontrolowanych w¹tków (które zostan¹ np. zatrzymane w chwili wyst¹pienia b³êdu krytycznego).
-	@warning Musi byæ wywo³ane Z poziomu w¹tku!
-	@notice Funkcja ta wywo³ywana jest automatycznie zaraz po utworzeniu w¹tku.
-	*/
-	virtual void __stdcall onThreadStart(const char* name=0) = 0;
-	/** Zwalnia bufory tymczasowe i usuwa z listy kontrolowanych w¹tków.
-	@warning Musi byæ wywo³ane Z poziomu w¹tku!
-	@notice Funkcja ta wywo³ywana jest automatycznie zaraz przed zakoñczeniem w¹tku.
-	*/
-	virtual void __stdcall onThreadEnd()=0;
-
+	virtual Konnekt::Plugin __stdcall getPlugin(Konnekt::tPluginId pluginId = pluginNotFound)=0;
 
 	// funkcje lokalne, dla ulatwienia
 	int DTgetInt(tTable db , unsigned int row , unsigned int col);
@@ -250,9 +230,6 @@ public:
 		return this->SetColumn(table , id , type , (int)def , name);
 	}
 
-	inline operator oPlugin () {
-		return this->getPlugin();
-	}
 
 };
 

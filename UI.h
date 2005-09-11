@@ -477,11 +477,6 @@ under_dot - podkreœlone kropkowan¹ lini¹
 	*/
 	#define ACTT_TIPBUTTON  0x1C0000
 
-    #define ACTT_LINK		0x1D0000   /**< Przycisk - link (bez obramowania) .
-	Zachowuje siê identycznie jak #ACTT_BUTTON.
-	*/
-
-
   /** @} */
 
   /** \defgroup acts_ Statusy akcji
@@ -568,8 +563,6 @@ under_dot - podkreœlone kropkowan¹ lini¹
     #define ACTSINFO_CENTER      0x1000 ///< Tekst jest wyœrodkowany.
 
 	#define ACTSBUTTON_ALIGNRIGHT 0x1000
-
-    #define ACTSEDIT_READONLY  0x1000 /**< Kontrolka jest tylko do odczytu. */
 
 
 /** @} */
@@ -787,9 +780,7 @@ struct sUIActionNotify_destroyWindow: public sUIActionNotify_base {
     //#define IMIA_MAIN_LOG   106
     #define IMIA_MAIN_ABOUT 107
     #define IMIA_MAIN_WWW   108
-    #define IMIA_MAIN_HELP   116
-	#define IMIA_MAIN_FORUM 118
-	#define IMIA_MAIN_DOWNLOADINFO 119
+    #define IMIA_MAIN_SUPPORT   116
 
     #define IMIA_CNTTIP 117
 
