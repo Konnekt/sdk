@@ -12,7 +12,7 @@ Dodatkowo kilka funkcji / makr dla Waszej wygody :)
 #ifndef PLUGEXPORTH
 #define PLUGEXPORTH
 
-#include <Stamina/Version.h>
+#include <Stamina/VersionControl.h>
 #include "plug.h"
 
 #pragma pack(push, 1)

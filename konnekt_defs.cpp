@@ -141,10 +141,8 @@ char * __vsaprintf(const char *format, va_list ap)
 #endif
 #ifndef NO_PLUG_EXPORT
 
-using Tables::Value;
-
      bool SETSTR(int id , const char * val) {
-		 Value v(Tables::ctypeString); 
+		 OldValue v(Tables::ctypeString); 
          v.vCChar = val;
          return Ctrl->DTset(DTCFG , 0 , id, &v);
      }    

@@ -1,6 +1,5 @@
 #pragma once
 
-#include "plug.h"
 #include <Stamina\Unique.h>
 
 namespace Konnekt { 

@@ -181,6 +181,9 @@
 				RelativePath="..\konnekt\plug.h">
 			</File>
 			<File
+				RelativePath=".\plug_defs.h">
+			</File>
+			<File
 				RelativePath="..\konnekt\plug_export.h">
 			</File>
 			<File

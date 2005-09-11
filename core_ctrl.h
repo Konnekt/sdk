@@ -4,6 +4,7 @@
 #include "core_plugin.h"
 #include "core_tables.h"
 
+using namespace Konnekt;
 
 /**Klasa s³u¿¹ca do komunikowania siê z "rdzeniem" systemu wtyczek.
 
