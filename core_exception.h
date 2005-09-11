@@ -1,6 +1,5 @@
 #pragma once
 
-
 class cKException { // Wyj¹tek
 public:
 	const char * info;

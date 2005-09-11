@@ -4,12 +4,30 @@
 #include "core_unique.h"
 #include "core_plugin.h"
 
-#include <Stamina/DataTable.h>
-
 #define DTCFG Konnekt::Tables::tableConfig
 #define DTCNT Konnekt::Tables::tableContacts
 #define DTMSG Konnekt::Tables::tableMessages
 #define DTNONE Konnekt::Tables::tableNotFound
+
+
+#define DT_ROWID_MASK 0x40000000  ///< Bit oznaczaj¹cy, ¿e "numer wiersza", jest identyfikatorem wiersza.
+                                /// \sa #ISCNTID #GETCNTID cCtrl::DTgetID()
+
+/** @defgroup dt_ct_ Typy kolumn 
+Typ kolumny sk³ada siê z 8 bitowego typu (jak np. #DT_CT_INT) i flag.
+@{ */
+#define DT_CT_INT 0    ///< 4 bajty (int)
+#define DT_CT_PCHAR 1  ///< Tekst zakoñczony znakiem '0'.
+#define DT_CT_STR DT_CT_PCHAR
+#define DT_CT_64     3 ///< 8 bajtów (__int64, double ...)
+#define DT_CT_UNKNOWN -1  ///< dla Tables::Value, typ nieznany (zostanie ustawiony).
+
+#define DT_CF_NOSAVE 0x100  ///< Kolumna nie zostanie zapisana do pliku.
+#define DT_CF_SECRET   0x400       ///< Kolumna mo¿e byæ has³em i powinna byæ odpowiednio strze¿ona...
+#define DT_CF_CXOR      0x01000 ///< Kodowanie kolumn poprzez XORing. Dzia³a tylko jako DT_CT_PCHAR|DT_CT_CXOR.
+
+/** @} */
+
 
 
 namespace Konnekt { namespace Tables {
@@ -102,7 +120,7 @@ namespace Konnekt { namespace Tables {
 	const tRowId allRows = -1;
 	const tColId colNotFound = -1;
 	const tColId colByName = -1;
-	//const tRowId rowIdMask = DT_ROWID_MASK;
+	const tRowId rowIdMask = DT_ROWID_MASK;
 
 
 	enum enTableOptions {
@@ -124,6 +142,26 @@ namespace Konnekt { namespace Tables {
 		optDefaultSet = optBroadcastEvents | optUseCurrentPassword,
 	};
 
+	class Find {
+	public:
+
+		enum Operation {
+			eq, neq, gt, gteq, lt, lteq
+		};
+
+		inline Find(Operation operation, tColId col, const Value& value):operation(operation), col(col), value(value) {}
+
+		static inline Find EqStr(tColId col, const char* str) {
+			return Find(eq, col, ValueStr(str));
+		}
+		static inline Find EqInt(tColId col, int value) {
+			return Find(eq, col, ValueInt(value));
+		}
+
+		Operation operation;
+		tColId col;
+		Value value;
+	};
 
 	class iTable: public Stamina::iSharedObject {
 	public:
@@ -147,13 +185,13 @@ namespace Konnekt { namespace Tables {
 		 */
          virtual tRowId __cdecl findRow(unsigned int startPos, int argCount, ...)=0;
 
-		 inline tRowId findRow(unsigned int startPos, Stamina::DT::Find& f1) {
+		 inline tRowId findRow(unsigned int startPos, Find& f1) {
 			 return this->findRow(startPos, 1, &f1);
 		 }
-		 inline tRowId findRow(unsigned int startPos, Stamina::DT::Find& f1, Stamina::DT::Find& f2) {
+		 inline tRowId findRow(unsigned int startPos, Find& f1, Find& f2) {
 			 return this->findRow(startPos, 2, &f1, &f2);
 		 }
-		 inline tRowId findRow(unsigned int startPos, Stamina::DT::Find& f1, Stamina::DT::Find& f2, Stamina::DT::Find& f3) {
+		 inline tRowId findRow(unsigned int startPos, Find& f1, Find& f2, Find& f3) {
 			 return this->findRow(startPos, 3, &f1, &f2, &f3);
 		 }
 
