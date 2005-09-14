@@ -1,0 +1,71 @@
+======================================================================
+* Konnekt Delphi SDK
+*
+* (c) 2005 Winthux
+*
+* Delphi SDK jest t³umaczeniem oryginalnego SDK Konnekta.
+*
+* Przed wykorzystaniem nale¿y siê zapoznaæ z niniejszym plikiem.
+======================================================================
+
+
+
+Informacje:
+============
+* Wszystkie struktury, funkcje i sta³e maj¹ identyczne nazwy co w oryginale.
+
+* Dodatkowo do ka¿dej struktury dodawa³em definicjê wskaŸnika do danej struktury.
+	Np. sIMessage_basePtr jest wskaŸnikiem do sIMessage_base.
+
+* Dla wygody przy wiêkszoœci struktur s¹ zdefiniowane funkcje (a'la konstruktory,
+  których recordy nie posiadaj¹), wype³niaj¹ce odpowiednie pola recordów.
+  Dziêki nim nie trzeba przejmowaæ siê ustawianiem za ka¿dym razem pola size.
+
+  Nazwa funkcji: nazwa_strukturyB(); np. sIMessage_baseB();
+
+* Nie wiem jak siê obs³uguje zasoby w delphi wiêc ³adowanie ikonek, bitmap itp jest
+  na razie rzecz¹ otwart¹
+
+
+
+!!! Uwaga !!!:
+==============
+* Jako, ¿e w K wszystkie napisy przekazywane s¹ jako wskaŸniki, to w niektórych
+  przypadkach trzeba zadeklarowaæ sta³a z napisem i przekazywaæ wskaŸnik do tych
+  napisów. 
+
+* Metoda BeginThreadAndWait klasy cCtrl nie jest zaimplementowana !!!.
+
+* Obs³uga w¹tków mo¿e nie dzia³aæ poprawnie.
+
+* Niektóre parametry metod klasy cCtrl mog¹ mieæ niepoprawne typy argumentów.
+
+
+
+Ró¿nice:
+========
+* Niektóre funkcje zosta³y przeniesione do innych plików.
+
+* W wielu przypadkach zmienna type oznaczana jest jako type_.
+
+* Przy ustawianiu wartoœci domyœlnych dla kolumn konfiguracji DT_CT_STR i DT_CT_64
+  trzeba podaæ sta³¹.
+
+
+
+Zalecania:
+==========
+* Sta³e, nazwy funkcji, struktury nazywamy tak samo jak w oryginalnym SDK
+
+* Nowe sta³e umieszczamy rosn¹co, tzn. IM_PLUG_SDKVERSION = IM_BASE+20;
+  l¹duje pod IM_BASE+19; Je¿eli nie ma IM_BASE lub innej sta³ej w definicji
+  to trzeba poszukaæ po przedrostku IM_, IMC_... Je¿eli nie znajdziemy "grupy"
+  sta³ych, gdzie nowa sta³a ma nale¿eæ to patrzymy w jakim miejscu znajduje siê
+  w oryginalnym pliku i mniej wiêcej celujemy w to samo miejsce...
+
+* O ile siê da, sta³e, struktury, funkcjê proszê umieszczaæ w plikach
+  z identycznymi nazwami co w oryginalnym SDK. (¯eby nie powsta³ ba³agan
+  i ³atwo mo¿na by³o zlokalizowaæ). Nie zawsze siê takie coœ da zrobiæ,
+  np. plug_export.h zawiera definicje funkcji zadeklarowanych w plug_defs.cpp.
+  Delphi nie pozwala rozdzieliæ definicji i deklaracji wiêc wszystkie
+  definicje przenios³em do PlugDefs.pas.
