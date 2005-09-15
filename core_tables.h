@@ -33,6 +33,7 @@ namespace Tables {
 		tableConfig = 0,
 		tableContacts = 1,
 		tableMessages = 2,
+		tableGlobalCfg = 3,
 		tableByName = -1,
 
 		dtCfg = 0,
@@ -88,7 +89,7 @@ namespace Tables {
 		optSilent = 0x1000,
 
 
-		optDefaultSet = /*optBroadcastEvents | */optUseCurrentPassword | optUseTemporary,
+		optDefaultSet = /*optBroadcastEvents | */ optUseTemporary,
 	};
 
 	inline enTableOptions operator | (enTableOptions a, enTableOptions b) {
