@@ -1,4 +1,9 @@
 /**@page changelog Changelog
+
+ @section chg_050708 2005-07-08   v0.6.22.137
+   - Identyfikator tablicy tTableId jest teraz tTableId
+   - Wszystkie g³ówne tablice podpiête s¹ pod nowe API obs³ugi tablic
+
  @section chg_050210 2005-02-10   v0.6.22
    - #IM_CNT_CHANGED rozsy³any jest równie¿ po ka¿dym zapisaniu informacji o kontakcie.
    - w #IMC_FINDCONTACT (i teoretycznie we wszystkich miejscach gdzie podajemy kontakt jako parê sieæ,UID) mo¿emy podaæ sieæ jako NET_NONE i UID jako identyfikator kontaktu w tablicy (oczywiœcie liczba zamieniona na tekst)
@@ -64,7 +69,7 @@
 	 W ten sposób nag³ówki do³¹czamy tak: #include "konnekt/nazwa_naglowka.h"
 
  \section chg_031011 2003-10-11   v0.6.18.101
-   - Identyfikator tablicy jest teraz typu tTable.
+   - Identyfikator tablicy jest teraz typu tTableId.
    - Zamiast sSETCOL i IMC_CNT_SETCOL i IMC_CFG_SETCOL wysy³amy teraz strukturê
      sIMessage_setColumn, albo u¿ywamy funkcji SetColumn().
    - Wycofane, ale nadal dzia³aj¹ce identyfikatory znajduj¹ siê w plug_obsolete.h
