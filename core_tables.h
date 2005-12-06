@@ -423,7 +423,7 @@ namespace Tables {
 
 	oTable registerTable(cCtrl * ctrl, tTableId tableId, const StringRef& name, enTableOptions tableOpts = optDefaultSet);
 	inline oTable registerTable(cCtrl * ctrl, tTableId tableId, enTableOptions tableOpts = optDefaultSet) {
-		return registerTable(ctrl, tableId, tableOpts);
+		return registerTable(ctrl, tableId, "", tableOpts);
 	}
 	inline oTable registerTable(cCtrl * ctrl, const StringRef& name, enTableOptions tableOpts = optDefaultSet) {
 		return registerTable(ctrl, tableByName, name, tableOpts);

@@ -27,6 +27,17 @@
    kSound::action::Check | id - Checkbox
    kSound::action::Value | id - Wartoœæ
    kSound::action::Play | id - Play/Stop
+
+ Standardowe typy dŸwiêków:
+
+	newUser - Ktoœ jest dostêpny.
+	newMsg - Wiadomoœæ (zamkniête okno)
+	newMsgAct - Wiadomoœæ , aktywne okno
+	newMsgInact - Wiadomoœæ , nieaktywne okno rozmowy
+	quickEvent - Zdarzenie (np. niedostarczenie wiadomoœci)
+	msgSent - Wiadomoœæ wys³ana
+
+
  @{
 */
 namespace kSound {

@@ -147,7 +147,7 @@ char * __vsaprintf(const char *format, va_list ap)
          return Ctrl->DTset(DTCFG , 0 , id, &v);
      }    
      bool SETINT(int id , int val , int mask) {
-		 Value v(Tables::ctypeInt); 
+		 OldValue v(Tables::ctypeInt); 
          if (mask != -1) { // maskowanie
              Ctrl->DTget(DTCFG , 0 , id, &v);
              v.vInt = (v.vInt & ~mask) | val;
@@ -158,20 +158,20 @@ char * __vsaprintf(const char *format, va_list ap)
          }
      }    
      const char * GETSTR(int id , char * buff , unsigned int size) {
-		 Value v(Tables::ctypeString); 
+		 OldValue v(Tables::ctypeString); 
          v.vChar = buff;
          v.buffSize = size;
          Ctrl->DTget(DTCFG , 0 , id, &v);
          return v.vCChar;
      }    
      int GETINT(int id) {
-		 Value v(Tables::ctypeInt); 
+		 OldValue v(Tables::ctypeInt); 
          Ctrl->DTget(DTCFG , 0 , id, &v); 
          return v.vInt;
      }    
 
      bool SETCNTI(int row , int id , int val , int mask) {
-		 Value v(Tables::ctypeInt); 
+		 OldValue v(Tables::ctypeInt); 
          if (mask != -1) { // maskowanie
              Ctrl->DTget(DTCNT , row , id, &v);
              v.vInt = (v.vInt & ~mask) | val;
@@ -182,7 +182,7 @@ char * __vsaprintf(const char *format, va_list ap)
          }
      }
 	 bool SETCNTI64(int row , int id , __int64 val, __int64 mask) {
-		 Value v(Tables::ctypeInt64); 
+		 OldValue v(Tables::ctypeInt64); 
          if (mask != -1) { // maskowanie
              Ctrl->DTget(DTCNT , row , id, &v);
              v.vInt64 = (v.vInt64 & ~mask) | val;
@@ -195,22 +195,22 @@ char * __vsaprintf(const char *format, va_list ap)
 
 
      bool SETCNTC(int row , int id , const char * val) {
-		 Value v(Tables::ctypeString); 
+		 OldValue v(Tables::ctypeString); 
          v.vCChar = val;
          return Ctrl->DTset(DTCNT , row , id, &v); 
      }
      int GETCNTI(int row , int id) {
-		 Value v(Tables::ctypeInt); 
+		 OldValue v(Tables::ctypeInt); 
          Ctrl->DTget(DTCNT , row , id, &v); 
          return v.vInt;}
 
 	 __int64 GETCNTI64(int row , int id) {
-		 Value v(Tables::ctypeInt64); 
+		 OldValue v(Tables::ctypeInt64); 
          Ctrl->DTget(DTCNT , row , id, &v); 
          return v.vInt64;}
 
      const char * GETCNTC(int row , int id , char * buff , unsigned int size) {
-		 Value v(Tables::ctypeString); 
+		 OldValue v(Tables::ctypeString); 
          v.vChar = buff;
          v.buffSize = size;
          Ctrl->DTget(DTCNT , row , id, &v); 
@@ -292,12 +292,12 @@ void IMERROR() {  //Windows errors
 
 
 int cCtrl::DTgetInt(tTable db , unsigned int row , unsigned int col) {
-    Value v(Tables::ctypeInt); 
+    OldValue v(Tables::ctypeInt); 
     DTget(db , row , col, &v); 
     return v.vInt;
 }
 bool cCtrl::DTsetInt(tTable db , unsigned int row , unsigned int col , int val , int mask){
-    Value v(Tables::ctypeInt); 
+    OldValue v(Tables::ctypeInt); 
     if (mask != -1) { // maskowanie
         DTget(db , row , col, &v);
         v.vInt = (v.vInt & ~mask) | val;
@@ -308,24 +308,24 @@ bool cCtrl::DTsetInt(tTable db , unsigned int row , unsigned int col , int val ,
     }
 }
 char * cCtrl::DTgetStr(tTable db , unsigned int row , unsigned int col , char * buff , unsigned int size){
-    Value v(Tables::ctypeString); 
+    OldValue v(Tables::ctypeString); 
     v.vChar = buff;
     v.buffSize = size;
     DTget(db , row , col, &v); 
     return v.vChar;
 }
 bool cCtrl::DTsetStr(tTable db , unsigned int row , unsigned int col , const char * val){
-    Value v(Tables::ctypeString); 
+    OldValue v(Tables::ctypeString); 
     v.vCChar = val;
     return DTset(db , row , col, &v); 
 }
 __int64 cCtrl::DTgetInt64(tTable db , unsigned int row , unsigned int col) {
-    Value v(Tables::ctypeInt64); 
+    OldValue v(Tables::ctypeInt64); 
     DTget(db , row , col, &v); 
     return v.vInt64;
 }
 bool cCtrl::DTsetInt64(tTable db , unsigned int row , unsigned int col , __int64 val , __int64 mask) {
-    Value v(Tables::ctypeInt64); 
+    OldValue v(Tables::ctypeInt64); 
     if (mask != -1) { // maskowanie
         DTget(db , row , col, &v);
         v.vInt64 = (v.vInt64 & ~mask) | val;
@@ -790,7 +790,7 @@ ShowBits::enLevel ShowBits::getLevel() {
 	return (ShowBits::enLevel) (getAllBits() & ShowBits::levelFull);
 }
 unsigned int ShowBits::getAllBits() {
-    Value v(Tables::ctypeInt); 
+    OldValue v(Tables::ctypeInt); 
     if (Ctrl->DTget(DTCFG , 0 , CFG_SHOWBITS, &v)) 
 		return v.vInt;
 	else return 0xFFFFFFFF;
