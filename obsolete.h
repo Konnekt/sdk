@@ -10,15 +10,15 @@
 #endif
 #pragma pack(push, 1)
 
+/** Rejestruje kolumnê w tabeli ustawieñ.
+@param p1 (sSETCOL*) parametry kolumny.
+@attention Mo¿e byæ wysy³ane TYLKO PO otrzymaniu komunikatu #IM_SETCOLS.*/
+        #define IMC_CFG_SETCOL 1001    
+/** Rejestruje kolumnê w tabeli kontaktów.
+\param p1 (sSETCOL*) parametry kolumny.
+\attention Mo¿e byæ wysy³ane TYLKO PO otrzymaniu komunikatu #IM_SETCOLS.*/
+		#define IMC_CNT_SETCOL 1101    
 
-        #define IMC_CFG_SETCOL 1001    ///< Rejestruje kolumnê w tabeli ustawieñ.
-                                        ///  \param p1 (sSETCOL*) parametry kolumny.
-                                        ///  \attention Mo¿e byæ wysy³ane TYLKO PO otrzymaniu komunikatu
-                                        ///  #IM_SETCOLS.
-        #define IMC_CNT_SETCOL 1101    ///< Rejestruje kolumnê w tabeli kontaktów.
-                                        ///  \param p1 (sSETCOL*) parametry kolumny.
-                                        ///  \attention Mo¿e byæ wysy³ane TYLKO PO otrzymaniu komunikatu
-                                        ///  #IM_SETCOLS.
         /** Struktura u¿ywana w #IMC_CFG_SETCOL i #IMC_CNT_SETCOL */
         struct sSETCOL {
             int id /// ID kolumny.

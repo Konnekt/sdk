@@ -98,63 +98,6 @@ class cCtrl;
 
 
 
-// -----------------------------------------------------------------------------------------------
-  /** \defgroup net_ Sieci wtyczek
-      \brief \no
-
-      "Sieæ" (Net) wtyczki oznacza przynale¿noœæ do pewnej grupy.
-      Na przyk³ad jeden protokó³ mo¿e byæ obs³ugiwany przez kilka niezale¿nych
-      od siebie wtyczek o tej samej wartoœci \a Net. <br> <br>
-      Wartoœæ sieci u¿ywana jest przede wszystkim podczas komunikacji
-      pomiêdzy wtyczkami. W momencie wys³ania #IMessage , rdzeñ
-      szuka wtyczki o podanej wartoœci \a Net obs³uguj¹cej typ wysy³anej
-      wiadomoœci. W ten sposób , mo¿na rozsy³aæ w systemie wiadomoœci
-      do \i wtyczek nawet nie wiedz¹c o ich istnieniu (a przede wszystkim
-      o ich identyfikatorach) ...<br><br>
-      Numery sieci gotowych wtyczek bêd¹ do³¹czane do SDK...
-
-      \attention \a Net jest typu <b>unsigned int</b> , przy czym
-              wartoœci definiowane przez Was powinny byæ wiêksze od @b 255!
-			  Wartoœci od 128-255 powinny byæ WOLNE
-      \sa info imt_ #IM_PLUG_NET
-  \{
-  */
-     #define NET_FIRST -2          ///< Wiadomoœæ dotrze do pierwszej wtyczki (dowolnej sieci), która potrafi j¹ obs³u¿yæ.
-     #define NET_BROADCAST -1      ///< Wiadomoœæ dotrze do wtyczek wszystkich sieci.
-     #define NET_BC NET_BROADCAST  ///< Odpowiednik #NET_BROADCAST.
-     #define NET_NONE 0            ///< Wiadomosci do rdzenia.
-     #define NET_NET 1             ///< Wtyczki obs³uguj¹ce protokó³ "w³asny".
-     #define NET_INTERNAL 2
-     #define NET_SOUND 3           ///< DŸwiêk
-     #define NET_UPDATE 4           ///< Update
-     #define NET_OTHER   6         ///< Wtyczki nie posiadaj¹ce akcji, nie obs³uguj¹ce wiadomoœci itp.
-
-     #define NET_GG  10            ///< Wtyczki obs³uguj¹ce protokó³ GG
-     #define NET_ICQ 11            ///< Wtyczki obs³uguj¹ce protokó³ ICQ
-     #define NET_JABBER 12            ///< Wtyczki obs³uguj¹ce protokó³ JABBER
-     #define NET_EMAIL 13            ///< Wtyczki obs³uguj¹ce EMaile
-     #define NET_SMS 14            ///< Wtyczki obs³uguj¹ce SMSy
-	 #define NET_KLAN 15 
-	 #define NET_KSTYLE 16
-	 #define NET_EXPIMP 17
-	 #define NET_KONNFERENCJA 20
-
-	 #define NET_AIM    60            ///< Wtyczki obs³uguj¹ce protokó³ AIM
-     #define NET_YAHOO  61            ///< Wtyczki obs³uguj¹ce protokó³ YAHOO
-     #define NET_MSN    62            ///< Wtyczki obs³uguj¹ce protokó³ MSN
-     #define NET_TLEN   63            ///< Wtyczki obs³uguj¹ce protokó³ TLEN
-	 
-
-	// sieci tylko do 19 . ich komunikaty to IM_USER + NET * 1000
-    // nastêpne od net 60, tak ¿eby komunikaty zaczê³y siê jako NET * 1000
-
-	 #define NET_KTRANSFER  130 ///< kTransfer 
-
-  // Inne wtyczki
-     #define NET_WAPILOT 756       ///< WApilot.dll
-	 #define NET_KEASY  227
-	 #define NET_KAWAY  666
-  /** \} */  // net_
 
   // Typy IMessage
 
