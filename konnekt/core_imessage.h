@@ -19,6 +19,7 @@ namespace Konnekt {
 
         /// Wiadomoœæ bezpoœrednio do rdzenia (lub UI).
         imtCore = 0,
+        imtNone = 0,
 
         /// Wiadomoœci tekstowe.
         imtMessage = 1,
@@ -60,6 +61,56 @@ namespace Konnekt {
 	inline enIMessageType operator | (enIMessageType& a, enIMessageType& b) {
 		return (enIMessageType)(a | b);
 	}
+
+
+
+/** Struktura u¿ywana podczas przesy³ania wiadomoœci.
+    Jest u¿ywana jako bazowa dla wiêkszych struktur...
+  */
+  struct sIMessage_base {
+    unsigned short s_size; ///< Rozmiar struktury w bajtach (zazwyczaj ustawiane przez kontruktor)
+    unsigned int id;   ///< Identyfikator wiadomoœci
+    unsigned int flag; ///< Flaga wiadomoœci (na razie powinno byæ zawsze równe 0)
+    tNet net;  ///< Docelowa sieæ. 0 - rdzeñ lub UI
+    enIMessageType type; ///< Docelowy typ wtyczek
+    tPluginId sender; ///< Identyfikator wtyczki wysy³aj¹cej
+	sIMessage_base(unsigned int _id, tNet _net, enIMessageType _type)
+        :s_size(sizeof(sIMessage_base)),id(_id),net(_net),type(_type),sender(pluginNotFound),flag(0) {}
+    sIMessage_base() 
+		:s_size(sizeof(sIMessage_base)),id(0),net(Net::none),type(imtNone),sender(pluginNotFound),flag(0) {}
+    sIMessage_base(unsigned int _id)
+		:s_size(sizeof(sIMessage_base)),id(_id),net(Net::none),type(imtNone),sender(pluginNotFound),flag(0) {}
+    sIMessage_base(sIMessage_base * base) {*this = *base;}
+
+
+  };
+  /** Struktura u¿ywana podczas przesy³ania wiadomoœci.
+    Mo¿e byæ struktur¹ bazow¹ dla wiêkszych struktur ...
+    p1 i p2 mog¹ byæ zast¹pione dowolnymi typami, najlepiej o
+    rozmiarze po 4 bajty ...
+  */
+  struct sIMessage_2params: public sIMessage_base {
+    IMPARAM p1;   ///< Parametr pierwszy
+    IMPARAM p2;   ///< Parametr drugi
+
+    sIMessage_2params(unsigned int _id, tNet _net, enIMessageType _type, IMPARAM _p1, IMPARAM _p2)
+        :sIMessage_base(_id , _net, _type), p1(_p1),p2(_p2) {s_size=sizeof(sIMessage_2params);}
+    sIMessage_2params()
+        :sIMessage_base(), p1(0),p2(0) {s_size=sizeof(sIMessage_2params);}
+    sIMessage_2params(unsigned int _id, IMPARAM _p1, IMPARAM _p2) 
+        :sIMessage_base(_id), p1(_p1),p2(_p2) {s_size=sizeof(sIMessage_2params);}
+    sIMessage_2params(sIMessage_base &base) 
+        :sIMessage_base(base.id , base.net , base.type), p1(0),p2(0) 
+        {s_size=sizeof(sIMessage_2params);
+         this->flag = base.flag;
+         this->sender = base.sender;}
+  };
+  typedef sIMessage_2params sIMessage;
+  typedef sIMessage sIMESSAGE;
+  #define sIMessage_V1 30 ///< Rozmiar tej struktury w wersji 1 SDK
+
+
+
 
 
 };

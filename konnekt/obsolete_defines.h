@@ -12,30 +12,29 @@
 @{ */
 
 
-     #define NET_FIRST -2          ///< Wiadomoœæ dotrze do pierwszej wtyczki (dowolnej sieci), która potrafi j¹ obs³u¿yæ.
-     #define NET_BROADCAST -1      ///< Wiadomoœæ dotrze do wtyczek wszystkich sieci.
+#define NET_FIRST Net::first          ///< Wiadomoœæ dotrze do pierwszej wtyczki (dowolnej sieci), która potrafi j¹ obs³u¿yæ.
+#define NET_BROADCAST Net::broadcast      ///< Wiadomoœæ dotrze do wtyczek wszystkich sieci.
      #define NET_BC NET_BROADCAST  ///< Odpowiednik #NET_BROADCAST.
-     #define NET_NONE 0            ///< Wiadomosci do rdzenia.
-     #define NET_NET 1             ///< Wtyczki obs³uguj¹ce protokó³ "w³asny".
-     #define NET_INTERNAL 2
-     #define NET_SOUND 3           ///< DŸwiêk
-     #define NET_UPDATE 4           ///< Update
-     #define NET_OTHER   6         ///< Wtyczki nie posiadaj¹ce akcji, nie obs³uguj¹ce wiadomoœci itp.
+#define NET_NONE Net::none            ///< Wiadomosci do rdzenia.
 
-     #define NET_GG  10            ///< Wtyczki obs³uguj¹ce protokó³ GG
-     #define NET_ICQ 11            ///< Wtyczki obs³uguj¹ce protokó³ ICQ
-     #define NET_JABBER 12            ///< Wtyczki obs³uguj¹ce protokó³ JABBER
-     #define NET_EMAIL 13            ///< Wtyczki obs³uguj¹ce EMaile
-     #define NET_SMS 14            ///< Wtyczki obs³uguj¹ce SMSy
-	 #define NET_KLAN 15 
-	 #define NET_KSTYLE 16
-	 #define NET_EXPIMP 17
-	 #define NET_KONNFERENCJA 20
+#define NET_SOUND Net::sound           ///< DŸwiêk
+     #define NET_UPDATE Net::update           ///< Update
+     #define NET_OTHER   Net::other         ///< Wtyczki nie posiadaj¹ce akcji, nie obs³uguj¹ce wiadomoœci itp.
 
-	 #define NET_AIM    60            ///< Wtyczki obs³uguj¹ce protokó³ AIM
-     #define NET_YAHOO  61            ///< Wtyczki obs³uguj¹ce protokó³ YAHOO
-     #define NET_MSN    62            ///< Wtyczki obs³uguj¹ce protokó³ MSN
-     #define NET_TLEN   63            ///< Wtyczki obs³uguj¹ce protokó³ TLEN
+     #define NET_GG  Net::gg            ///< Wtyczki obs³uguj¹ce protokó³ GG
+     #define NET_ICQ Net::icq            ///< Wtyczki obs³uguj¹ce protokó³ ICQ
+     #define NET_JABBER Net::jabber            ///< Wtyczki obs³uguj¹ce protokó³ JABBER
+     #define NET_EMAIL Net::email            ///< Wtyczki obs³uguj¹ce EMaile
+     #define NET_SMS Net::sms            ///< Wtyczki obs³uguj¹ce SMSy
+	 #define NET_KLAN Net::klan 
+	 #define NET_KSTYLE Net::kstyle
+	 #define NET_EXPIMP Net::expimp
+	 #define NET_KONNFERENCJA Net::konnferencja
+
+	 #define NET_AIM    Net::aim            ///< Wtyczki obs³uguj¹ce protokó³ AIM
+     #define NET_YAHOO  Net::yahoo            ///< Wtyczki obs³uguj¹ce protokó³ YAHOO
+     #define NET_MSN    Net::msn            ///< Wtyczki obs³uguj¹ce protokó³ MSN
+     #define NET_TLEN   Net::tlen            ///< Wtyczki obs³uguj¹ce protokó³ TLEN
 	 
 
 	// sieci tylko do 19 . ich komunikaty to IM_USER + NET * 1000
@@ -109,15 +108,15 @@
         /** \} */ // imt_
 
 
-	typedef enPlugPriority PLUGP_enum;
+	typedef enPluginPriority PLUGP_enum;
 
-     /** Grupy priorytetów dla #IM_PLUG_PRIORITY */
+    /** Grupy priorytetów dla #IM_PLUG_PRIORITY */
 	const PLUGP_enum PLUGP_LOWEST = Konnekt::priorityLowest;
-     const PLUGP_enum PLUGP_LOW = Konnekt::priorityLow;
-	 const PLUGP_enum PLUGP_STANDARD = Konnekt::priorityStandard;
-	 const PLUGP_enum PLUGP_HIGH = Konnekt::priorityHigh;
-	 const PLUGP_enum PLUGP_HIGHEST = Konnekt::priorityHighest;
-     const PLUGP_enum PLUGP_NONE = Konnekt::priorityNone;
+    const PLUGP_enum PLUGP_LOW = Konnekt::priorityLow;
+	const PLUGP_enum PLUGP_STANDARD = Konnekt::priorityStandard;
+	const PLUGP_enum PLUGP_HIGH = Konnekt::priorityHigh;
+	const PLUGP_enum PLUGP_HIGHEST = Konnekt::priorityHighest;
+    const PLUGP_enum PLUGP_NONE = Konnekt::priorityNone;
 
 
 /** @} */

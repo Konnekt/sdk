@@ -17,12 +17,10 @@ Dodatkowo kilka funkcji / makr dla Waszej wygody :)
 
 #pragma pack(push, 1)
 
+/** Wskaznik do struktury #cCtrl.*/
 extern cCtrl * Ctrl;
 
 #ifndef KONNEKT_SDK_NOEXPORT
- /**< Wskaznik do struktury #cCtrl.
-                    Przy jej pomocy mo¿liwy jest dostêp do funkcji rdzenia.
-                    */
 /*
 Funkcje eksportowane
 */

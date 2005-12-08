@@ -52,6 +52,8 @@ namespace Konnekt {
 	 
 
 			ktransfer = 130,///< kTransfer 
+
+			last = 0xFFFFFFFF,
 		};
 	};
 

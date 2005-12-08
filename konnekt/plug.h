@@ -31,52 +31,10 @@ Nag³ówek powinien byæ do³¹czony do kodu wtyczki poprzez plug_export.h .
 
 using namespace Konnekt;
 
-class cCtrl;
+#include "core_net.h"
+#include "core_plugin.h"
+#include "core_imessage.h"
 
-/** Struktura u¿ywana podczas przesy³ania wiadomoœci.
-    Jest u¿ywana jako bazowa dla wiêkszych struktur...
-  */
-  struct sIMessage_base {
-    unsigned short s_size; ///< Rozmiar struktury w bajtach (zazwyczaj ustawiane przez kontruktor)
-    unsigned int id;   ///< Identyfikator wiadomoœci
-    unsigned int flag; ///< Flaga wiadomoœci (na razie powinno byæ zawsze równe 0)
-    int net;  ///< Docelowa sieæ. 0 - rdzeñ lub UI
-    unsigned int type; ///< Docelowy typ wtyczek
-    unsigned int sender; ///< Identyfikator wtyczki wysy³aj¹cej
-    sIMessage_base(unsigned int _id, int _net, unsigned int _type)
-        :s_size(sizeof(sIMessage_base)),id(_id),net(_net),type(_type),sender(0),flag(0) {}
-    sIMessage_base() 
-        :s_size(sizeof(sIMessage_base)),id(0),net(0),type(0),sender(0),flag(0) {}
-    sIMessage_base(unsigned int _id)
-        :s_size(sizeof(sIMessage_base)),id(_id),net(0),type(0),sender(0),flag(0) {}
-    sIMessage_base(sIMessage_base * base) {*this = *base;}
-
-
-  };
-  /** Struktura u¿ywana podczas przesy³ania wiadomoœci.
-    Mo¿e byæ struktur¹ bazow¹ dla wiêkszych struktur ...
-    p1 i p2 mog¹ byæ zast¹pione dowolnymi typami, najlepiej o
-    rozmiarze po 4 bajty ...
-  */
-  struct sIMessage_2params: public sIMessage_base {
-    IMPARAM p1;   ///< Parametr pierwszy
-    IMPARAM p2;   ///< Parametr drugi
-
-    sIMessage_2params(unsigned int _id, int _net, unsigned int _type, IMPARAM _p1, IMPARAM _p2)
-        :sIMessage_base(_id , _net, _type), p1(_p1),p2(_p2) {s_size=sizeof(sIMessage_2params);}
-    sIMessage_2params()
-        :sIMessage_base(), p1(0),p2(0) {s_size=sizeof(sIMessage_2params);}
-    sIMessage_2params(unsigned int _id, IMPARAM _p1, IMPARAM _p2) 
-        :sIMessage_base(_id), p1(_p1),p2(_p2) {s_size=sizeof(sIMessage_2params);}
-    sIMessage_2params(sIMessage_base &base) 
-        :sIMessage_base(base.id , base.net , base.type), p1(0),p2(0) 
-        {s_size=sizeof(sIMessage_2params);
-         this->flag = base.flag;
-         this->sender = base.sender;}
-  };
-  typedef sIMessage_2params sIMessage;
-  typedef sIMessage sIMESSAGE;
-  #define sIMessage_V1 30 ///< Rozmiar tej struktury w wersji 1 SDK
 
   typedef IMPARAM (__stdcall*fIMessageProc)(sIMessage_base * msg);
 
@@ -177,7 +135,7 @@ Komunikat przesy³any jest przy pomocy @b sIMessage_plugArgs .*/
 			const char * const * argv;   ///< Tablica wskaŸników do argumentów
 
 			sIMessage_plugArgs(unsigned int argc , const char * const * argv)
-				:sIMessage_base(IM_PLUG_ARGS , NET_BC, IMT_ALL), argc(argc),argv(argv) 
+				:sIMessage_base(IM_PLUG_ARGS , Net::broadcast, imtAll), argc(argc),argv(argv) 
 			{
 				s_size=sizeof(*this);
 			}
@@ -347,7 +305,7 @@ Komunikat przesy³any jest przy pomocy @b sIMessage_plugArgs .*/
 				};
                 unsigned int _oldNet; ///< Poprzednia wartoœæ net tego kontaktu
                 const char * _oldUID; ///< Poprzednia wartoœæ UID
-                sIMessage_CntChanged(int msgID , int cntID):sIMessage_base(msgID),_cntID(cntID),_changed_bitmap(0),_oldNet(NET_NONE),_oldUID(0){s_size=sizeof(*this);}
+				sIMessage_CntChanged(int msgID , int cntID):sIMessage_base(msgID),_cntID(cntID),_changed_bitmap(0),_oldNet(Net::none),_oldUID(0){s_size=sizeof(*this);}
                 sIMessage_CntChanged(const sIMessage_base * base){
                     if (base->s_size == sizeof(*this)) {
                         *this = *(const sIMessage_CntChanged*)(base);
@@ -360,7 +318,7 @@ Komunikat przesy³any jest przy pomocy @b sIMessage_plugArgs .*/
                         this->s_size = sizeof(*this);
                         this->_cntID = ((const sIMessage_2params*)(base))->p1;
                         this->_changed_bitmap = ((const sIMessage_2params*)(base))->p2;
-						this->_oldNet = NET_NONE;
+						this->_oldNet = Net::none;
 						this->_oldUID = 0;
                     } else throw 0;
                 }
@@ -489,8 +447,8 @@ Przy jego pomocy mo¿na odró¿niæ dwie instancje korzystaj¹ce z ró¿nych profili...
 			sIMessage_debugCommand(unsigned int argc, const char * const * argv, enAsync async = synchronous)
 				:sIMessage_plugArgs(argc, argv), async(async) {
 					id = IMC_DEBUG_COMMAND;
-					net = 0;
-					type = 0;
+					net = Net::none;
+					type = imtNone;
 					s_size=sizeof(*this);
 				}
 		};
@@ -601,7 +559,7 @@ Przy jego pomocy mo¿na odró¿niæ dwie instancje korzystaj¹ce z ró¿nych profili...
             unsigned int woflag; ///< Tylko wiadomoœci nie posiadaj¹ce tych flag. 0 ¿eby u¿yæ wszystkich.
             int id; ///< ID wiadomoœci, -1 ¿eby u¿yæ wszystkich.
 			unsigned int position; ///< Które z kolei przyj¹æ dopasowanie?
-            sMESSAGESELECT() {s_size=sizeof(sMESSAGESELECT);net=NET_BC;uid=0;type=-1;wflag=0;woflag=0;id=-1;position=0;}
+			sMESSAGESELECT() {s_size=sizeof(sMESSAGESELECT);net=Net::broadcast;uid=0;type=-1;wflag=0;woflag=0;id=-1;position=0;}
             sMESSAGESELECT(int _net , const char * _uid=0 , unsigned int _type = -1 , unsigned int _wflag=0 , unsigned int _woflag=0) {
                 s_size=sizeof(sMESSAGESELECT);
                 net=_net;
@@ -1246,7 +1204,7 @@ Nie ma ju¿ potrzeby wysy³ania #IMI_REFRESH_CNT
             unsigned int flags;
             const char * title;
             HANDLE parent;  
-            sIMessage_msgBox(unsigned int id , const char * msg="" , const char * title=0 , int _flags = 0 , HANDLE parent = 0):sIMessage_base(id , 0 , 0) 
+			sIMessage_msgBox(unsigned int id , const char * msg="" , const char * title=0 , int _flags = 0 , HANDLE parent = 0):sIMessage_base(id , Net::none , imtNone) 
                 {this->s_size = sizeof(*this);
                  this->parent = parent;
                  this->msg = msg;

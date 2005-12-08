@@ -11,7 +11,7 @@ namespace Konnekt {
 	STAMINA_REGISTER_VERSION(Konnekt, apiVersion);
 
 
-
+	class cCtrl;
 
 	typedef unsigned int tIMid;
 	typedef unsigned int tIMCid;

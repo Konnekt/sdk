@@ -1,8 +1,6 @@
 #pragma once
 
-#include "core_object.h"
-#include "core_net.h"
-#include "core_imessage.h"
+#include <Stamina/String.h>
 
 namespace Konnekt {
 	enum tPluginId {
@@ -12,10 +10,10 @@ namespace Konnekt {
 	};
 
 	enum enPluginPriority {
-		priorityPriorityLowest = 0x10,  /// Koniec listy
-        priorityPriorityLow = 0x40,  
-        priorityPriorityStandard = 0x80, /// Zwyk³e wtyczki
-        priorityPriorityHigh = 0xB0,  
+		priorityLowest = 0x10,  /// Koniec listy
+        priorityLow = 0x40,  
+        priorityStandard = 0x80, /// Zwyk³e wtyczki
+        priorityHigh = 0xB0,  
         priorityHighest = 0xE0,  /// Pocz¹tek listy
 		priorityCore = 0xFF, /// Zarezerwowane dla Core i UI.
         priorityNone = 0x0  /// W efekcie to samo co plugStandard
@@ -23,7 +21,13 @@ namespace Konnekt {
 
 	const int pluginsMaxCount = 0xFF;
 	const int pluginsDynamicIdStart = 0x1000;
-	
+};
+
+#include "core_object.h"
+#include "core_net.h"
+#include "core_imessage.h"
+
+namespace Konnekt {
 
 	/** Interfejs s³u¿¹cy do operowania na wtyczce
 	
@@ -63,7 +67,7 @@ namespace Konnekt {
 		virtual HMODULE __stdcall getDllInstance()=0;
 
 		/** Zwraca œcie¿kê pliku .dll */
-		virtual const String& __stdcall getDllFile()=0;
+		virtual const Stamina::String& __stdcall getDllFile()=0;
 
 		/** Zwraca true je¿eli jest to wtyczka dynamiczna
 		@sa iPlugin*/
@@ -86,16 +90,16 @@ namespace Konnekt {
 		virtual Stamina::Version __stdcall getVersion()=0;
 
 		/** Zwraca sygnaturê wtyczki (jej unikalny, niezmienny identyfikator) */
-		virtual const String& __stdcall getSig()=0;
+		virtual const Stamina::String& __stdcall getSig()=0;
 
 		/** Zwraca nazwê wtyczki czyteln¹ dla u¿ytkownika */
-		virtual const String& __stdcall getName()=0;
+		virtual const Stamina::String& __stdcall getName()=0;
 
 		/** Zwraca nazwê sieci, któr¹ obs³uguje wtyczki (o ile obs³uguje) */
-		virtual const String& __stdcall getNetName()=0;
+		virtual const Stamina::String& __stdcall getNetName()=0;
 
 		/** Zwraca priorytet wtyczki */
-		virtual enPlugPriority __stdcall getPriority()=0;
+		virtual enPluginPriority __stdcall getPriority()=0;
 
 
 		/** Czy wtyczka mo¿e byæ wypinana / wpinana podczas pracy */
@@ -115,7 +119,7 @@ namespace Konnekt {
 		@return Zwraca true je¿eli operacja siê powiod³a... W przypadku poUnloadNowAndOnNextStart zwraca false, je¿li wtyczka nie mog³a byæ wypiêta natychmiast, ale nie zostanie ona za³adowana przy nastêpnym uruchomieniu.
 		@sa enPlugOutUnload, HotPlug
 		*/
-		virtual bool __stdcall plugOut(const cCtrl* sender, const StringRef& reason, bool quiet, enPlugOutUnload unload)=0;
+		virtual bool __stdcall plugOut(const cCtrl* sender, const Stamina::StringRef& reason, bool quiet, enPlugOutUnload unload)=0;
 
 
 		tPluginId getId() {

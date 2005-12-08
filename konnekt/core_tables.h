@@ -500,7 +500,7 @@ namespace Tables {
 			/** Obiekt tablicy. */
 			oTable table;
 
-			TableIM(tIMid IMid, oTable & table):sIMessage_base(IMid, 0, 0), table(table) {
+			TableIM(tIMid IMid, oTable & table):sIMessage_base(IMid, Net::none, imtNone), table(table) {
 				this->s_size = sizeof(*this);
 			}
 		};

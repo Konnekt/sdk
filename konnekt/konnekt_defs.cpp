@@ -37,7 +37,7 @@ extern "C" __declspec(dllexport) void __stdcall KonnektApiVersions(fApiVersionCo
 
 
 
-int IMessage(unsigned int  id , signed int net , unsigned int type , int p1 , int p2) {
+int IMessage(unsigned int  id , tNet net , enIMessageType type , int p1 , int p2) {
 
 	return Ctrl->IMessage(id , net , type , p1 , p2);
 }
@@ -55,18 +55,18 @@ int IMessageDirect(unsigned int plug , sIMessage_base * msg) {
 }
 
 
-int cCtrl::IMessage(unsigned int  id , signed int net , unsigned int type , int p1 , int p2) {
+int cCtrl::IMessage(unsigned int  id , tNet net , enIMessageType type , int p1 , int p2) {
 	return (this->IMessage)(&sIMessage (id,net,type,p1,p2));
 }
 int cCtrl::IMessage(sIMessage_base * msg) {
 	return this->IMessage(msg);
 }
 int cCtrl::ICMessage(unsigned int  id , int p1 , int p2) {
-    return (this->IMessage)(&sIMessage (id,0,0,p1,p2));
+	return (this->IMessage)(&sIMessage (id,Net::none,imtNone,p1,p2));
 }
 int cCtrl::IMessageDirect(unsigned int  id , unsigned int plug, int p1 , int p2) {
     if (!plug) plug=this->ID();
-    return (this->IMessageDirect)(plug , &sIMessage (id,0,0,p1,p2));
+	return (this->IMessageDirect)(plug , &sIMessage (id,Net::none,imtNone,p1,p2));
 }
 
 

@@ -4,7 +4,7 @@
 #include "core_plugin.h"
 #include "core_tables.h"
 
-using namespace Konnekt;
+namespace Konnekt {
 
 /**Klasa s³u¿¹ca do komunikowania siê z "rdzeniem" systemu wtyczek.
 
@@ -240,7 +240,7 @@ public:
 	void IMLOG_(enDebugLevel level , const char *format, va_list p);
 
 	// ----
-	inline int IMessage(unsigned int  id , signed int net=0 , unsigned int type=-1 , int p1=0 , int p2=0);
+	inline int IMessage(unsigned int  id , tNet net = Net::none , enIMessageType type = imtAll , int p1=0 , int p2=0);
 	inline int ICMessage(unsigned int  id , int p1=0 , int p2=0);
 	inline int IMessageDirect(unsigned int  id , unsigned int plug=0, int p1=0 , int p2=0);
 
@@ -265,3 +265,4 @@ public:
 #define DTMSG  0x2  ///< Tablica wiadomoœci.
 #define DTNONE -1*/
 
+};
