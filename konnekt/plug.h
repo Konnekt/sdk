@@ -29,9 +29,6 @@ Nag≥Ûwek powinien byÊ do≥πczony do kodu wtyczki poprzez plug_export.h .
 
 #include "plug_defs.h"
 
-
-
-
 using namespace Konnekt;
 
 class cCtrl;
@@ -99,61 +96,6 @@ class cCtrl;
 
 
 
-  // Typy IMessage
-
-// -----------------------------------------------------------------------------------------------
-  /** \defgroup imt_ Definicje typÛw IMessage ...
-    \brief \no
-
-    Kaøda wtyczka powinna zdefiniowaÊ jakiego typu #IMessage potrafi
-    przyjπÊ (konkretniej - za co ma odpowiadaÊ).<br><br>
-    Typy moøna ≥πczyÊ poprzez '|' (OR). <br><br>
-    IMessage() wywo≥any z \a typem innym od #IMT_ALL zostanie
-    wys≥any tylko do wtyczek z zadeklarowanπ obs≥ugπ wybranego \a typu.
-
-    \sa #IM_PLUG_NET IMessage()
-    \{
-  */
-        typedef unsigned int tIMtype;
-
-        /// Wszystkie typy.
-        #define IMT_ALL 0xFFFFFFFF
-        /// WiadomoúÊ bezpoúrednio do rdzenia (lub UI).
-        #define IMT_CORE        0
-
-        /// Wiadomoúci tekstowe.
-        #define IMT_MESSAGE     1
-        /// ProtokÛ≥ sieciowy.
-        #define IMT_PROTOCOL    2
-        /// Kontakty.
-        #define IMT_CONTACT     4
-        /// Konfiguracja.
-        #define IMT_CONFIG      8
-        /// Interfejs Uøytkownika (uøywanie wtyczki UI).
-        #define IMT_UI          0x10
-        /** Wtyczka obs≥uguje kontakty ca≥ej swojej sieci.
-            \attention Ustawienie tego typu spowoduje dodanie nazwy sieci (#IM_PLUG_NETNAME)
-            do list sieci w opcjach kontaktu (np. dodawanie , ignorowanie itp.)<br>
-            Tylko \b jedna wtyczka z ca≥ej sieci moøe mieÊ ten typ ustawiony!!!
-            \sa #IM_PLUG_NETNAME \ref cnt
-            */
-        #define IMT_NET         0x20  // Rozpoznaje kontakty danej sieci (podczas dodawania , edycji)
-        /** Wtyczka obs≥uguje wyszukiwanie kontaktÛw w swojej sieci.
-            \attention Podobnie jak w #IMT_UI Ustawienie tego typu spowoduje dodanie nazwy sieci (#IM_PLUG_NETNAME)
-            do list sieci w wyszukiwarce kontaktÛw<br>
-            Tylko \b jedna wtyczka z ca≥ej sieci moøe mieÊ ten typ ustawiony!!!
-            \sa #IM_PLUG_NETNAME \ref cnt
-            */
-        #define IMT_NETSEARCH   0x40
-        /// Wtyczka wykorzystuje system obs≥ugi wiadomoúci tekstowych zawarty w UI.
-        #define IMT_MSGUI       0x80
-        /// Kontakty w sieci posiadajπ UID (UserID)
-        #define IMT_NETUID      0x100
-        /// Otrzyma w IM_MSG_RCV wszystkie wiadomoùci , niezale¨nie od \ref net_ "NET".
-        #define IMT_ALLMESSAGES 0x200
-        /// BÍdzie otrzymywaÊ IM_MSG_ACK.
-        #define IMT_MESSAGEACK 0x400
-        /** \} */ // imt_
 
 // -----------------------------------------------------------------------------------------------
   /** \defgroup gr_im Identyfikatory IMessage
@@ -215,15 +157,6 @@ class cCtrl;
                                                    /// Jeøeli twoja wtyczka nie jest uzaleøniona od kolejnoúci, NIE ustawiaj jej!
                                                    /// DziÍki priorytetom wiadomoúci mogπ byÊ obs≥ugiwane w odpowiedniej kolejnoúci.
                                                    /// \return (PLUGP_enum) pozycja
-     /** Grupy priorytetÛw dla #IM_PLUG_PRIORITY */
-     enum PLUGP_enum {
-         PLUGP_LOWEST = 0x10,  /// Koniec listy
-         PLUGP_LOW = 0x40,  
-         PLUGP_STANDARD = 0x80, /// Zwyk≥e wtyczki
-         PLUGP_HIGH = 0xB0,  
-         PLUGP_HIGHEST = 0xE0,  /// Poczπtek listy
-         PLUGP_NONE = 0x0  /// W efekcie to samo co PLUGP_STANDARD
-     };
 
 
          #define IM_PLUG_INIT      IM_BASE+1
@@ -2059,6 +1992,9 @@ Obs≥uguje komunikaty WM_KEYDOWN i WM_SYSKEYDOWN
 
 
 #include "core_ctrl.h"
+
+#include "obsolete_defines.h"
+
 
  #pragma pack(pop)
 

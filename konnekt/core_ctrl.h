@@ -191,8 +191,9 @@ public:
 	virtual Unique::tRangeId __stdcall idInRange(Unique::tDomainId domainId, Unique::tId id, Unique::iRange::enType check = Unique::iRange::typeBoth) = 0;
 
 	virtual Tables::oTable __stdcall getTable(Tables::tTableId tableId)=0;
+
 	/** Zwraca obiekt wtyczki.
-	@param pluginId identyfikator, indeks, lub pluginNotFound je¿eli chcemy uzyskaæ obiekt przypisany do cCtrl.
+	@param pluginId Identyfikator, indeks, lub pluginNotFound je¿eli chcemy uzyskaæ obiekt przypisany do cCtrl.
 	*/
 	virtual Konnekt::oPlugin __stdcall getPlugin(Konnekt::tPluginId pluginId = pluginNotFound)=0;
 

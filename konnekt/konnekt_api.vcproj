@@ -124,6 +124,12 @@
 				RelativePath="..\konnekt\core_exception.h">
 			</File>
 			<File
+				RelativePath=".\core_imessage.h">
+			</File>
+			<File
+				RelativePath=".\core_net.h">
+			</File>
+			<File
 				RelativePath="..\konnekt\core_object.h">
 			</File>
 			<File
@@ -176,6 +182,9 @@
 			</File>
 			<File
 				RelativePath="..\konnekt\obsolete.h">
+			</File>
+			<File
+				RelativePath=".\obsolete_defines.h">
 			</File>
 			<File
 				RelativePath="..\konnekt\plug.h">

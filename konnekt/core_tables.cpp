@@ -5,6 +5,7 @@
 
 using namespace Konnekt;
 using namespace Stamina;
+using namespace Tables;
 
 Tables::tTableId Tables::getTableId(const StringRef& tableName) {
 	return (tTableId)Unique::getId(Unique::domainTable, tableName);
@@ -34,8 +35,17 @@ void Tables::oTable::setById(Tables::tTableId tableId) {
 }
 
 
+
 DT::oColumn Tables::iTable::setColumn(Tables::tColId id , Tables::tColType type, const StringRef& name) {
-	return this->setColumn(Ctrl->getPlugin(), id , type , name);
+	return this->setColumn(Ctrl, id , type , name);
+}
+
+inline oColumn iTable::setColumn(const cCtrl* plugin, const Stamina::StringRef& name, tColType type) {
+	return this->setColumn(plugin, colByName, type, name);
+}
+
+inline oColumn iTable::setColumn(const Stamina::StringRef& name, tColType type) {
+	return this->setColumn(Ctrl, name, type);
 }
 
 

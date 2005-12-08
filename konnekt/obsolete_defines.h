@@ -50,4 +50,74 @@
 
 /** @} */
 
+
+
+  // Typy IMessage
+
+// -----------------------------------------------------------------------------------------------
+  /** \defgroup imt_ Definicje typÛw IMessage ...
+    \brief \no
+
+    Kaøda wtyczka powinna zdefiniowaÊ jakiego typu #IMessage potrafi
+    przyjπÊ (konkretniej - za co ma odpowiadaÊ).<br><br>
+    Typy moøna ≥πczyÊ poprzez '|' (OR). <br><br>
+    IMessage() wywo≥any z \a typem innym od #IMT_ALL zostanie
+    wys≥any tylko do wtyczek z zadeklarowanπ obs≥ugπ wybranego \a typu.
+
+    \sa #IM_PLUG_NET IMessage()
+    \{
+  */
+        typedef unsigned int tIMtype;
+
+        /// Wszystkie typy.
+        #define IMT_ALL 0xFFFFFFFF
+        /// WiadomoúÊ bezpoúrednio do rdzenia (lub UI).
+        #define IMT_CORE        0
+
+        /// Wiadomoúci tekstowe.
+        #define IMT_MESSAGE     1
+        /// ProtokÛ≥ sieciowy.
+        #define IMT_PROTOCOL    2
+        /// Kontakty.
+        #define IMT_CONTACT     4
+        /// Konfiguracja.
+        #define IMT_CONFIG      8
+        /// Interfejs Uøytkownika (uøywanie wtyczki UI).
+        #define IMT_UI          0x10
+        /** Wtyczka obs≥uguje kontakty ca≥ej swojej sieci.
+            \attention Ustawienie tego typu spowoduje dodanie nazwy sieci (#IM_PLUG_NETNAME)
+            do list sieci w opcjach kontaktu (np. dodawanie , ignorowanie itp.)<br>
+            Tylko \b jedna wtyczka z ca≥ej sieci moøe mieÊ ten typ ustawiony!!!
+            \sa #IM_PLUG_NETNAME \ref cnt
+            */
+        #define IMT_NET         0x20  // Rozpoznaje kontakty danej sieci (podczas dodawania , edycji)
+        /** Wtyczka obs≥uguje wyszukiwanie kontaktÛw w swojej sieci.
+            \attention Podobnie jak w #IMT_UI Ustawienie tego typu spowoduje dodanie nazwy sieci (#IM_PLUG_NETNAME)
+            do list sieci w wyszukiwarce kontaktÛw<br>
+            Tylko \b jedna wtyczka z ca≥ej sieci moøe mieÊ ten typ ustawiony!!!
+            \sa #IM_PLUG_NETNAME \ref cnt
+            */
+        #define IMT_NETSEARCH   0x40
+        /// Wtyczka wykorzystuje system obs≥ugi wiadomoúci tekstowych zawarty w UI.
+        #define IMT_MSGUI       0x80
+        /// Kontakty w sieci posiadajπ UID (UserID)
+        #define IMT_NETUID      0x100
+        /// Otrzyma w IM_MSG_RCV wszystkie wiadomoùci , niezale¨nie od \ref net_ "NET".
+        #define IMT_ALLMESSAGES 0x200
+        /// BÍdzie otrzymywaÊ IM_MSG_ACK.
+        #define IMT_MESSAGEACK 0x400
+        /** \} */ // imt_
+
+
+	typedef enPlugPriority PLUGP_enum;
+
+     /** Grupy priorytetÛw dla #IM_PLUG_PRIORITY */
+	const PLUGP_enum PLUGP_LOWEST = Konnekt::priorityLowest;
+     const PLUGP_enum PLUGP_LOW = Konnekt::priorityLow;
+	 const PLUGP_enum PLUGP_STANDARD = Konnekt::priorityStandard;
+	 const PLUGP_enum PLUGP_HIGH = Konnekt::priorityHigh;
+	 const PLUGP_enum PLUGP_HIGHEST = Konnekt::priorityHighest;
+     const PLUGP_enum PLUGP_NONE = Konnekt::priorityNone;
+
+
 /** @} */

@@ -29,7 +29,7 @@ namespace Tables {
 	using ::Stamina::StringRef;
 	using ::Stamina::ByteBuffer;
 
-	enum enTableId {
+	enum tTableId {
 		tableConfig = 0,
 		tableContacts = 1,
 		tableMessages = 2,
@@ -43,7 +43,6 @@ namespace Tables {
 		tableNotFound = -1
 	};
 
-	typedef enTableId tTableId;
 
 
 
@@ -193,9 +192,13 @@ namespace Tables {
 		 @endcode
 
 		 */
-		 virtual oColumn __stdcall setColumn(const oPlugin& plugin, tColId colId , tColType type , const Stamina::StringRef& name = StringRef())=0;
+		 virtual oColumn __stdcall setColumn(const cCtrl* plugin, tColId colId , tColType type , const Stamina::StringRef& name = StringRef())=0;
 
  		 oColumn setColumn(tColId id, tColType type, const Stamina::StringRef& name = StringRef());
+
+		 oColumn setColumn(const cCtrl* plugin, const Stamina::StringRef& name, tColType type);
+
+		 oColumn setColumn(const Stamina::StringRef& name, tColType type);
 
 
 		 /** Dodaje wiersz do tablicy.
