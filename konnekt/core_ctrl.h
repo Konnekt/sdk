@@ -16,7 +16,7 @@ Ka¿da wtyczka posiada w³asn¹ kopiê cCtrl.
 class cCtrl {
 public:
 	virtual int __stdcall getLevel()=0;  ///< Zwraca "poziom" dostepu do rdzenia. W 99% przypadków zwróci 1 ...
-	virtual unsigned int __stdcall ID()=0;  ///< Zwraca identyfikator wtyczki.
+	virtual tPluginId __stdcall ID()=0;  ///< Zwraca identyfikator wtyczki.
 	virtual HINSTANCE __stdcall hInst()=0;   ///<  Zwraca uchwyt procesu (HINSTANCE).
 	virtual HINSTANCE __stdcall hDll()=0;   ///<  Zwraca uchwyt biblioteki wtyczki.
 
@@ -216,6 +216,9 @@ public:
 	*/
 	virtual void __stdcall onThreadEnd()=0;
 
+	virtual unsigned int __stdcall getPluginsCount()=0;
+
+	// --------------
 
 	// funkcje lokalne, dla ulatwienia
 	int DTgetInt(tTable db , unsigned int row , unsigned int col);

@@ -54,6 +54,10 @@ int IMessageDirect(unsigned int plug , sIMessage_base * msg) {
 	return Ctrl->IMessageDirect(plug , msg);
 }
 
+int iPlugin::IMessageDirect(tIMid id, int p1, int p2) {
+	return this->IMessageDirect(Ctrl, &sIMessage_2params(id, p1, p2));
+}
+
 
 int cCtrl::IMessage(unsigned int  id , tNet net , enIMessageType type , int p1 , int p2) {
 	return (this->IMessage)(&sIMessage (id,net,type,p1,p2));

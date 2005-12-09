@@ -69,42 +69,42 @@
         typedef unsigned int tIMtype;
 
         /// Wszystkie typy.
-        #define IMT_ALL 0xFFFFFFFF
+		#define IMT_ALL Konnekt::imtAll
         /// WiadomoúÊ bezpoúrednio do rdzenia (lub UI).
-        #define IMT_CORE        0
+        #define IMT_CORE        Konnekt::imtCore
 
         /// Wiadomoúci tekstowe.
-        #define IMT_MESSAGE     1
+        #define IMT_MESSAGE     Konnekt::imtMessage
         /// ProtokÛ≥ sieciowy.
-        #define IMT_PROTOCOL    2
+        #define IMT_PROTOCOL    Konnekt::imtProtocol
         /// Kontakty.
-        #define IMT_CONTACT     4
+        #define IMT_CONTACT     Konnekt::imtContact
         /// Konfiguracja.
-        #define IMT_CONFIG      8
+        #define IMT_CONFIG      Konnekt::imtConfig
         /// Interfejs Uøytkownika (uøywanie wtyczki UI).
-        #define IMT_UI          0x10
+        #define IMT_UI          Konnekt::imtUI
         /** Wtyczka obs≥uguje kontakty ca≥ej swojej sieci.
             \attention Ustawienie tego typu spowoduje dodanie nazwy sieci (#IM_PLUG_NETNAME)
             do list sieci w opcjach kontaktu (np. dodawanie , ignorowanie itp.)<br>
             Tylko \b jedna wtyczka z ca≥ej sieci moøe mieÊ ten typ ustawiony!!!
             \sa #IM_PLUG_NETNAME \ref cnt
             */
-        #define IMT_NET         0x20  // Rozpoznaje kontakty danej sieci (podczas dodawania , edycji)
+        #define IMT_NET         Konnekt::imtNet  // Rozpoznaje kontakty danej sieci (podczas dodawania , edycji)
         /** Wtyczka obs≥uguje wyszukiwanie kontaktÛw w swojej sieci.
             \attention Podobnie jak w #IMT_UI Ustawienie tego typu spowoduje dodanie nazwy sieci (#IM_PLUG_NETNAME)
             do list sieci w wyszukiwarce kontaktÛw<br>
             Tylko \b jedna wtyczka z ca≥ej sieci moøe mieÊ ten typ ustawiony!!!
             \sa #IM_PLUG_NETNAME \ref cnt
             */
-        #define IMT_NETSEARCH   0x40
+        #define IMT_NETSEARCH   Konnekt::imtNetSearch
         /// Wtyczka wykorzystuje system obs≥ugi wiadomoúci tekstowych zawarty w UI.
-        #define IMT_MSGUI       0x80
+        #define IMT_MSGUI       Konnekt::imtMsgUI
         /// Kontakty w sieci posiadajπ UID (UserID)
-        #define IMT_NETUID      0x100
+        #define IMT_NETUID      Konnekt::imtNetUID
         /// Otrzyma w IM_MSG_RCV wszystkie wiadomoùci , niezale¨nie od \ref net_ "NET".
-        #define IMT_ALLMESSAGES 0x200
+        #define IMT_ALLMESSAGES Konnekt::imtAllMessages
         /// BÍdzie otrzymywaÊ IM_MSG_ACK.
-        #define IMT_MESSAGEACK 0x400
+        #define IMT_MESSAGEACK Konnekt::imtMessageAck
         /** \} */ // imt_
 
 

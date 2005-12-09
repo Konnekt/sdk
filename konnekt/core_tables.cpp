@@ -40,7 +40,7 @@ DT::oColumn Tables::iTable::setColumn(Tables::tColId id , Tables::tColType type,
 	return this->setColumn(Ctrl, id , type , name);
 }
 
-inline oColumn iTable::setColumn(const cCtrl* plugin, const Stamina::StringRef& name, tColType type) {
+inline oColumn iTable::setColumn(cCtrl* plugin, const Stamina::StringRef& name, tColType type) {
 	return this->setColumn(plugin, colByName, type, name);
 }
 

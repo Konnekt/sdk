@@ -31,7 +31,6 @@ Nag³ówek powinien byæ do³¹czony do kodu wtyczki poprzez plug_export.h .
 
 using namespace Konnekt;
 
-#include "core_net.h"
 #include "core_plugin.h"
 #include "core_imessage.h"
 

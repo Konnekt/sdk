@@ -3,9 +3,20 @@
 #include <Stamina/String.h>
 
 namespace Konnekt {
+
+	/** Identyfikator wtyczki.
+	W komunikacji z API mo¿na zamiennie u¿ywaæ identyfikatora i pozycji
+	wtyczki na liœcie. Poni¿szy kod jest prawid³owy i dotyczy tej samej wtyczki:
+
+	@code
+	Ctrl->getPlugin(pluginUI) == Ctrl->getPlugin((tPluginId)1);
+	@endcode
+
+	*/
 	enum tPluginId {
 		pluginCore = 0x100, /// Sta³y identyfikator "wtyczki" rdzenia
 		pluginUI = 0x101, /// Sta³y identyfikator wtyczki interfejsu
+		pluginFirstDynamic = 0x1000, /// Pierwszy plugin spoza rdzenia
 		pluginNotFound = -1,
 	};
 
@@ -20,7 +31,7 @@ namespace Konnekt {
 	};
 
 	const int pluginsMaxCount = 0xFF;
-	const int pluginsDynamicIdStart = 0x1000;
+	const int pluginsDynamicIdStart = pluginFirstDynamic;
 };
 
 #include "core_object.h"
@@ -58,59 +69,61 @@ namespace Konnekt {
 
 
 		/** Zwraca identyfikator wtyczki */
-		virtual tPluginId __stdcall getPluginId()=0;
+		virtual tPluginId getPluginId()=0;
 
 		/** Zwraca pozycjê wtyczki na liœcie */
-		virtual int __stdcall getPluginIndex()=0;
+		virtual int getPluginIndex()=0;
 
 		/** Zwraca uchwyt do pliku .dll powi¹zanego z t¹ wtyczk¹ */
-		virtual HMODULE __stdcall getDllInstance()=0;
+		virtual HMODULE getDllModule()=0;
 
 		/** Zwraca œcie¿kê pliku .dll */
-		virtual const Stamina::String& __stdcall getDllFile()=0;
+		virtual const Stamina::String& getDllFile()=0;
 
 		/** Zwraca true je¿eli jest to wtyczka dynamiczna
 		@sa iPlugin*/
-		bool __stdcall isVirtual() {
+		bool isVirtual() {
 			return this->getOwnerPlugin() != 0;
 		}
 
 		/** Zwraca wtyczkê, która zarejestrowa³a t¹ wtyczkê, lub 0 jeœli jest to wtyczka klasyczna.  */
-		virtual iPlugin* __stdcall getOwnerPlugin()=0;
+		virtual iPlugin* getOwnerPlugin()=0;
 
 		/** Zwraca sieæ wtyczki */
-		virtual tNet __stdcall getNet()=0;
+		virtual tNet getNet()=0;
 
 		/** Zwraca typ wtyczki */
-		virtual enIMessageType __stdcall getType()=0;
+		virtual enIMessageType getType()=0;
 
 		/** Zwraca wersjê wtyczki
 		Wersja pobierana jest z zasobów pliku .dll (Równie¿ dla wtyczek wirtualnych!). Je¿eli wersji tam nie ma, podawana jest wersja zwrócona w IM_PLUG_VERSION z wtyczki "klasycznej"
 		*/
-		virtual Stamina::Version __stdcall getVersion()=0;
+		virtual Stamina::Version getVersion()=0;
 
 		/** Zwraca sygnaturê wtyczki (jej unikalny, niezmienny identyfikator) */
-		virtual const Stamina::String& __stdcall getSig()=0;
+		virtual const Stamina::String& getSig()=0;
 
 		/** Zwraca nazwê wtyczki czyteln¹ dla u¿ytkownika */
-		virtual const Stamina::String& __stdcall getName()=0;
+		virtual const Stamina::String& getName()=0;
 
 		/** Zwraca nazwê sieci, któr¹ obs³uguje wtyczki (o ile obs³uguje) */
-		virtual const Stamina::String& __stdcall getNetName()=0;
+		virtual const Stamina::String& getNetName()=0;
 
 		/** Zwraca priorytet wtyczki */
-		virtual enPluginPriority __stdcall getPriority()=0;
+		virtual enPluginPriority getPriority()=0;
 
 
 		/** Czy wtyczka mo¿e byæ wypinana / wpinana podczas pracy */
-		virtual bool __stdcall canHotPlug()=0;
+		virtual bool canHotPlug()=0;
 
-		virtual bool __stdcall canPlugOut()=0;
+		virtual bool canPlugOut()=0;
 
-		virtual bool __stdcall isRunning()=0;
+		virtual bool isRunning()=0;
 
 		/** Przesy³a IMessage bezpoœrednio do wtyczki */
-		virtual int __stdcall sendIMessage(cCtrl* sender, sIMessage_base*im)=0;
+		virtual int IMessageDirect(cCtrl* sender, sIMessage_base* im)=0;
+
+		int IMessageDirect(tIMid id, int p1 = 0, int p2 = 0);
 
 		/** Wypina wtyczkê
 		@param reason Przyczyna wypiêcia wtyczki
@@ -119,7 +132,7 @@ namespace Konnekt {
 		@return Zwraca true je¿eli operacja siê powiod³a... W przypadku poUnloadNowAndOnNextStart zwraca false, je¿li wtyczka nie mog³a byæ wypiêta natychmiast, ale nie zostanie ona za³adowana przy nastêpnym uruchomieniu.
 		@sa enPlugOutUnload, HotPlug
 		*/
-		virtual bool __stdcall plugOut(const cCtrl* sender, const Stamina::StringRef& reason, bool quiet, enPlugOutUnload unload)=0;
+		virtual bool plugOut(cCtrl* sender, const Stamina::StringRef& reason, bool quiet, enPlugOutUnload unload)=0;
 
 
 		tPluginId getId() {
@@ -128,15 +141,15 @@ namespace Konnekt {
 		
 
 	private:
-		virtual void __stdcall zz_ipl1(){}
-		virtual void __stdcall zz_ipl2(){}
-		virtual void __stdcall zz_ipl3(){}
-		virtual void __stdcall zz_ipl4(){}
-		virtual void __stdcall zz_ipl5(){}
-		virtual void __stdcall zz_ipl6(){}
-		virtual void __stdcall zz_ipl7(){}
-		virtual void __stdcall zz_ipl8(){}
-		virtual void __stdcall zz_ipl9(){}
+		virtual void zz_ipl1(){}
+		virtual void zz_ipl2(){}
+		virtual void zz_ipl3(){}
+		virtual void zz_ipl4(){}
+		virtual void zz_ipl5(){}
+		virtual void zz_ipl6(){}
+		virtual void zz_ipl7(){}
+		virtual void zz_ipl8(){}
+		virtual void zz_ipl9(){}
 
 	};
 

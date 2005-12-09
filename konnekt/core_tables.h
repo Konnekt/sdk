@@ -102,12 +102,12 @@ namespace Tables {
 
 
         /** Zamienia (lub nie) identyfikator na numer wiersza.*/
-        virtual int __stdcall getRowPos(tRowId rowId)=0;
+        virtual int getRowPos(tRowId rowId)=0;
         /** Zamienia (lub nie) numer wiersza na jego identyfikator.*/
-        virtual int __stdcall getRowId(unsigned int rowPos)=0;
+        virtual int getRowId(unsigned int rowPos)=0;
 
 		/** Zwraca obiekt kolumny o podanym identyfikatorze, o ile istnieje */
-		virtual oRow __stdcall getRow(tRowId rowId)=0;
+		virtual oRow getRow(tRowId rowId)=0;
 
 		 /** Znajduje wiersz spe³niaj¹cy podane kryteria.
 		 @param startPos - numer wiersza od którego zaczynamy szukanie
@@ -130,7 +130,7 @@ namespace Tables {
 		 }
 
 		 /** Zwraca iloœæ wierszy w tablicy.*/
-         virtual unsigned int __stdcall getRowCount()=0;
+         virtual unsigned int getRowCount()=0;
 
 		 int getCount() {
 			 return this->getRowCount();
@@ -139,19 +139,19 @@ namespace Tables {
 		 /** Zwraca obiekt kolumny o podanym identyfikatorze.
 		 @warning Zawsze zwraca jakiœ obiekt! Istnienie kolumny nale¿y sprawdziæ funkcj¹ iColumn::isUndefined()
 		 */
-		 virtual oColumn __stdcall getColumn(tColId colId)=0;
+		 virtual oColumn getColumn(tColId colId)=0;
 
-		 virtual oColumn __stdcall getColumn(const Stamina::StringRef& colName)=0;
+		 virtual oColumn getColumn(const Stamina::StringRef& colName)=0;
 
 		 inline tColId getColumnId(const StringRef& colName) {
 			 return this->getColumn(colName)->getId();
 		 }
 
 		 /** Zwraca liczbê kolumn */
-		 virtual unsigned int __stdcall getColCount()=0;
+		 virtual unsigned int getColCount()=0;
 
 		 /** Zwraca identyfikator kolumny na wskazanej pozycji lub colNotFound */
-		 virtual oColumn __stdcall getColumnByPos(unsigned int colPos)=0;
+		 virtual oColumn getColumnByPos(unsigned int colPos)=0;
 
 		 bool columnExists(tColId colId) {
 			 return this->getColumn(colId)->isUndefined() == false;
@@ -163,14 +163,14 @@ namespace Tables {
          @param reserved Zarezerwowane na póŸniej, musi byæ równe 0.
          @return Iloœæ wczeœniej za³o¿onych blokad.
          */
-         virtual void __stdcall lockData(tRowId rowId , int reserved=0)=0;
+         virtual void lockData(tRowId rowId , int reserved=0)=0;
          /** Odblokowuje dostêp do wiersza dla innych w¹tków, zastrze¿ony wczeœniej przy u¿yciu lockData().
          @param rowId Identyfikator/numer wiersza, lub allRows jeœli chcemy dblokowaæ WSZYSTKIE dane
          @param reserved Zarezerwowane na póŸniej, musi byæ równe 0.
          @return Iloœæ pozosta³ych blokad.
          @attention Po wykonaniu tej funkcji, wszystkie zwrócone wskaŸniki bezpoœrednie mog¹ byæ ju¿ nieaktualne!
          */
-         virtual void __stdcall unlockData(tRowId rowId , int reserved=0)=0;
+         virtual void unlockData(tRowId rowId , int reserved=0)=0;
 
 
 
@@ -192,11 +192,11 @@ namespace Tables {
 		 @endcode
 
 		 */
-		 virtual oColumn __stdcall setColumn(const cCtrl* plugin, tColId colId , tColType type , const Stamina::StringRef& name = StringRef())=0;
+		 virtual oColumn setColumn(cCtrl* plugin, tColId colId , tColType type , const Stamina::StringRef& name = StringRef())=0;
 
  		 oColumn setColumn(tColId id, tColType type, const Stamina::StringRef& name = StringRef());
 
-		 oColumn setColumn(const cCtrl* plugin, const Stamina::StringRef& name, tColType type);
+		 oColumn setColumn(cCtrl* plugin, const Stamina::StringRef& name, tColType type);
 
 		 oColumn setColumn(const Stamina::StringRef& name, tColType type);
 
@@ -204,31 +204,31 @@ namespace Tables {
 		 /** Dodaje wiersz do tablicy.
 		 @warning W wiêkszoœci przypadków to w³aœciciel tablicy dodaje do niej wiersze!
 		 */
-		 virtual oRow __stdcall addRow(tRowId rowId = rowNotFound)=0;
+		 virtual oRow addRow(tRowId rowId = rowNotFound)=0;
 		 /** Usuwa wiersz z tablicy.
 		 @warning W wiêkszoœci przypadków to w³aœciciel tablicy usuwa z niej wiersze!
 		 */
-		 virtual bool __stdcall removeRow(tRowId rowId)=0;
+		 virtual bool removeRow(tRowId rowId)=0;
          /** Kasuje kolumny i dane */
-		 virtual void __stdcall reset()=0;
+		 virtual void reset()=0;
          /** Kasuje dane */
-		 virtual void __stdcall resetData()=0;
+		 virtual void resetData()=0;
          /** Zwalnia dane z pamiêci */
-		 virtual void __stdcall unloadData()=0;
+		 virtual void unloadData()=0;
 		 /** Rozsy³a komunikat IM::setColumns dla tablicy */
-		 virtual void __stdcall requestColumns(cCtrl * ctrl, unsigned int net = -1, unsigned int plugType = -1)=0;
+		 virtual void requestColumns(cCtrl * ctrl, unsigned int net = -1, unsigned int plugType = -1)=0;
 		 /** Rozsy³a komunikat IM::dataChanged dla tablicy, lub wiersza. 
 		 @param ctrl - cCtrl wtyczki
 		 @param rowId - identyfikator zmienionego wiersza, lub allRows
 		 */
-		 virtual void __stdcall dataChanged(cCtrl * ctrl, tRowId rowId,unsigned int net = -1, unsigned int plugType = -1)=0;
+		 virtual void dataChanged(cCtrl * ctrl, tRowId rowId,unsigned int net = -1, unsigned int plugType = -1)=0;
 
 		 void dataChanged(cCtrl * ctrl, unsigned int net = -1, unsigned int plugType = -1) {
 			 dataChanged(ctrl, allRows, net, plugType);
 		 }
 		 
 		 /** Zwraca true je¿eli dane zosta³y za³adowane */
-		 virtual bool __stdcall isLoaded()=0;
+		 virtual bool isLoaded()=0;
 
 		 /** Wczytuje dane z pliku, o ile wczeœniej nie by³y ju¿ za³adowane.
 		  Je¿eli z tablic¹ nie jest skojarzony ¿aden plik wywo³anie load() blokuje mo¿liwoœæ dodawania kolumn.
@@ -236,48 +236,48 @@ namespace Tables {
 		  \param filePath £aduje dane z innego pliku ni¿ domyœlny.
 		  \return true je¿eli dane zosta³y za³adowane 
 		  */
-		 virtual enResult __stdcall load(bool force = false, const StringRef& filePath = StringRef())=0;
+		 virtual enResult load(bool force = false, const StringRef& filePath = StringRef())=0;
 		 /** Zapisuje dane do pliku, je¿eli dane uleg³y zmianie.
 		  Je¿eli z tablic¹ nie jest skojarzony ¿aden plik wywo³anie save() nie ma ¿adnego skutku.
 		  \param force Wymusza zapisanie danych.
 		  \param filePath Zapisuje dane do innego pliku ni¿ domyœlny.
 		  \return true je¿eli dane zosta³y zapisane 
 		  */
-		 virtual enResult __stdcall save(bool force = false, const StringRef& filePath = StringRef())=0;
+		 virtual enResult save(bool force = false, const StringRef& filePath = StringRef())=0;
 		 /** Zapis z opóŸnieniem. 
 		 Dane zostan¹ zapisane do domyœlnego pliku, je¿eli przez kilka sekund nie bêdzie wywo³ywana f-cja lateSave.
 		 Dane zapisywane s¹ jednorazowo.
 		 @warning Je¿eli po kilku sekundach od wywo³ania lateSave() zaczniemy zapisywaæ do tablicy dane bez wczeœniejszego wywo³ania lateSave(false) tablica mo¿e zostaæ zapisana ze zmianami wprowadzonymi do po³owy...
 		 @param enabled W³¹cza/wy³¹cza opcjê opóŸnionego zapisu.
 		 */
-		 virtual void __stdcall lateSave(bool enabled=true)=0;
+		 virtual void lateSave(bool enabled=true)=0;
 
-		 virtual bool __stdcall setOpt(enTableOptions option , bool enabled)=0;
-		 virtual bool __stdcall getOpt(enTableOptions option)=0;
+		 virtual bool setOpt(enTableOptions option , bool enabled)=0;
+		 virtual bool getOpt(enTableOptions option)=0;
 
 		 /** Ustawia nazwê pliku */
-		 virtual void __stdcall setFilename(const StringRef& filename)=0;
+		 virtual void setFilename(const StringRef& filename)=0;
 		 /** Zwraca nazwê pliku (bez œcie¿ki) */
-		 virtual String __stdcall getFilename()=0;
+		 virtual String getFilename()=0;
 		 /** Ustawia œcie¿kê katalogu z plikiem.
 		 @param path Nowa œcie¿ka, lub 0 je¿eli chcemy ustawiæ œcie¿kê standardow¹
 		 */
-		 virtual void __stdcall setDirectory(const StringRef& path = StringRef())=0;
+		 virtual void setDirectory(const StringRef& path = StringRef())=0;
 		 /** Zwraca œcie¿kê do pliku */
-		 virtual String __stdcall getDirectory()=0;
+		 virtual String getDirectory()=0;
 		 /** Zwraca nazwê tablicy.
 		 Nazwa pobierana jest z Unique::domainTables i tam powinna byæ rejestrowana
 		 */
 		 String getTableName();
-		 virtual tTableId __stdcall getTableId()=0;
-		 virtual oPlugin __stdcall getTableOwner()=0;
+		 virtual tTableId getTableId()=0;
+		 virtual oPlugin getTableOwner()=0;
 
-		 virtual bool __stdcall unregisterTable()=0;
+		 virtual bool unregisterTable()=0;
 
 #ifdef __DATATABLE__
-		 virtual DataTable& __stdcall getDT()=0;
+		 virtual DataTable& getDT()=0;
 #else
-		 virtual void* __stdcall getDT()=0;
+		 virtual void* getDT()=0;
 #endif
 
  		 virtual void setTablePassword(const StringRef& password)=0;
@@ -379,16 +379,16 @@ namespace Tables {
 
 
 	  private:
-		virtual void __stdcall zz_it1(){}
-		virtual void __stdcall zz_it2(){}
-		virtual void __stdcall zz_it3(){}
-		virtual void __stdcall zz_it4(){}
-		virtual void __stdcall zz_it5(){}
-		virtual void __stdcall zz_it6(){}
-		virtual void __stdcall zz_it7(){}
-		virtual void __stdcall zz_it8(){}
-		virtual void __stdcall zz_it9(){}
-		//virtual void __stdcall zz_it10(){}
+		virtual void zz_it1(){}
+		virtual void zz_it2(){}
+		virtual void zz_it3(){}
+		virtual void zz_it4(){}
+		virtual void zz_it5(){}
+		virtual void zz_it6(){}
+		virtual void zz_it7(){}
+		virtual void zz_it8(){}
+		virtual void zz_it9(){}
+		//virtual void zz_it10(){}
 
 	};
 
