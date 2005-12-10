@@ -13,6 +13,10 @@
 
 #include <Stamina/Lib.h>
 
+#define KONNEKT_SDK_NOEXPORT
+#include "konnekt/plug_export.h"
+
+
 #include "konnekt/plug.h"
 #include "konnekt/core_assert.h"
 
@@ -38,7 +42,6 @@ extern "C" __declspec(dllexport) void __stdcall KonnektApiVersions(fApiVersionCo
 
 
 int IMessage(unsigned int  id , tNet net , enIMessageType type , int p1 , int p2) {
-
 	return Ctrl->IMessage(id , net , type , p1 , p2);
 }
 int IMessage(sIMessage_base * msg) {

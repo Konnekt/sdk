@@ -11,6 +11,7 @@
 
 #include "konnekt/ui.h"
 #include "konnekt/plug_func.h"
+
 Controler * Ctrl = 0;
 
 
@@ -95,7 +96,7 @@ void Controler::logV(enDebugLevel level, const char* module, const char* where, 
 	int size = _vscprintf(format, p);
 	char * buff = new char [size + 2];
 	buff[size + 1] = 0;
-	size = _vsnprintf(buff, size+1, format, va);
+	size = _vsnprintf(buff, size+1, format, p);
 	buff[size] = 0;
 	this->logMsg(level, module, where, buff);
 	delete [] buff;

@@ -116,11 +116,13 @@ namespace Konnekt {
 
 		public:
 
+			/// Rozpoczyna konstrukcjê broadcastu;
 			Broadcast() {
+				value = Net::none;
 				flag = 1;
 			}
 
-			/// Konstruuje broadcast na podstawie pe³nej wartoœci net
+			/// Konstruuje na podstawie pe³nej wartoœci net. Na potrzeby odczytu flag
 			Broadcast(tNet net) {
 				*this = net;
 			}
@@ -144,21 +146,21 @@ namespace Konnekt {
 				return value;
 			}
 
-			bool isBroadcast() const {
-				return flag;
-			}
-
 			/// Zwraca pe³n¹ wartoœæ net
 			tNet toNet() const {
 				return value;
 			}
 
+			/** Ustawia typ wartoœci sieci na broadcast (@sa isBroadcast()).
+			*/
 			inline Broadcast& setBroadcast() {
 				this->flag = 1;
 				this->type = typeBroadcast;
 				return *this;
 			}
 
+			/** Ustawia typ wartoœci sieci na first (@sa isFirstOnly()).
+			*/
 			inline Broadcast& setFirst() {
 				this->flag = 1;
 				this->type = typeFirst;
@@ -205,37 +207,54 @@ namespace Konnekt {
 			}
 
 
-			bool isReverse() const {
-				return reverse;
+			/** Zwraca true, je¿eli jest to specjalnie skonstruowana wartoœæ Net.
+			*/
+			inline bool isSpecial() const {
+				return flag;
 			}
 
+			/** Czy komunikat ma byæ wys³any do wielu wtyczek */
+			inline bool isBroadcast() const {
+				return flag && getType() == typeBroadcast;
+			}
 
-			enType getType() const {
+			/** Czy komunikat ma byæ wys³any do jednej wtyczki */
+			inline bool isFirstOnly() const {
+				return !flag || getType() == typeFirst;
+			}
+
+			// 
+			inline bool isReverse() const {
+				return flag && reverse;
+			}
+
+			/** Dzia³a prawid³owo tylko dla specjalnych wartoœci - isSpecial() */
+			inline enType getType() const {
 				return type;
 			}
 
-			enIMType getIMType() const {
-				return imtype;
+			inline enIMType getIMType() const {
+				return flag ? imtype : imtypeAll;
 			}
 
-			tNet getOnlyNet() const {
-				return (startType == startNet) ? (tNet)start : Net::all;
+			inline tNet getOnlyNet() const {
+				return (flag && startType == startNet) ? (tNet)start : Net::all;
 			}
 
-			tNet getNotNet() const {
-				return (startType == startNotNet) ? (tNet)start : Net::all;
+			inline tNet getNotNet() const {
+				return (flag && startType == startNotNet) ? (tNet)start : Net::all;
 			}
 
-			int getStartOccurence() const {
-				return (startType == startOccurence) ? start : 0;
+			inline int getStartOccurence() const {
+				return (flag && startType == startOccurence) ? start : 0;
 			}
 
-			tPluginId getStartPlugin() const {
-				return (startType == startPluginId) ? (tPluginId)start : (tPluginId)0;
+			inline tPluginId getStartPlugin() const {
+				return (flag && startType == startPluginId) ? (tPluginId)start : (tPluginId)0;
 			}
 
-			enResult getResultType() const {
-				return result;
+			inline enResult getResultType() const {
+				return flag ? result : resultLast;
 			}
 
 

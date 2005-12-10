@@ -64,6 +64,7 @@ namespace Konnekt {
 
 	enum enIMessageFlag {
 
+		imfNone = 0,
 		imfRecalling = 1, /// 
 		imfRecalled = 2,
 
@@ -100,11 +101,11 @@ namespace Konnekt {
     enIMessageType type; ///< Docelowy typ wtyczek
     tPluginId sender; ///< Identyfikator wtyczki wysy³aj¹cej
 	sIMessage_base(unsigned int _id, tNet _net, enIMessageType _type)
-        :s_size(sizeof(sIMessage_base)),id(_id),net(_net),type(_type),sender(pluginNotFound),flag(0) {}
+		:s_size(sizeof(sIMessage_base)),id(_id),net(_net),type(_type),sender(pluginNotFound),flag(imfNone) {}
     sIMessage_base() 
-		:s_size(sizeof(sIMessage_base)),id(0),net(Net::none),type(imtNone),sender(pluginNotFound),flag(0) {}
+		:s_size(sizeof(sIMessage_base)),id(0),net(Net::none),type(imtNone),sender(pluginNotFound),flag(imfNone) {}
     sIMessage_base(unsigned int _id)
-		:s_size(sizeof(sIMessage_base)),id(_id),net(Net::none),type(imtNone),sender(pluginNotFound),flag(0) {}
+		:s_size(sizeof(sIMessage_base)),id(_id),net(Net::none),type(imtNone),sender(pluginNotFound),flag(imfNone) {}
     sIMessage_base(sIMessage_base * base) {*this = *base;}
 
 
