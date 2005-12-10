@@ -18,7 +18,7 @@
 
 #include "konnekt/ui.h"
 #include "konnekt/plug_func.h"
-cCtrl * Ctrl = 0;
+
 
 
 using namespace Konnekt;
@@ -59,46 +59,13 @@ int iPlugin::IMessageDirect(tIMid id, int p1, int p2) {
 }
 
 
-int cCtrl::IMessage(unsigned int  id , tNet net , enIMessageType type , int p1 , int p2) {
-	return (this->IMessage)(&sIMessage (id,net,type,p1,p2));
-}
-int cCtrl::IMessage(sIMessage_base * msg) {
-	return this->IMessage(msg);
-}
-int cCtrl::ICMessage(unsigned int  id , int p1 , int p2) {
-	return (this->IMessage)(&sIMessage (id,Net::none,imtNone,p1,p2));
-}
-int cCtrl::IMessageDirect(unsigned int  id , unsigned int plug, int p1 , int p2) {
-    if (!plug) plug=this->ID();
-	return (this->IMessageDirect)(plug , &sIMessage (id,Net::none,imtNone,p1,p2));
-}
-
-
-int cCtrl::DTgetInt(tTable db , unsigned int row , const char * name) {
-	return this->DTgetInt(db , row , this->DTgetNameID(db , name));
-}
-bool cCtrl::DTsetInt(tTable db , unsigned int row , const char * name , int value , int mask) {
-	return this->DTsetInt(db , row , this->DTgetNameID(db , name), value , mask);
-}
-char * cCtrl::DTgetStr(tTable db , unsigned int row , const char * name , char * buff , unsigned int size) {
-	return this->DTgetStr(db , row , this->DTgetNameID(db , name), buff , size);
-}
-bool cCtrl::DTsetStr(tTable db , unsigned int row , const char * name , const char * value) {
-	return this->DTsetStr(db , row , this->DTgetNameID(db , name), value);
-}
-__int64 cCtrl::DTgetInt64(tTable db , unsigned int row , const char * name) {
-	return this->DTgetInt64(db , row , this->DTgetNameID(db , name));
-}
-bool cCtrl::DTsetInt64(tTable db , unsigned int row , const char * name , __int64 value , __int64 mask) {
-	return this->DTsetInt64(db , row , this->DTgetNameID(db , name), value, mask);
-}
 
 
 
   const char * SAFECHAR(const char * ch) {return ch?ch:"";}
 
   int Plug_Init(int p1 , int p2) {
-    Ctrl=(cCtrl*)p1;
+    Ctrl=(Controler*)p1;
     return 1;
   }
 
@@ -225,51 +192,17 @@ void IMLOG(const char *format, ...) {
 	if (!Ctrl) return;
 	va_list ap;
 	va_start(ap, format);
-	Ctrl->IMLOG_(DBG_LOG , format , ap);
+	Ctrl->logV(DBG_LOG , 0, 0, format , ap);
 	va_end(ap);
 }
 void IMDEBUG(enDebugLevel level , const char *format, ...) {
 	if (!Ctrl || !Ctrl->DebugLevel(level)) return;
 	va_list ap;
 	va_start(ap, format);
-	Ctrl->IMLOG_(level , format , ap);
+	Ctrl->logV(level , 0, 0, format , ap);
 	va_end(ap);
 }
 
-void cCtrl::IMLOG(const char *format, ...) {
-	if (!this) return;
-	va_list ap;
-	va_start(ap, format);
-	this->IMLOG_(DBG_LOG , format , ap);
-	va_end(ap);
-}
-void cCtrl::IMDEBUG(enDebugLevel level , const char *format, ...) {
-	if (!this) return;
-	if (!this->DebugLevel(level)) return;
-	va_list ap;
-	va_start(ap, format);
-	this->IMLOG_(level , format , ap);
-	va_end(ap);
-}
-
-
-void cCtrl::IMLOG_(enDebugLevel level , const char *format, va_list ap) {
-#ifdef _DEBUG
-    char buffer [5000];
-#else
-    char buffer [255];
-#endif
-    int size = VSNPRINTF(buffer , sizeof(buffer) , format,ap);
-    buffer[sizeof(buffer)-1]=0;
-#ifdef IMLOG_AUTOALLOC
-    if (size==-1 || size>sizeof(buffer)) {
-        char * buff = __vsaprintf(format , ap);
-        IMessage(IMC_LOG , 0,0,(LPARAM)buff,level);
-        free(buff);
-    } else 
-#endif    
-	{this->IMessage(&sIMessage_2params(IMC_LOG , (int)buffer,level));}
-}
 
 
 
@@ -295,84 +228,6 @@ void IMERROR() {  //Windows errors
 
 
 
-int cCtrl::DTgetInt(tTable db , unsigned int row , unsigned int col) {
-    OldValue v(Tables::ctypeInt); 
-    DTget(db , row , col, &v); 
-    return v.vInt;
-}
-bool cCtrl::DTsetInt(tTable db , unsigned int row , unsigned int col , int val , int mask){
-    OldValue v(Tables::ctypeInt); 
-    if (mask != -1) { // maskowanie
-        DTget(db , row , col, &v);
-        v.vInt = (v.vInt & ~mask) | val;
-        return DTset(db , row , col, &v);
-    } else {
-        v.vInt = val;
-        return DTset(db , row , col, &v); 
-    }
-}
-char * cCtrl::DTgetStr(tTable db , unsigned int row , unsigned int col , char * buff , unsigned int size){
-    OldValue v(Tables::ctypeString); 
-    v.vChar = buff;
-    v.buffSize = size;
-    DTget(db , row , col, &v); 
-    return v.vChar;
-}
-bool cCtrl::DTsetStr(tTable db , unsigned int row , unsigned int col , const char * val){
-    OldValue v(Tables::ctypeString); 
-    v.vCChar = val;
-    return DTset(db , row , col, &v); 
-}
-__int64 cCtrl::DTgetInt64(tTable db , unsigned int row , unsigned int col) {
-    OldValue v(Tables::ctypeInt64); 
-    DTget(db , row , col, &v); 
-    return v.vInt64;
-}
-bool cCtrl::DTsetInt64(tTable db , unsigned int row , unsigned int col , __int64 val , __int64 mask) {
-    OldValue v(Tables::ctypeInt64); 
-    if (mask != -1) { // maskowanie
-        DTget(db , row , col, &v);
-        v.vInt64 = (v.vInt64 & ~mask) | val;
-        return DTset(db , row , col, &v);
-    } else {
-        v.vInt64 = val;
-        return DTset(db , row , col, &v); 
-    }
-}
-
-
-
-int cCtrl::BeginThreadAndWait(const char * name, void *security, unsigned stack_size, cCtrl::fBeginThread start_address,	void *arglist, unsigned initflag, unsigned *thrdaddr) {
-	HANDLE th = (HANDLE) this->BeginThread(name, security , stack_size , start_address , arglist , CREATE_SUSPENDED | initflag , thrdaddr);
-	if (!th) return 0;
-	ResumeThread(th);
-/*    while (MsgWaitForMultipleObjectsEx(1 , &th , 250 , QS_ALLINPUT | QS_ALLPOSTMESSAGE , MWMO_ALERTABLE | MWMO_INPUTAVAILABLE) - WAIT_OBJECT_0 != 0) {
-		this->WMProcess();
-//		SleepEx(0 , TRUE); // metoda, która mo¿e pomo¿e przy problemach z W98. Pomog³a ju¿ kiedyœ...
-    }
-	*/
-	while (WaitForSingleObjectEx(th , 10 , TRUE)!=WAIT_OBJECT_0) {
-		this->WMProcess();
-	}
-	DWORD ret = 0;
-	GetExitCodeThread(th , &ret);
-	CloseHandle(th);	
-	return ret;
-}
-
-
-
- 
-// ___________________________________________________
-// plug_func.h
-// ---------------------------------------------------
-
-int cCtrl::SetColumn(tTable table , int id , int type , int def , const char * name){
-	return this->IMessage(&sIMessage_setColumn(table , id , type , def , name));
-}
-int SetColumn(tTable table , int id , int type , int def , const char * name){
-	return Ctrl->SetColumn(table , id , type , def , name);
-}
 
 
 
@@ -386,7 +241,7 @@ int SetColumn(tTable table , int id , int type , int def , const char * name){
 		return Ctrl->UIActionInsert(_parent , _id , _pos , _status , _txt , _p1 , _w , _h , _p2 , _param);
 	}
 
-	int cCtrl::UIActionInsert(int _parent , int _id , int _pos , int _status , const char * _txt  , int _p1 , short _w , short _h , int _p2 , int _param) {
+	int Controler::UIActionInsert(int _parent , int _id , int _pos , int _status , const char * _txt  , int _p1 , short _w , short _h , int _p2 , int _param) {
        sUIActionInfo ai = sUIActionInfo(_parent , _id , _pos , _status , (char*)_txt , _p1 , _w , _h , _p2 , _param);
        return this->ICMessage(IMI_ACTION , (IMPARAM)&ai , 0);
     }

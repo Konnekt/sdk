@@ -119,4 +119,25 @@
     const PLUGP_enum PLUGP_NONE = Konnekt::priorityNone;
 
 
+
+  /**
+    \defgroup imerror_ Kody b³edu
+    \brief \no
+
+    \{
+  */
+
+  #define IMERROR_NORESULT 1   ///< Wtyczka nie obs³u¿y³a wiadomoœci.
+  #define IMERROR_UNSUPPORTEDMSG IMERROR_NORESULT /// \no
+  #define IMERROR_BADSENDER 2  ///< Wiadomoœæ wstrzymana, pojawi³ siê b³¹d...
+  #define IMERROR_BADPLUG 3    ///< Podana wtyczka nie istnieje.
+  #define IMERROR_THREADSAFE 4 ///< Wiadomoœæ zosta³a wywo³ana w trybie bezpiecznym (bez oczekiwania na powrót).
+  #define IMERROR_SHUTDOWN 5   ///< Wiadomoœæ zosta³a anulowana z powodu zamykania programu.
+  #define IMERROR_BADPARAM 6   ///< Nieprawid³owe parametry.
+  #define IMERROR_BADSTRUCT 7   ///< Niepoprawna struktura.
+
+  /** @} */ // imerror_
+
+
+
 /** @} */

@@ -62,6 +62,31 @@ namespace Konnekt {
 		return (enIMessageType)(a | b);
 	}
 
+	enum enIMessageFlag {
+
+		imfRecalling = 1, /// 
+		imfRecalled = 2,
+
+	};
+
+	inline enIMessageFlag operator | (enIMessageFlag& a, enIMessageFlag& b) {
+		return (enIMessageFlag)(a | b);
+	}
+
+
+	enum enIMessageError {
+
+		errorNone = 0,
+		errorNoResult = 1, ///< Wtyczka nie obs³u¿y³a wiadomoœci.
+		errorUnsupportedMsg = 1,
+		errorBadSender = 2, ///< Wiadomoœæ wstrzymana, pojawi³ siê b³¹d...
+		errorBadPlugin = 3, ///< Podana wtyczka nie istnieje.
+		errorThreadSafe = 4, ///< Wiadomoœæ zosta³a wywo³ana w trybie bezpiecznym (bez oczekiwania na powrót).
+		errorShutdown = 5, ///< Wiadomoœæ zosta³a anulowana z powodu zamykania programu.
+		errorBadParam = 6, ///< Nieprawid³owe parametry.
+		errorBadStruct = 7, ///< Niepoprawna struktura.
+
+	};
 
 
 /** Struktura u¿ywana podczas przesy³ania wiadomoœci.
@@ -70,7 +95,7 @@ namespace Konnekt {
   struct sIMessage_base {
     unsigned short s_size; ///< Rozmiar struktury w bajtach (zazwyczaj ustawiane przez kontruktor)
     unsigned int id;   ///< Identyfikator wiadomoœci
-    unsigned int flag; ///< Flaga wiadomoœci (na razie powinno byæ zawsze równe 0)
+    enIMessageFlag flag; ///< Flaga wiadomoœci (na razie powinno byæ zawsze równe 0)
     tNet net;  ///< Docelowa sieæ. 0 - rdzeñ lub UI
     enIMessageType type; ///< Docelowy typ wtyczek
     tPluginId sender; ///< Identyfikator wtyczki wysy³aj¹cej

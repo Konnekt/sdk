@@ -11,7 +11,7 @@ namespace Konnekt {
 	STAMINA_REGISTER_VERSION(Konnekt, apiVersion);
 
 
-	class cCtrl;
+	class Controler;
 
 	typedef unsigned int tIMid;
 	typedef unsigned int tIMCid;
@@ -20,28 +20,26 @@ namespace Konnekt {
 
 	typedef char tTable;
 
+	typedef Stamina::LogLevel enDebugLevel;
 
-	 /** Rodzaj zapisywanej informacji dla cCtrl::IMDEBUG() */
-	 enum enDebugLevel {
-		DBG_NONE = 0,
-		DBG_NET = 1,
-		DBG_TRAFFIC = 2 , 
-		DBG_DUMP = 4 , 
-		DBG_FUNC = 8 , 
-		DBG_MISC = 0x10 ,
-		DBG_ERROR = 0x20 , 
-		DBG_WARN = 0x40 ,
-		DBG_ASSERT = 0x80 ,
-		DBG_LOG = 0x100 ,
-		DBG_DEBUG = 0x1000 ,
-		DBG_TEST = 0x10000 ,
-		DBG_TEST_FAILED = 0x30000 , 
-		DBG_TEST_PASSED = 0x50000 , 
-		DBG_TEST_TITLE = 0x70000 , 
-		DBG_COMMAND = 0x100000 , 
-		DBG_ALL = 0xFF0FFF
-
-	 };
+	 /** Rodzaj zapisywanej informacji dla Controler::IMDEBUG() */
+	const enDebugLevel DBG_NONE = 0;
+	const enDebugLevel DBG_NET = 1;
+	const enDebugLevel DBG_TRAFFIC = 2;
+	const enDebugLevel DBG_DUMP = 4;
+	const enDebugLevel DBG_FUNC = 8;
+	const enDebugLevel DBG_MISC = 0x10;
+	const enDebugLevel DBG_ERROR = 0x20;
+	const enDebugLevel DBG_WARN = 0x40;
+	const enDebugLevel DBG_ASSERT = 0x80;
+	const enDebugLevel DBG_LOG = 0x100;
+	const enDebugLevel DBG_DEBUG = 0x1000;
+	const enDebugLevel DBG_TEST = 0x10000;
+	const enDebugLevel DBG_TEST_FAILED = 0x30000;
+	const enDebugLevel DBG_TEST_PASSED = 0x50000;
+	const enDebugLevel DBG_TEST_TITLE = 0x70000;
+	const enDebugLevel DBG_COMMAND = 0x100000;
+	const enDebugLevel DBG_ALL = 0xFF0FFF;
 
 
 }

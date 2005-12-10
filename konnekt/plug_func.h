@@ -28,7 +28,7 @@ using ::Stamina::String;
     #define ACTIONONLY(notify) if (notify->code != ACTN_ACTION) return 0
     /** Pusta akcja. */
     #define NOACTION sUIAction(0,0)
-    /** Sprawdza czy cCtrl::isRunning() zwraca true, jeœli nie, wychodzi. */
+    /** Sprawdza czy Controler::isRunning() zwraca true, jeœli nie, wychodzi. */
     #define ISRUNNING() if (!Ctrl->isRunning()) {Ctrl->setError(IMERROR_SHUTDOWN); return 0;}
 
     /// Dodaje akcjê.

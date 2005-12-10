@@ -121,7 +121,7 @@ namespace Konnekt {
 		virtual bool isRunning()=0;
 
 		/** Przesy³a IMessage bezpoœrednio do wtyczki */
-		virtual int IMessageDirect(cCtrl* sender, sIMessage_base* im)=0;
+		virtual int IMessageDirect(Controler* sender, sIMessage_base* im)=0;
 
 		int IMessageDirect(tIMid id, int p1 = 0, int p2 = 0);
 
@@ -132,7 +132,7 @@ namespace Konnekt {
 		@return Zwraca true je¿eli operacja siê powiod³a... W przypadku poUnloadNowAndOnNextStart zwraca false, je¿li wtyczka nie mog³a byæ wypiêta natychmiast, ale nie zostanie ona za³adowana przy nastêpnym uruchomieniu.
 		@sa enPlugOutUnload, HotPlug
 		*/
-		virtual bool plugOut(cCtrl* sender, const Stamina::StringRef& reason, bool quiet, enPlugOutUnload unload)=0;
+		virtual bool plugOut(Controler* sender, const Stamina::StringRef& reason, bool quiet, enPlugOutUnload unload)=0;
 
 
 		tPluginId getId() {

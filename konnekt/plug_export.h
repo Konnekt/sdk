@@ -17,8 +17,8 @@ Dodatkowo kilka funkcji / makr dla Waszej wygody :)
 
 #pragma pack(push, 1)
 
-/** Wskaznik do struktury #cCtrl.*/
-extern cCtrl * Ctrl;
+/** Wskaznik do struktury #Controler.*/
+extern Controler * Ctrl;
 
 #ifndef KONNEKT_SDK_NOEXPORT
 /*
@@ -58,7 +58,7 @@ najwygodniej jest z nich po prostu korzystac :)
   void IMERROR();
 
 
-  /** Wysy³a wiadomoœæ . Wywo³uje bezpoœrednio cCtrl::IMessage .
+  /** Wysy³a wiadomoœæ . Wywo³uje bezpoœrednio Controler::IMessage .
   \param id Identyfikator wiadomoœci
   \param net Docelowa sieæ wtyczek
   \param type Docelowy typ wtyczek
@@ -66,7 +66,7 @@ najwygodniej jest z nich po prostu korzystac :)
   \sa gr_im net_ imt_
   */
   inline int IMessage(unsigned int  id , signed int net=0 , unsigned int type=-1 , int p1=0 , int p2=0);
-  /** Wysy³a wiadomoœæ . Wywo³uje bezpoœrednio cCtrl::IMessage .
+  /** Wysy³a wiadomoœæ . Wywo³uje bezpoœrednio Controler::IMessage .
   */
   inline int IMessage(sIMessage_base * msg);
 
@@ -161,10 +161,10 @@ najwygodniej jest z nich po prostu korzystac :)
      \param size Rozmiar bufora.
      \return (const char *)
      Je¿eli jako \a buff i \a size podamy 0, otrzymamy wskaŸnik do kopii wartoœci
-     przechowywanej w buforze tymczasowym (cCtrl::GetTempBuff). Je¿eli wczeœniej
+     przechowywanej w buforze tymczasowym (Controler::GetTempBuff). Je¿eli wczeœniej
      zablokujemy tablicê, otrzymamy najprawdopodobniej wskaŸnik bezpoœredni.
      Je¿eli \a buff bêdzie równy 0, a \a size -1, otrzymamy kopiê wartoœci
-     w œwie¿o zaalokowanej strukturze, któr¹ nale¿y zwolniæ przez cCtrl::free.
+     w œwie¿o zaalokowanej strukturze, któr¹ nale¿y zwolniæ przez Controler::free.
      \sa #GETCNTCA
      */
      const char * GETCNTC(int row , int id , char * buff = 0 , unsigned int size = 0);
@@ -172,7 +172,7 @@ najwygodniej jest z nich po prostu korzystac :)
      \param row (int) ID kontaktu
      \param id  (int) ID kolumny
      \return (const char *)
-     \attention Zwrócony bufor trzeba zwolniæ przy pomocy cCtrl::free !
+     \attention Zwrócony bufor trzeba zwolniæ przy pomocy Controler::free !
      */
      #define GETCNTCA(row , id) GETCNTC(row , id , 0 , -1)
 
@@ -241,10 +241,10 @@ najwygodniej jest z nich po prostu korzystac :)
      \param size Rozmiar bufora.
      \return (const char *)
      Je¿eli jako \a buff i \a size podamy 0, otrzymamy wskaŸnik do kopii wartoœci
-     przechowywanej w buforze tymczasowym (cCtrl::GetTempBuff). Je¿eli wczeœniej
+     przechowywanej w buforze tymczasowym (Controler::GetTempBuff). Je¿eli wczeœniej
      zablokujemy tablicê, otrzymamy najprawdopodobniej wskaŸnik bezpoœredni.
      Je¿eli \a buff bêdzie równy 0, a \a size -1, otrzymamy kopiê wartoœci
-     w œwie¿o zaalokowanej strukturze, któr¹ nale¿y zwolniæ przez cCtrl::free.
+     w œwie¿o zaalokowanej strukturze, któr¹ nale¿y zwolniæ przez Controler::free.
      \sa #GETSTRA
      */
      const char * GETSTR(int id , char * buff = 0 , unsigned int size = 0);
@@ -291,9 +291,9 @@ najwygodniej jest z nich po prostu korzystac :)
 #ifdef IMLOG_AUTOALLOC
     char * __vsaprintf(const char *format, va_list ap);
 #endif
-/** @sa cCtrl::IMLOG() */
+/** @sa Controler::IMLOG() */
 void IMLOG(const char *format, ...);
-/** @sa cCtrl::IMDEBUG() */
+/** @sa Controler::IMDEBUG() */
 void IMDEBUG(enDebugLevel level , const char *format, ...);
 
 #ifdef _WINDOWS_

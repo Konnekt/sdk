@@ -10,18 +10,18 @@ namespace Konnekt {
 
 Adres tej struktury (zaalokowanej w rdzeniu) przekazywany jest
 jako parametr w pierwszej wiadomosci do wtyczki - #IM_INIT ...<br>
-Ka¿da wtyczka posiada w³asn¹ kopiê cCtrl.
+Ka¿da wtyczka posiada w³asn¹ kopiê Controler.
 \sa IMessageProc()
 */
-class cCtrl {
+class Controler {
 public:
 	virtual int __stdcall getLevel()=0;  ///< Zwraca "poziom" dostepu do rdzenia. W 99% przypadków zwróci 1 ...
 	virtual tPluginId __stdcall ID()=0;  ///< Zwraca identyfikator wtyczki.
 	virtual HINSTANCE __stdcall hInst()=0;   ///<  Zwraca uchwyt procesu (HINSTANCE).
 	virtual HINSTANCE __stdcall hDll()=0;   ///<  Zwraca uchwyt biblioteki wtyczki.
 
-	virtual int __stdcall getError()=0; ///< Zwraca kod ostatniego b³êdu.
-	virtual void __stdcall setError(int err_code)=0; ///< Ustawia kod b³êdu.
+	virtual enIMessageError __stdcall getError()=0; ///< Zwraca kod ostatniego b³êdu.
+	virtual void __stdcall setError(enIMessageError err_code)=0; ///< Ustawia kod b³êdu.
 	///  Powinien byc ustawiony gdy wystapil blad przy ODBIORZE wiadomosci (np wiadomosc jest nieobslugiwana).
 	///  \sa ImessageProc() imerror_
 	virtual bool __stdcall isRunning()=0; ///< Zwraca 0 jeœli program jest w trakcie zamykania.
@@ -99,7 +99,7 @@ public:
 	*/
 	virtual bool __stdcall DTset(tTable db , unsigned int row , unsigned int col , Stamina::DT::OldValue * value)=0;
 	/** Blokuje dostêp do wiersza w tablicy dla innych w¹tków. Zaraz po
-	wykorzystaniu zabezpieczonych danych trzeba wywo³aæ cCtrl::DTunlock z tymi
+	wykorzystaniu zabezpieczonych danych trzeba wywo³aæ Controler::DTunlock z tymi
 	samymi parametrami!
 	\param db Identyfikator tabeli
 	\param row Identyfikator/numer wiersza, lub -1 jeœli chcemy zablokowaæ CA£¥ tablicê
@@ -123,7 +123,7 @@ public:
 	/** Wszystkie bufory tekstowe wrzucane do API, ¿eby mog³by byæ zwolnione
 	w innym module musz¹ byæ zaalokowane poni¿sz¹ funkcj¹. */
 	virtual char * __stdcall strdup(const char * str)=0;
-	/** Wszystkie bufory zaalokowane przez cCtrl::malloc i cCtrl::strdup
+	/** Wszystkie bufory zaalokowane przez Controler::malloc i Controler::strdup
 	powinny byæ zwolnione t¹ funkcj¹. */
 	virtual void __stdcall free(void * buff)=0;
 
@@ -159,7 +159,7 @@ public:
 		unsigned *thrdaddr=0
 		)=0;
 	/** Tworzy w¹tek i czeka a¿ siê skoñczy.
-	Parametry te same co w cCtrl::BeginThread()
+	Parametry te same co w Controler::BeginThread()
 	*/
 	int BeginThreadAndWait(const char * name, void *security,	unsigned stack_size, fBeginThread start_address, void *arglist=0, unsigned initflag=0, unsigned *thrdaddr=0);
 
@@ -193,7 +193,7 @@ public:
 	virtual Tables::oTable __stdcall getTable(Tables::tTableId tableId)=0;
 
 	/** Zwraca obiekt wtyczki.
-	@param pluginId Identyfikator, indeks, lub pluginNotFound je¿eli chcemy uzyskaæ obiekt przypisany do cCtrl.
+	@param pluginId Identyfikator, indeks, lub pluginNotFound je¿eli chcemy uzyskaæ obiekt przypisany do Controler.
 	*/
 	virtual Konnekt::oPlugin __stdcall getPlugin(Konnekt::tPluginId pluginId = pluginNotFound)=0;
 
@@ -218,6 +218,26 @@ public:
 
 	virtual unsigned int __stdcall getPluginsCount()=0;
 
+	/** Zwraca obiekt loguj¹cy przypisany do wtyczki (Stamina::Logger) */
+	virtual class Stamina::Logger* __stdcall getLogger()=0;
+
+	/** Loguje treœæ 
+	@param level Rodzaj logowanego komunikatu
+	@param module Dowolna treœæ okreœlaj¹ca logiczny modu³ wtyczki, lub NULL. Nie trzeba podawaæ nazwy wtyczki.
+	@param where Dowolna treœæ okreœlaj¹ca miejsce zdarzenia, lub NULL
+	@param msg Treœæ do zapisania
+
+	Parametry module i where s³u¿¹ tylko i wy³¹cznie czytelnoœci logów. Najlepiej okreœlaæ logowane treœci w jednolity sposób. Np. informacjê o obs³u¿eniu komunikatu IM_CONNECT mo¿na zapisaæ jako:
+	@code
+	Ctrl->log(logFunc, "IMessage", "Connect", "Connected");
+	@endcode
+
+	Istnieje osobna f-cja do tworzenia treœci fomatowanych Ctrl::log().
+
+	Bardziej zaawansowane mo¿liwoœci daje obiekt typu Stamina::Logger, który mo¿na otrzymaæ z f-cji Ctrl::getLogger(). 
+	*/
+	virtual void __stdcall logMsg(enDebugLevel level, const char* module, const char* where, const char* msg)=0;
+
 	// --------------
 
 	// funkcje lokalne, dla ulatwienia
@@ -240,7 +260,9 @@ public:
 	void IMLOG(const char *format, ...);
 	/** Loguje, je¿eli wtyczka ma w³¹czone logowanie na danym "poziomie" */
 	void IMDEBUG(enDebugLevel level , const char *format, ...);
-	void IMLOG_(enDebugLevel level , const char *format, va_list p);
+
+	void log(enDebugLevel level, const char* module, const char* where, const char *format, ...);
+	void logV(enDebugLevel level, const char* module, const char* where, const char *format, va_list p);
 
 	// ----
 	inline int IMessage(unsigned int  id , tNet net = Net::none , enIMessageType type = imtAll , int p1=0 , int p2=0);
@@ -260,6 +282,8 @@ public:
 
 };
 
+
+typedef Controler cCtrl;
 
 
 

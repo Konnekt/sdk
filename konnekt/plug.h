@@ -118,7 +118,7 @@ using namespace Konnekt;
 
          #define IM_PLUG_INIT      IM_BASE+1
          /**< Inicjalizacja wtyczki. Pierwszy przes³any IMessage nakazuj¹cy wtyczce inicjalizacjê kodu.
-                 \param cCtrl adres struktury steruj¹cej
+                 \param Controler adres struktury steruj¹cej
                  \param ID identyfikator wtyczki
          */
 
@@ -230,7 +230,7 @@ Komunikat przesy³any jest przy pomocy @b sIMessage_plugArgs .*/
          #define IM_END           IM_BASE+2101 ///< Wtyczka powinna zakoñczyæ dzia³anie.
 												/// @param p1 (bool) I powinna to zrobiæ jak najszybciej...
 
-         #define IM_BEFOREEND     IM_BASE+2102 ///< Za chwilê zostanie rozes³ane IM_END, ostatnia chwila, kiedy cCtrl::IsRunning() zwraca true.
+         #define IM_BEFOREEND     IM_BASE+2102 ///< Za chwilê zostanie rozes³ane IM_END, ostatnia chwila, kiedy Controler::IsRunning() zwraca true.
 												/// @param p1 (bool) Zamykanie jest w trybie "natychmiastowym". Nale¿y wykonywaæ jak najmniej operacji...
 
 		 #define IM_UIACTION      IM_BASE+2200 ///< Powiadomienie o zdarzeniu w akcji.
@@ -1481,23 +1481,6 @@ Obs³uguje komunikaty WM_KEYDOWN i WM_SYSKEYDOWN
   /** @} */  // do UI.dll
   /** @} */  // IMESSAGE
 // -----------------------------------------------------------------------------------------------
-  /**
-    \defgroup imerror_ Kody b³edu
-    \brief \no
-
-    \{
-  */
-
-  #define IMERROR_NORESULT 1   ///< Wtyczka nie obs³u¿y³a wiadomoœci.
-  #define IMERROR_UNSUPPORTEDMSG IMERROR_NORESULT /// \no
-  #define IMERROR_BADSENDER 2  ///< Wiadomoœæ wstrzymana, pojawi³ siê b³¹d...
-  #define IMERROR_BADPLUG 3    ///< Podana wtyczka nie istnieje.
-  #define IMERROR_THREADSAFE 4 ///< Wiadomoœæ zosta³a wywo³ana w trybie bezpiecznym (bez oczekiwania na powrót).
-  #define IMERROR_SHUTDOWN 5   ///< Wiadomoœæ zosta³a anulowana z powodu zamykania programu.
-  #define IMERROR_BADPARAM 6   ///< Nieprawid³owe parametry.
-  #define IMERROR_BADSTRUCT 7   ///< Niepoprawna struktura.
-
-  /** @} */ // imerror_
 
 /** @} */  // Komunikacja pomiedzy wtyczkami
 

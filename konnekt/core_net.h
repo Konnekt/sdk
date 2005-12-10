@@ -58,7 +58,7 @@ namespace Konnekt {
 
 			ktransfer = 130,///< kTransfer 
 
-			last = 0xFFFFFFFF,
+			last = 0x0000FFFF,
 		};
 
         /** Klasa broadcast pozwala sterowaæ procesem rozsy³ania komunikatu do wielu wtyczek.

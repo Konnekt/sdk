@@ -105,6 +105,9 @@
 			Name="Source Files"
 			Filter="cpp;c;cxx;def;odl;idl;hpj;bat;asm">
 			<File
+				RelativePath=".\core_ctrl.cpp">
+			</File>
+			<File
 				RelativePath=".\core_tables.cpp">
 			</File>
 			<File

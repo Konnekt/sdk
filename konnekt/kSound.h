@@ -79,15 +79,15 @@ namespace kSound {
 		const int mute = NET_SOUND * 1000 + 1;
 	};
 	/** Rejestruje dŸwiêk. */
-	inline void SoundRegister(cCtrl * Ctrl , const char * name , const char * info , int flags = 0 , int colID=-1, const char* defSound=0) {
+	inline void SoundRegister(Controler * Ctrl , const char * name , const char * info , int flags = 0 , int colID=-1, const char* defSound=0) {
 		sIMessage_SoundRegister sr(name , info , flags , colID, defSound);
 		Ctrl->IMessage(&sr);
 	}
 	/** Odgrywa dŸwiêk */
-	inline void SoundPlay(cCtrl * Ctrl , const char * name , int cntID=0) {
+	inline void SoundPlay(Controler * Ctrl , const char * name , int cntID=0) {
 		Ctrl->IMessage(&sIMessage_2params(PLAY , NET_SOUND , IMT_CONFIG , (int)name , cntID));
 	}
-	inline const char* GetSoundFile(cCtrl * Ctrl , const char * name , int cntID=0) {
+	inline const char* GetSoundFile(Controler * Ctrl , const char * name , int cntID=0) {
 		return (const char*)Ctrl->IMessage(&sIMessage_2params(GETFILE , NET_SOUND , IMT_CONFIG , (int)name , cntID));
 	}
 };
