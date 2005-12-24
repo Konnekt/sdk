@@ -216,14 +216,14 @@ namespace Tables {
          /** Zwalnia dane z pamiêci */
 		 virtual void unloadData()=0;
 		 /** Rozsy³a komunikat IM::setColumns dla tablicy */
-		 virtual void requestColumns(Controler * ctrl, unsigned int net = -1, unsigned int plugType = -1)=0;
+		 virtual void requestColumns(Controler * ctrl, tNet net = Net::broadcast, enIMessageType plugType = imtAll)=0;
 		 /** Rozsy³a komunikat IM::dataChanged dla tablicy, lub wiersza. 
 		 @param ctrl - Controler wtyczki
 		 @param rowId - identyfikator zmienionego wiersza, lub allRows
 		 */
-		 virtual void dataChanged(Controler * ctrl, tRowId rowId,unsigned int net = -1, unsigned int plugType = -1)=0;
+		 virtual void dataChanged(Controler * ctrl, tRowId rowId,tNet net = Net::broadcast, enIMessageType plugType = imtAll)=0;
 
-		 void dataChanged(Controler * ctrl, unsigned int net = -1, unsigned int plugType = -1) {
+		 void dataChanged(Controler * ctrl, tNet net = Net::broadcast, enIMessageType plugType = imtAll) {
 			 dataChanged(ctrl, allRows, net, plugType);
 		 }
 		 

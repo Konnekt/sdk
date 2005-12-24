@@ -41,23 +41,23 @@ extern "C" __declspec(dllexport) void __stdcall KonnektApiVersions(fApiVersionCo
 
 
 
-int IMessage(unsigned int  id , tNet net , enIMessageType type , int p1 , int p2) {
+extern inline int IMessage(unsigned int  id , tNet net , enIMessageType type , int p1 , int p2) {
 	return Ctrl->IMessage(id , net , type , p1 , p2);
 }
-int IMessage(sIMessage_base * msg) {
+extern inline int IMessage(sIMessage_base * msg) {
 	return Ctrl->IMessage(msg);
 }
-int ICMessage(unsigned int  id , int p1 , int p2) {
+extern inline int ICMessage(tIMid  id , int p1 , int p2) {
 	return Ctrl->ICMessage(id , p1 , p2);
 }
-int IMessageDirect(unsigned int  id , unsigned int plug, int p1 , int p2) {
+extern inline int IMessageDirect(tIMid  id , tPluginId plug, int p1 , int p2) {
 	return Ctrl->IMessageDirect(id , plug , p1 , p2);
 }
-int IMessageDirect(unsigned int plug , sIMessage_base * msg) {
+extern inline int IMessageDirect(tPluginId plug , sIMessage_base * msg) {
 	return Ctrl->IMessageDirect(plug , msg);
 }
 
-int iPlugin::IMessageDirect(tIMid id, int p1, int p2) {
+extern inline int iPlugin::IMessageDirect(tIMid id, int p1, int p2) {
 	return this->IMessageDirect(Ctrl, &sIMessage_2params(id, p1, p2));
 }
 
@@ -240,7 +240,7 @@ void IMERROR() {  //Windows errors
        return ICMessage(IMI_ACTION , (IMPARAM)&ai , 0);
     }
 
-	inline int UIActionInsert(int _parent , int _id , int _pos , int _status , const char * _txt , int _p1 , short _w , short _h , int _p2 , int _param) {
+	extern inline int UIActionInsert(int _parent , int _id , int _pos , int _status , const char * _txt , int _p1 , short _w , short _h , int _p2 , int _param) {
 		return Ctrl->UIActionInsert(_parent , _id , _pos , _status , _txt , _p1 , _w , _h , _p2 , _param);
 	}
 
@@ -378,7 +378,7 @@ void IMERROR() {  //Windows errors
 				if (name) 
 					plugName = name;
 				else {
-					plugName = SAFECHAR((char*)IMessageDirect(IM_PLUG_NAME, 0, 0, 0));
+					plugName = Ctrl->getPlugin()->getName();
 					char ver [50];
 					ver[0]=0;
 					ICMessage(IMC_PLUG_VERSION, ICMessage(IMC_PLUGID_POS, Ctrl->ID(), 0), (int) ver);
@@ -402,7 +402,7 @@ void IMERROR() {  //Windows errors
 				if (name) 
 					tip = name;
 				else {
-					tip = SAFECHAR((char*)IMessageDirect(IM_PLUG_NAME, 0, 0, 0));
+					tip = Ctrl->getPlugin()->getName();
 					char ver [50];
 					ver[0]=0;
 					ICMessage(IMC_PLUG_VERSION, ICMessage(IMC_PLUGID_POS, Ctrl->ID(), 0), (int) ver);

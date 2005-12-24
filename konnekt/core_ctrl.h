@@ -39,7 +39,7 @@ public:
 	\param plug ID wtyczki
 	\sa im_ imc_plug_
 	*/
-	virtual int __stdcall IMessageDirect(unsigned int plug , sIMessage_base * msg)=0;
+	virtual int __stdcall IMessageDirect(tPluginId plug , sIMessage_base * msg)=0;
 	/** Zamienia (lub nie) identyfikator wiersza na jego numer.
 	*/
 	virtual int __stdcall DTgetPos(tTable db , unsigned int row)=0;
@@ -68,7 +68,7 @@ public:
 
 	virtual unsigned int __stdcall Is_TUS(unsigned int thID)=0; ///< Zwraca \a thID jeœli aktualny w¹tek jest ró¿ny od \a thID. Lub 0 gdy s¹ równe. Jako \a thID mo¿na podaæ 0 - zostanie zamienione na g³ówny w¹tek aplikacji.
 	virtual int __stdcall RecallTS(HANDLE th = 0 , bool wait = 1)=0;
-	virtual int __stdcall RecallIMTS(HANDLE th , bool wait , sIMessage_base * msg , int plugID)=0;
+	virtual int __stdcall RecallIMTS(HANDLE th , bool wait , sIMessage_base * msg , tPluginId plugID)=0;
 
 	virtual void __stdcall WMProcess()=0; ///< Opró¿nienie kolejki wiadomoœci windowsowych.
 	///  Powinno byæ wykonywane TYLKO w g³ównym w¹tku, w d³ugich
@@ -265,13 +265,13 @@ public:
 	void logV(enDebugLevel level, const char* module, const char* where, const char *format, va_list p);
 
 	// ----
-	inline int IMessage(unsigned int  id , tNet net = Net::none , enIMessageType type = imtAll , int p1=0 , int p2=0);
-	inline int ICMessage(unsigned int  id , int p1=0 , int p2=0);
-	inline int IMessageDirect(unsigned int  id , unsigned int plug=0, int p1=0 , int p2=0);
+	int IMessage(unsigned int  id , tNet net = Net::none , enIMessageType type = imtAll , int p1=0 , int p2=0);
+	int ICMessage(unsigned int  id , int p1=0 , int p2=0);
+	int IMessageDirect(unsigned int  id , tPluginId plug, int p1=0 , int p2=0);
 
 	int UIActionInsert(int _parent , int _id , int _pos , int _status=0 , const char * _txt = 0 , int _p1=0 , short _w=0 , short _h=0 , int _p2=0 , int _param=0);
 
-	inline int SetColumn(tTable table , int id , int type , int def , const char * name);
+	int SetColumn(tTable table , int id , int type , int def , const char * name);
 	inline int SetColumn(tTable table , int id , int type , const char * def  , const char * name=0) {
 		return this->SetColumn(table , id , type , (int)def , name);
 	}

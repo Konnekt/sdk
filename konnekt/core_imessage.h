@@ -58,8 +58,8 @@ namespace Konnekt {
 	};
 
 
-	inline enIMessageType operator | (enIMessageType& a, enIMessageType& b) {
-		return (enIMessageType)(a | b);
+	inline enIMessageType operator | (const enIMessageType& a, const enIMessageType& b) {
+		return (enIMessageType)((int)a | (int)b);
 	}
 
 	enum enIMessageFlag {
@@ -70,8 +70,8 @@ namespace Konnekt {
 
 	};
 
-	inline enIMessageFlag operator | (enIMessageFlag& a, enIMessageFlag& b) {
-		return (enIMessageFlag)(a | b);
+	inline enIMessageFlag operator | (const enIMessageFlag& a, const enIMessageFlag& b) {
+		return (enIMessageFlag)((int)a | (int)b);
 	}
 
 
@@ -86,6 +86,8 @@ namespace Konnekt {
 		errorShutdown = 5, ///< Wiadomoœæ zosta³a anulowana z powodu zamykania programu.
 		errorBadParam = 6, ///< Nieprawid³owe parametry.
 		errorBadStruct = 7, ///< Niepoprawna struktura.
+
+		errorBadBroadcast = 8,
 
 	};
 

@@ -116,7 +116,7 @@ namespace Konnekt {
 
 		public:
 
-			/// Rozpoczyna konstrukcjê broadcastu;
+			/// Rozpoczyna konstrukcjê broadcastu. Ustawia domyœlnie typ typeBroadcast
 			Broadcast() {
 				value = Net::none;
 				flag = 1;

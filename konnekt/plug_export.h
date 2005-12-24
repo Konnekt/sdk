@@ -65,10 +65,10 @@ najwygodniej jest z nich po prostu korzystac :)
   \param p1,p2 Parametry
   \sa gr_im net_ imt_
   */
-  inline int IMessage(unsigned int  id , signed int net=0 , unsigned int type=-1 , int p1=0 , int p2=0);
+  int IMessage(unsigned int  id , tNet net = Net::none , enIMessageType type = imtAll , int p1=0 , int p2=0);
   /** Wysy³a wiadomoœæ . Wywo³uje bezpoœrednio Controler::IMessage .
   */
-  inline int IMessage(sIMessage_base * msg);
+  int IMessage(sIMessage_base * msg);
 
 
   /** Wysy³a wiadomoœæ bezpoœrednio do rdzenia/ui (net = 0 , type = 0) .
@@ -76,7 +76,7 @@ najwygodniej jest z nich po prostu korzystac :)
   \param p1,p2 Parametry
   \sa im_
   */
-  inline int ICMessage(unsigned int  id , int p1=0 , int p2=0);
+  int ICMessage(unsigned int  id , int p1=0 , int p2=0);
 
   /** Wysy³a wiadomoœæ bezpoœrednio do wtyczki.
   \param id Identyfikator wiadomoœci
@@ -84,10 +84,10 @@ najwygodniej jest z nich po prostu korzystac :)
   \param p1,p2 Parametry
   \sa im_ imc_plug_
   */
-  inline int IMessageDirect(unsigned int  id , unsigned int plug=0, int p1=0 , int p2=0);
+  int IMessageDirect(unsigned int  id , tPluginId plug, int p1=0 , int p2=0);
 
   /** Wysy³a wiadomoœæ bezpoœrednio do wtyczki.*/
-  inline int IMessageDirect(unsigned int plug , sIMessage_base * msg);
+  int IMessageDirect(tPluginId plug , sIMessage_base * msg);
 
 
   void WMProcess(void);

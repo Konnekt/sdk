@@ -28,7 +28,7 @@ int Controler::IMessage(sIMessage_base * msg) {
 int Controler::ICMessage(unsigned int  id , int p1 , int p2) {
 	return (this->IMessage)(&sIMessage (id,Net::none,imtNone,p1,p2));
 }
-int Controler::IMessageDirect(unsigned int  id , unsigned int plug, int p1 , int p2) {
+int Controler::IMessageDirect(unsigned int  id , tPluginId plug, int p1 , int p2) {
     if (!plug) plug=this->ID();
 	return (this->IMessageDirect)(plug , &sIMessage (id,Net::none,imtNone,p1,p2));
 }
