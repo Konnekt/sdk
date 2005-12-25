@@ -20,6 +20,7 @@ String Tables::iTable::getTableName() {
 
 Tables::oTable Tables::registerTable(Controler * ctrl, Tables::tTableId tableId, const StringRef& name, enTableOptions tableOpts) {
 	if (!ctrl) ctrl = Ctrl;
+	S_ASSERT(ctrl != 0);
 	if (tableId == Tables::tableNotFound && name.empty() == false) {
 		tableId = (tTableId) Unique::registerName(Unique::domainTable, name);
 	} else if (name.empty() == false) {

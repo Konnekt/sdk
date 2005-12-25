@@ -272,14 +272,14 @@ namespace Konnekt {
 				tNet value;
 
 				struct {
-					unsigned start:32;
-					unsigned _fill:19;
-					enIMType imtype:2;
-					unsigned reverse:1;
-					enResult result:3;
-					enStart startType:3;
-					enType type:3;
-					unsigned flag:1; // oznacza czy w ogóle jest to broadcast
+					unsigned start		:16;
+					unsigned _fill		:3;
+					enIMType imtype		:2;
+					unsigned reverse	:1;
+					enResult result		:3;
+					enStart startType	:3;
+					enType type			:3;
+					unsigned flag		:1; // oznacza czy w ogóle jest to broadcast
 				};
 
 			};
