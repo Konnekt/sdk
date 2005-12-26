@@ -37,6 +37,13 @@ extern "C" __declspec(dllexport) void __stdcall KonnektApiVersions(fApiVersionCo
 	cmp(iLockableObject::staticClassInfo().getModuleVersion());
 	cmp(Stamina::Lib::version);
 	cmp(Konnekt::apiVersion);
+
+	VersionControl * vc = VersionControl::instance();
+
+	for (VersionControl::tModuleList::const_iterator it = vc->begin(); it != vc->end(); ++it) {
+		cmp(*it);
+	}
+
 }
 
 
