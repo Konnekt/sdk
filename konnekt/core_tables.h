@@ -392,6 +392,9 @@ namespace Tables {
 
 	};
 
+
+	STAMINA_REGISTER_CLASS_VERSION(iTable);
+
 	inline tTableId getTableId(const StringRef& tableName);
 
 

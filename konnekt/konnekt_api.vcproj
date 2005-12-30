@@ -113,6 +113,13 @@
 			<File
 				RelativePath=".\konnekt_defs.cpp">
 			</File>
+			<Filter
+				Name="test"
+				Filter="">
+				<File
+					RelativePath=".\test\test_cppunit.cpp">
+				</File>
+			</Filter>
 		</Filter>
 		<Filter
 			Name="Header Files"
@@ -210,6 +217,13 @@
 			<File
 				RelativePath="..\konnekt\ui_message_controls.h">
 			</File>
+			<Filter
+				Name="test"
+				Filter="">
+				<File
+					RelativePath=".\test_cppunit.h">
+				</File>
+			</Filter>
 		</Filter>
 		<Filter
 			Name="Resource Files"

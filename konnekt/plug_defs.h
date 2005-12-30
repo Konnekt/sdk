@@ -35,11 +35,12 @@ namespace Konnekt {
 	const enDebugLevel DBG_ASSERT = Stamina::logAssert;
 	const enDebugLevel DBG_LOG = Stamina::logLog;
 	const enDebugLevel DBG_DEBUG = Stamina::logDebug;
-	const enDebugLevel DBG_TEST = (enDebugLevel) 0x10000;
-	const enDebugLevel DBG_TEST_FAILED = (enDebugLevel) 0x30000;
-	const enDebugLevel DBG_TEST_PASSED = (enDebugLevel) 0x50000;
-	const enDebugLevel DBG_TEST_TITLE = (enDebugLevel) 0x70000;
-	const enDebugLevel DBG_COMMAND = (enDebugLevel) 0x100000;
+	const enDebugLevel DBG_TEST = (enDebugLevel) 0x1000000;
+	const enDebugLevel DBG_TEST_FAILED = (enDebugLevel) 0x2000000;
+	const enDebugLevel DBG_TEST_PASSED = (enDebugLevel) 0x3000000;
+	const enDebugLevel DBG_TEST_TITLE = (enDebugLevel) 0x4000000;
+	const enDebugLevel DBG_COMMAND = (enDebugLevel) 0x5000000;
+	const enDebugLevel DBG_SPECIAL = (enDebugLevel) 0xF000000;
 	const enDebugLevel DBG_ALL = (enDebugLevel) 0xFF0FFF;
 
 
