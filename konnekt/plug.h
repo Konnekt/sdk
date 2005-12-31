@@ -31,11 +31,11 @@ Nag³ówek powinien byæ do³¹czony do kodu wtyczki poprzez plug_export.h .
 
 using namespace Konnekt;
 
+
 #include "core_plugin.h"
 #include "core_imessage.h"
 
 
-  typedef IMPARAM (__stdcall*fIMessageProc)(sIMessage_base * msg);
 
 #ifndef _WINDOWS_
     #define HANDLE void *
@@ -183,6 +183,9 @@ Komunikat przesy³any jest przy pomocy @b sIMessage_plugArgs .*/
 
 		 #define IM_THREADSTART    IM_BASE + 43 ///< Aktualny w¹tek w³aœnie zosta³ uruchomiony. Lepiej polegaæ jednak na DllMain!
 	 	 #define IM_THREADEND	   IM_BASE + 44 ///< Aktualny w¹tek w³aœnie siê koñczy. Lepiej polegaæ jednak na DllMain!
+
+
+
 
 		 #define IM_MSG_RCV       IM_BASE+100
          /**< Wtyczka powinna sprawdziæ czy obs³uguje dany typ wiadomoœci.

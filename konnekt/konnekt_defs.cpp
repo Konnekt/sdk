@@ -5,6 +5,9 @@
   info="Cia³a wszystkich f-cji z nag³ówków."
 */
 
+#define WIN32_LEAN_AND_MEAN
+#define _WIN32_WINNT 0x0500
+
 #include <stdio.h>
 #include <stdarg.h>
 #include <windows.h>
@@ -64,7 +67,7 @@ extern inline int IMessageDirect(tPluginId plug , sIMessage_base * msg) {
 	return Ctrl->IMessageDirect(plug , msg);
 }
 
-extern inline int iPlugin::IMessageDirect(tIMid id, int p1, int p2) {
+inline int iPlugin::IMessageDirect(tIMid id, int p1, int p2) {
 	return this->IMessageDirect(Ctrl, &sIMessage_2params(id, p1, p2));
 }
 

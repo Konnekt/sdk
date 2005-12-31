@@ -7,6 +7,7 @@ namespace Konnekt {
 
 
 	typedef void (__stdcall *fApiVersionCompare)(const Stamina::ModuleVersion& v);
+	typedef int (__stdcall*fIMessageProc)(struct sIMessage_base * msg);
 
 	const Stamina::ModuleVersion apiVersion = Stamina::ModuleVersion(Stamina::versionAPI, "KonnektAPI", Stamina::Version(3,0,0,0));
 	STAMINA_REGISTER_VERSION(Konnekt, apiVersion);

@@ -209,6 +209,9 @@
 				RelativePath="..\konnekt\plug_func.h">
 			</File>
 			<File
+				RelativePath=".\plugin_test.h">
+			</File>
+			<File
 				RelativePath="..\konnekt\sms.h">
 			</File>
 			<File
