@@ -48,7 +48,7 @@ inline oColumn iTable::setColumn(Controler* plugin, const Stamina::StringRef& na
 	return this->setColumn(plugin, colByName, type, name);
 }
 
-inline oColumn iTable::setColumn(const Stamina::StringRef& name, tColType type) {
+extern inline oColumn iTable::setColumn(const Stamina::StringRef& name, tColType type) {
 	return this->setColumn(Ctrl, name, type);
 }
 
