@@ -3,17 +3,36 @@
  *
  *  Please READ /License.txt FIRST!
  *
- *  Copyright (C)2005 Sijawusz Pur Rahnama
+ *  Copyright (C)2005-2006 Sijawusz Pur Rahnama
  *
- *  $Id: main.h 25 2005-12-26 18:00:47Z sija $
+ *  $Id: main.h 33 2006-01-16 10:59:17Z sija $
  */
 
 #pragma once
 
 namespace kAway2 {
+  /*
+   *  Values for {cfg::reply::minIntervalType} col
+   */
+  enum enMinIntType {
+    intervalTypeRcvTime,
+    intervalTypeSendTime,
+    intervalTypeBoth
+  };
+
   const unsigned int net = 667;
-  const bool debug = true;
-  const char poweredBy[64] = "Bonobo";
+  const char poweredBy[] = "Frank Zappa";
+
+  namespace api {
+    const unsigned int api = net * 1000 + IM_USER;
+
+    const unsigned int isEnabled = api + 1;
+    const unsigned int enable = api + 2;
+    const unsigned int disable = api + 3;
+
+    const unsigned int isIgnored = api + 4;
+    const unsigned int ignore = api + 5;
+  }
 
   namespace ui {
     const unsigned int ui = net * 1000;
@@ -55,6 +74,7 @@ namespace kAway2 {
 
     const unsigned int help = ico + 11;
     const unsigned int trash = ico + 12;
+    const unsigned int msg = ico + 13;
   }
 
   namespace act {
@@ -101,7 +121,18 @@ namespace kAway2 {
     const unsigned int muteOnEnable = cfg + 12;
     const unsigned int disableConfirmation = cfg + 13;
 
-    const char historyFolder[16] = "kAway2";
+    const char extParamName[] = "kA2AutoMsgTpl";
+    const char historyFolder[] = "kAway2";
+    const char mruName[] = "kA2_awayMsg";
+
+    namespace wnd {
+      const unsigned int wnd = cfg + 50;
+
+      const unsigned int changeOnEnable = wnd + 1;
+      const unsigned int changeInfoOnEnable = wnd + 2;
+      const unsigned int muteOnEnable = wnd + 3;
+      const unsigned int onEnableSt = wnd + 4;
+    }
 
     namespace tpl {
       const unsigned int tpl = cfg + 100;
@@ -135,6 +166,7 @@ namespace kAway2 {
 
       const unsigned int netChange = reply + 9;
       const unsigned int showInWnd = reply + 10;
+      const unsigned int minIntervalType = reply + 11;
     }
 
     namespace sms {
@@ -182,6 +214,7 @@ namespace kAway2 {
 
       const unsigned int onEnableSt = status + 5;
       const unsigned int onAutoAwaySt = status + 6;
+      const unsigned int dotsAppend = status + 7;
     }
   }
 }
