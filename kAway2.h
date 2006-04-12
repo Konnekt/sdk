@@ -1,11 +1,16 @@
-/*
- *  kAway2
+/**
+ *  kAway2 Header
  *
- *  Please READ /License.txt FIRST!
+ *  Licensed under The GNU Lesser General Public License
+ *  Redistributions of files must retain the above copyright notice.
  *
- *  Copyright (C)2005-2006 Sijawusz Pur Rahnama
- *
- *  $Id: main.h 33 2006-01-16 10:59:17Z sija $
+ *  @filesource
+ *  @copyright    Copyright (c) 2005-2006 Sijawusz Pur Rahnama
+ *  @link         svn://kplugins.net/kaway2/ kAway2 plugin SVN Repo
+ *  @version      $Revision: 44 $
+ *  @modifiedby   $LastChangedBy: sija $
+ *  @lastmodified $Date: 2006-04-12 11:48:32 +0200 (Śr, 12 kwi 2006) $
+ *  @license      http://creativecommons.org/licenses/LGPL/2.1/
  */
 
 #pragma once
@@ -21,7 +26,7 @@ namespace kAway2 {
   };
 
   const unsigned int net = 667;
-  const char poweredBy[] = "Frank Zappa";
+  const char poweredBy[] = "Susumu Yokota";
 
   namespace api {
     const unsigned int api = net * 1000 + IM_USER;
@@ -32,6 +37,11 @@ namespace kAway2 {
 
     const unsigned int isIgnored = api + 4;
     const unsigned int ignore = api + 5;
+
+    const unsigned int showAwayWnd = api + 6;
+
+    const unsigned int isAway = api + 7;
+    const unsigned int isBack = api + 8;
   }
 
   namespace ui {
