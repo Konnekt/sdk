@@ -87,6 +87,7 @@ namespace Konnekt {
 	#define ICON_DEFAULT 26
 	#define ICON_IMPORT 27
 	#define ICON_EXPORT 28
+	#define ICON_CHECKED 29
 
 	#define ICON_USER  30
 	#define ICON_GROUP 31
@@ -968,6 +969,10 @@ struct sUIActionNotify_destroyWindow: public sUIActionNotify_base {
     // Na razie nie wazne!
     #define CFG_UIF_MSGTXTS         157
 
+	#define CFG_UIF_MENU			219
+	#define CFG_UIF_MENUDEFAULT		220
+	#define CFG_UIF_MENUACTIVE		221
+
     #define CFG_ISAUTOAWAY          138
     #define CFG_UIONECLICKTRAY      140
     #define CFG_UITIPDELAY          143
@@ -981,6 +986,7 @@ struct sUIActionNotify_destroyWindow: public sUIActionNotify_base {
     #define CFG_UIONLINEBOLD        163
     #define CFG_UISHOWIP            164
     #define CFG_UIMAINTITLE         165 ///< \b UI - #DT_CT_PCHAR
+	#define CFG_UIMENUTYPE			218
 
     #define CFG_UIGRPTABS_MULTILINE 166 ///< \b UI - #DT_CT_INT - 
     #define CFG_UIGRPTABS_VERTICAL  167 ///< \b UI - #DT_CT_INT - 
@@ -1036,7 +1042,7 @@ struct sUIActionNotify_destroyWindow: public sUIActionNotify_base {
 
 
     #define CFG_UI_COUNT (38 + 8)  // cfg+colors
-    // 217  <- nastepny
+    // 222  <- nastepny
 /** @} */
 
 namespace Konnekt {

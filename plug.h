@@ -1404,10 +1404,12 @@ Nie ma ju¿ potrzeby wysy³ania #IMI_REFRESH_CNT
         };
 
 
-        #define IMI_DLGPASS     IMI_BASE+205  ///< Okienko podawania has³a.
-                                                /// \param (sDIALOG_access*) Parametry okna.
-                                                /// \param (bool) Gdy == 1 automatycznie do³¹cza do flag DFLAG_SAVE.
-                                                /// \return true/false
+/** Okienko podawania has³a.
+   @param (sDIALOG_access*) Parametry okna.
+   @param (bool) Gdy == 1 automatycznie do³¹cza do flag DFLAG_SAVE.
+   @return true/false */
+		#define IMI_DLGPASS     IMI_BASE+205  
+
         #define IMI_DLGLOGIN    IMI_BASE+206  ///< Okienko podawania loginu i has³a.
                                                 /// \param (sDIALOG_access*) Parametry okna.
                                                 /// \param (bool) Gdy == 1 automatycznie do³¹cza do flag DFLAG_SAVE.

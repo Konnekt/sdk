@@ -1,3 +1,15 @@
+/*
+ *  kJabber
+ *  
+ *  Please READ & ACCEPT /License.txt FIRST! 
+ * 
+ *  Copyright (C)2005,2006 Rafa³ Lindemann, STAMINA
+ *  http://www.stamina.pl/ , http://www.konnekt.info/
+ *
+ *  $Id: $
+ */
+
+
 #pragma once
 
 namespace kJabber {
@@ -27,7 +39,7 @@ namespace kJabber {
 	}
 	namespace IM {
 		/** Zwraca obiekt jaberoo::Session */
-		const int getSession = 12000;
+		const int getSession = IM_USER + 12000;
 	}
 	namespace ACT {
 		const int CfgGroup = 12000;
