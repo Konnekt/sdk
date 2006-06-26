@@ -285,60 +285,71 @@ namespace Tables {
 
 		 // wczytywanie danych
 
-		inline int getInt(tRowId row , tColId id, GetSet flags = gsNone)  {
-			return this->getColumn(id)->getInt( this->getRow(row), flags);
+		inline int getInt(tRowId rowId , tColId id, GetSet flags = gsNone)  {
+			const oRow row = this->getRow(rowId);
+			if (!row.isValid()) return 0;
+			return this->getColumn(id)->getInt( row, flags);
 		}
 		inline bool setInt(tRowId rowId , tColId id , int val, GetSet flags = gsNone) {
 			oRow row = this->getRow(rowId);
-			if (row) {
+			if (row.isValid()) {
 				return this->getColumn(id)->setInt(row , val, flags);
 			}
-			return row;
+			return row.isValid();
 		}
-		inline String getString(tRowId row , tColId id, GetSet flags = getCopy) {
-			return ::Stamina::PassStringRef( this->getColumn(id)->getString( this->getRow(row), flags ) );
+		inline String getString(tRowId rowId , tColId id, GetSet flags = getCopy) {
+			const oRow row = this->getRow(rowId);
+			if (!row.isValid()) return "";
+			return ::Stamina::PassStringRef( this->getColumn(id)->getString(row , flags ) );
 		}
 		inline bool setString(tRowId rowId , tColId id , const StringRef& val, GetSet flags = gsNone) {
 			oRow row = this->getRow(rowId);
-			if (row) {
+			if (row.isValid()) {
 				return this->getColumn(id)->setString(row, val, flags);
 			}
-			return row;
+			return row.isValid();
 		}
 
-		inline ByteBuffer getBin(tRowId row , tColId id, GetSet flags = getCopy) {
+		inline ByteBuffer getBin(tRowId rowId , tColId id, GetSet flags = getCopy) {
 			ByteBuffer b;
-			b.swap( this->getColumn(id)->getBin( this->getRow(row), flags ) );
+			const oRow row = this->getRow(rowId);
+			if (!row.isValid()) return b;
+			b.swap( this->getColumn(id)->getBin( row, flags ) );
 			return b;
 		}
 		inline bool setBin(tRowId rowId , tColId id , const ByteBuffer& val, GetSet flags = gsNone) {
 			oRow row = this->getRow(rowId);
-			if (row) {
+			if (row.isValid()) {
 				return this->getColumn(id)->setBin(row, val, flags);
 			}
-			return row;
+			return row.isValid();
 		}
 
-		inline __int64 getInt64(tRowId row , tColId id, GetSet flags = gsNone) {
-			return this->getColumn(id)->getInt64( this->getRow(row), flags );
+		inline __int64 getInt64(tRowId rowId , tColId id, GetSet flags = gsNone) {
+			const oRow row = this->getRow(rowId);
+			if (!row.isValid()) return 0;
+			return this->getColumn(id)->getInt64( row, flags );
 		}
 		inline bool setInt64(tRowId rowId , tColId id , __int64 val, GetSet flags = gsNone) {
 			oRow row = this->getRow(rowId);
-			if (row) {
+			if (row.isValid()) {
 				return this->getColumn(id)->setInt64(row , val, flags );
 			}
-			return row;
+			return row.isValid();
 		}
 
-		inline double getDouble(tRowId row , tColId id, GetSet flags = gsNone) {
-			return this->getColumn(id)->getDouble( this->getRow(row), flags );
+		inline double getDouble(tRowId rowId , tColId id, GetSet flags = gsNone) {
+			const oRow row = this->getRow(rowId);
+			if (!row.isValid()) return 0;
+
+			return this->getColumn(id)->getDouble( row, flags );
 		}
 		inline bool setDouble(tRowId rowId , tColId id , double val, GetSet flags = gsNone) {
 			oRow row = this->getRow(rowId);
-			if (row) {
+			if (row.isValid()) {
 				return this->getColumn(id)->setDouble(row , val, flags );
 			}
-			return row;
+			return row.isValid();
 		}
 
 // byName
