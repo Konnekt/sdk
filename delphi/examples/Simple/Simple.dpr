@@ -13,7 +13,7 @@ uses
   SysUtils,
   Plug in '..\..\api\plug.pas',
   PlugDefs in '..\..\api\plugdefs.pas',
-  ui in '..\..\api\ui.h';
+  ui in '..\..\api\ui.pas';
 
 {$R *.res}
 const
