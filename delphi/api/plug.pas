@@ -1,42 +1,68 @@
 unit Plug;
 {*
  * Konnekt Delphi SDK (Software Development Kit)
- * 
- * Nag³ówek: Plug Shared
- * Modyfikowany: 2005-09-13
- * Zgodny z wersj¹: 0.6.18.x
+ *
+ * Nag³ówek: Plugin shared
+ * Modyfikowany: 2006-08-31
+ * Zgodny z wersj¹: 0.6.22.x
  * Info: Podstawowy nag³ówek.
- * 
+ *
  * Œrodowisko: Borland Delphi 7
  *
- * http://www.konnekt.info
- * 
- * (C)2002-2005 Stamina
+ * http://www.konnekt.info/
+ *
+ * (C) 2002-2006 Stamina
  * SDK s³u¿y do przygotowywania oprogramowania wspó³pracuj¹cego
  * z programem Konnekt. Autorzy nie ponosz¹ ¿adnej odpowiedzialnoœci
  * za wykorzystanie tego kodu.
  * Kod zawarty w SDK mo¿e byæ u¿ywany tylko w projektach dotycz¹cych
- * programu Konnekt! *}
+ * programu Konnekt! 
+ *}
 
 interface
 
 uses
-  SysUtils;
+  SysUtils, Windows;
 
 const
   KONNEKT_SDK_V = 2;
+
+const
+  HISTORY_IGNORED_NAME = 'ignorowani';
+  HISTORY_IGNORED_DIR = 'deleted';
 
 {   Struktura u¿ywana podczas przesy³ania wiadomoœci.
     Jest u¿ywana jako bazowa dla wiêkszych struktur...
   }
 type
+     sCNTSEARCHPtr = ^sCNTSEARCH;
+         sCNTSEARCH =packed record
+            s_size:word;
+            status:integer;
+            uid:array [0..255] of char;
+            name:array [0..100] of char;
+            surname:array [0..100] of char;
+            nick:array [0..100] of char;
+            city:array [0..50] of char;
+            email:array [0..100] of char;
+            phone:array [0..50] of char;
+            other:array [0..255] of char;
+            gender:integer; ///< P³eæ 0 - nieznana , 1 - kobieta , 2 - mê¿czyzna
+            born_min:integer; ///< Urodzony, OD roku
+            born_max:integer; ///< Urodzony, DO roku
+            net:integer;    ///< Numer sieci.
+            start:integer;  ///< Od jakiej pozycji pokazywaæ dalej.
+                        /// Przy zwracaniu, ostatni znaleziony kontakt powinien mieæ ustawiony \start
+                        /// na pozycjê od której mo¿na wznowiæ wyszukiwanie.
+            handle:integer; ///< Uchwyt do okna wyszukiwania
+         end;
   sIMessage_basePtr = ^sIMessage_base; // wskaŸnik do struktury
   sIMessage_base = packed record
     size: Word;
     id: Cardinal;
     flag: Cardinal;
     net: Integer;
-    type_: Cardinal;
+    type_: Integer;
     sender: Cardinal;
   end;
 { Funkcje u³atwiaj¹ce uzupe³nianie recordów, pole size zawsze jest ustawiane
@@ -101,6 +127,7 @@ const
   AC_NONE = -1;    ///< Akcja nie jest przypisana do ¿adnego kontaktu.
   AC_CURRENT = -2; ///< Ostatnio przypisany kontakt.
 
+
 type
   sUIActionPtr = ^sUIAction;  // wskaŸnik do struktury
   sUIAction = packed record
@@ -121,6 +148,7 @@ type
     reserved: Integer;
   end;
 
+
 type
   sUIActionNotify_2paramsPtr = ^sUIActionNotify_2params;
   sUIActionNotify_2params = packed record
@@ -132,7 +160,52 @@ type
     notify2: Cardinal;
   end;
 
+
 { Identyfikatory tablic. }
+
+sIMessage_StatusChange=packed record
+  sm:sIMessage_base;
+  cntID:cardinal;
+  status:Cardinal;
+  info:pchar;
+end;
+
+
+sIMessage_StatusChange1=packed record
+  msgID:integer;
+  cntID:integer;
+  status:integer;
+end;
+
+sIMessage_msgBox=packed record
+  sm:sIMessage_base;
+  msg:pchar;
+  flags:cardinal;
+  title:pchar;
+  parent:integer;
+end;
+
+sIMessage_UIMakePopupPtr = ^sIMessage_UIMakePopup;
+sIMessage_UIMakePopup = packed record
+  size: Word;
+  id: Cardinal;
+  flag: Cardinal;
+  net: Integer;
+  type_: Cardinal;
+  sender: Cardinal;
+  _action: sUIAction;
+  _uFlags:Integer;
+  _x :Integer;
+  _y :Integer;
+  _nReserved :Integer;
+  _startFrom :Integer;
+  _hWndMenu :Cardinal;
+  Rect :PRect;
+end;
+
+function sIMessage_UIMakePopupB(action :sUiAction; uFlags :Integer; x :Integer; y :Integer; nReserved :Integer; hWnd :Cardinal; prcRect :PRect; startFrom :Integer = 0):sIMessage_UIMakePopup;
+
+
 type tTable = Shortint;
 
 const
@@ -225,19 +298,19 @@ function sUIActionInfo_cfgB(parent: Integer; id: Integer; pos: Integer = -1; sta
 
 type HINSTANCE = Longword;
 
-	{ Rodzaj zapisywanej informacji dla cCtrl::IMDEBUG() }
+  { Rodzaj zapisywanej informacji dla cCtrl::IMDEBUG() }
 type enDebugLevel = (
     DBG_NONE = 0,
-		DBG_NET = 1,
-		DBG_TRAFFIC = 2 , 
-		DBG_DUMP = 4 , 
-		DBG_FUNC = 8 , 
-		DBG_MISC = $10 ,
-		DBG_ERROR = $20 ,
-		DBG_WARN = $40 ,
-		DBG_LOG = $100 ,
-		DBG_DEBUG = $1000 ,
-		DBG_ALL = $0FFF
+    DBG_NET = 1,
+    DBG_TRAFFIC = 2 , 
+    DBG_DUMP = 4 , 
+    DBG_FUNC = 8 , 
+    DBG_MISC = $10 ,
+    DBG_ERROR = $20 ,
+    DBG_WARN = $40 ,
+    DBG_LOG = $100 ,
+    DBG_DEBUG = $1000 ,
+    DBG_ALL = $0FFF
     );
 
 const
@@ -254,7 +327,7 @@ const
   DT_CT_64 = 3;    ///< 8 bajtów (__int64, double ...)
   DT_CT_UNKNOWN = -1;  ///< dla sDTValue, typ nieznany (zostanie ustawiony).
   DT_CF_NOSAVE = $100;  ///< Kolumna nie zostanie zapisana do pliku.
-	DT_CF_SECRET = $400;       ///< Kolumna mo¿e byæ has³em i powinna byæ odpowiednio strze¿ona...
+  DT_CF_SECRET = $400;       ///< Kolumna mo¿e byæ has³em i powinna byæ odpowiednio strze¿ona...
   DT_CF_CXOR = $01000; ///< Kodowanie kolumn poprzez XORing. Dzia³a tylko jako DT_CT_PCHAR|DT_CT_CXOR.
 
 type
@@ -296,7 +369,35 @@ const
   IM_BASE = 20000;
   IM_SHARE = 30000;
   IM_USER = 40000;
+  IM_CHANGESTATUS = IM_SHARE+3005;
+  IM_CNT_SEARCH = IM_BASE+4010 ;
+  IM_CNT_CHANGED = IM_BASE+4006 ;
+  IM_CNT_STATUSCHANGE = IM_BASE+4011;
+  IM_PLUG_PRIORITY = IM_BASE+21;
+  IM_ALLPLUGINSINITIALIZED = IM_BASE + 22;
+  IM_SENDREQUEST = 1313500;
+  IM_CONNECT = IM_SHARE+3000;
+  IM_AWAY = IM_SHARE+3002;
+  IM_BACK = IM_SHARE+3003;
+  IM_ISCONNECTED = IM_SHARE+3006;
+  IM_GET_STATUS = IM_SHARE+31;
+  IM_GET_STATUSINFO = IM_SHARE+32;
+  IM_GET_UID = IM_SHARE+33;
+  IM_MSG_SEND = IM_SHARE+100 ;
+  IM_MSG_CHARLIMIT = IM_BASE + 105;
+  IM_CNT_DOWNLOAD = IM_SHARE+4001;
+  IM_CNT_UPLOAD = IM_SHARE+4000 ;
+  IM_CNT_ADD = IM_BASE+4003 ;
+  IM_IGN_CHANGED = IM_BASE+4021;
 
+  IMI_ICONRES = IMI_BASE+109;
+  IMI_ICONGET = IMI_BASE+136 ;
+  IMI_GETICONLIST = IMI_BASE+134;
+  IMI_GETICONINDEX = IMI_BASE+133;
+  IMI_REFRESH_LST = IMI_BASE+2001;
+  IMI_REFRESH_CNT = IMI_BASE+2000 ;
+  IMI_CNT_DETAILS_SUMMARIZE = IMI_BASE+1016;
+  IMI_CNT_SEARCH_FOUND = IMI_BASE+4000 ;
   IMI_ACTION = IMI_BASE+101;
   IMI_GROUP = IMI_BASE+102;
   IMI_ACTION_CALL = IMI_BASE+103;
@@ -312,7 +413,7 @@ const
   IMI_ACTION_GETTYPE = IMI_BASE+116;
   IMI_GROUP_GETHANDLE = IMI_BASE+117;
   IMI_ACTION_FINDPARENT = IMI_BASE+118;
-	IMI_GETPLUGINSGROUP = IMI_BASE+119;
+  IMI_GETPLUGINSGROUP = IMI_BASE+119;
   IMI_GROUP_MAKECFG = IMI_BASE+120;
   IMI_ACTION_SETCNT = IMI_BASE+121;
   IMI_ACTION_GETINDEX = IMI_BASE+122;
@@ -347,7 +448,6 @@ const
   IMI_CNT_ACTIVITY = IMI_BASE+1013;
   IMI_CNT_DEACTIVATE = IMI_BASE+1014;
   IMI_CNT_DETAILS = IMI_BASE+1015;
-  IMI_CNT_DETAILS_SUMMARIZE = IMI_BASE+1016;
   IMI_CNT_ISCOMPOSING = IMI_BASE+1020;
 
   IM_MSG_RCV = IM_BASE+100;
@@ -364,12 +464,19 @@ const
   IM_PLUG_UI_V = IM_SHARE+15;
   IM_PLUG_NAME = IM_SHARE+16;
   IM_PLUG_NETNAME = IM_SHARE+17;
+  IM_PLUG_NETSHORTNAME = IM_SHARE+25;
+  IM_PLUG_UIDNAME = IM_SHARE+26 ;
+
+const
+  IMIA_CNT_SEP = 131;
 
 const
   IM_MSG_ok = 1;
   IM_MSG_delete = 2;
   IM_MSG_update = 4;
   IM_MSG_processing = 8;
+
+
 
 type
   sDIALOGPtr = ^sDIALOG;
@@ -381,6 +488,21 @@ type
     handle: THandle; ///< Uchwyt do okna dialogowego. Przed utworzeniem okna, \a handle trzeba ustawiæ na rodzica okna!
     param: Pointer; ///< Parametr uzytkownika
   end;
+
+type
+  sDIALOG_accessPtr = ^sDIALOG_access;
+  sDIALOG_access = packed record
+    s_size: Word;
+    title: PChar; ///< Tytu³ okienka.
+    info: PChar;  ///< Dodatkowa informacja ...
+    flag: Integer;     ///< Flaga D*_
+    handle: THandle; ///< Uchwyt do okna dialogowego. Przed utworzeniem okna, \a handle trzeba ustawiæ na rodzica okna!
+    param: Pointer; ///< Parametr uzytkownika
+    pass:pchar;
+    login:pchar;
+    save:boolean;
+  end;
+function sDIALOG_accessB(): sDialog_access;
 
 type
   sDIALOG_enterPtr = ^sDIALOG_enter;
@@ -438,12 +560,17 @@ type
 function sDIALOG_longB(): sDIALOG_long;
 
 const
+  DFLAG_SAVE = 1;
+  DFLAG_PASS2 = 4;
+
+const
   DLONG_MODAL = $01;
   DLONG_CANCEL = $02;
   DLONG_NODLG = $04;
   DLONG_SINGLE = $08;
   DLONG_ONLY = DLONG_SINGLE;
   DLONG_BLOCKING = $10;
+  DLONG_ARECV = $200;
 
 const
   DSET_TITLE = $1;    ///< Zosta³ zmieniony tytu³.
@@ -455,11 +582,27 @@ const
 const
   IMC_LOG  = 1;
   IMC_CONNECTED = 7;
+  IMC_SETCONNECT = 30;
+  IMC_STATUSCHANGE = 246;
   IMC_PROFILEDIR = 12;
   IMC_NEWMESSAGE = 100;
   IMC_MESSAGEQUEUE = 101;
   IMC_PLUG_COUNT = 240;
   IMC_PLUG_HANDLE = 241;
+  IMC_PLUG_VERSION = 26;
+  IMC_PLUGID_POS = 245;
+  IMC_CNT_COUNT = 201;
+  IMC_PROFILESDIR = 23;
+  IMC_GETPROFILE  = 2;
+  IMC_FINDCONTACT = 200;
+  IMC_FINDPLUG_BYSIG = 248;
+  IMC_PLUG_ID = 243;
+  IMC_CNT_ADD = 230 ;
+  IMC_CNT_IGNORED = 310;
+  IMC_RESTORECURDIR = 24;
+  IMC_MESSAGEGET = 106;
+  IMC_MESSAGEREMOVE = 104;
+  IMC_MESSAGEWAITING = 103;
 
 type
   sMESSAGESELECTPtr = ^sMESSAGESELECT;
@@ -475,7 +618,7 @@ type
   end;
 
 function sMESSAGESELECTB(): sMESSAGESELECT; overload;
-function sMESSAGESELECTB(net: Integer; uid: PChar = nil; type_: Cardinal = Cardinal(-1); wflag: Cardinal = Cardinal(-1); woflag: Cardinal = Cardinal(-1)): sMESSAGESELECT; overload;
+function sMESSAGESELECTB(net: Integer; uid: PChar = nil; type_: Cardinal = Cardinal(-1); wflag: Cardinal = 0; woflag: Cardinal = 0): sMESSAGESELECT; overload;
 
 const
   IMERROR_NORESULT = 1;   ///< Wtyczka nie obs³u¿y³a wiadomoœci.
@@ -506,6 +649,38 @@ const
   CNT_UID = 0; ///< #DT_CT_PCHAR UID.
   CNT_NET = 1; ///< #DT_CT_INT Sieæ.
   CNT_STATUS = 2; ///< #DT_CT_INT Status.
+  CNT_BORN = 19;
+  CNT_CELLPHONE = 9;
+  CNT_LOCALITY = 13;
+  CNT_CITY = CNT_LOCALITY;
+  CNT_CLIENT = 15;
+  CNT_CLIENTVERSION = 28;
+  CNT_DISPLAY = 8;
+  CNT_EMAIL = 11;
+  CNT_GENDER = 20 ;
+  CNT_GROUP = 21;
+  CNT_HOST = 4;
+  CNT_INFO = 12;
+  CNT_INTERNAL = 24;
+  CNT_LASTACTIVITY = 29;
+  CNT_LASTMSG = 16;
+  CNT_NAME = 6;
+  CNT_NICK = 17;
+  CNT_NOTIFY = 3;
+  CNT_NOTIFY_MSG = 27;
+  CNT_PHONE = 10;
+  CNT_PORT = 5;
+  CNT_POSTALCODE = 26;
+  CNT_STATUS_ICON = 30;
+  CNT_STATUSINFO = 18;
+  CNT_SURNAME = 7;
+  CNT_STREET = 25;
+  CNT_COUNTRY = 14;
+  CNT_FAX = 35;
+  CNT_EMAIL_MORE = 32 ;
+  CNT_URL = 36;
+  CNT_DESCRIPTION = 34 ;
+  CNT_MIDDLENAME = 31;
 
 type fBeginThread = function(data: Pointer): Cardinal;
 
@@ -541,7 +716,7 @@ type
   Tstrdup = function(ptr: cCtrlRPtr; str: PChar): PChar; stdcall;
   Tfree = procedure(ptr: cCtrlRPtr; buff: Pointer); stdcall;
   TSleep = function(ptr: cCtrlRPtr; time: Cardinal): Integer; stdcall;
-  TBeginThread = function(ptr: cCtrlRPtr; security: Pointer; stack_size: Cardinal; start_address: fBeginThread; arglist: Pointer = nil; initflag: Cardinal = 0; thrdaddr: PCardinal = nil): THandle;
+  TBeginThread = function(ptr: cCtrlRPtr; security: Pointer; stack_size: Cardinal; start_address: fBeginThread; arglist: Pointer = nil; initflag: Cardinal = 0; thrdaddr: PCardinal = nil): THandle;stdcall;
   TDebugLevel = function(ptr: cCtrlRPtr; level: enDebugLevel = DBG_ALL): Cardinal; stdcall;
   TQuickShutdown = function(ptr: cCtrlRPtr): Boolean; stdcall;
   TSetDebugLevel = function(ptr: cCtrlRPtr; levelMask: enDebugLevel; level: enDebugLevel = DBG_ALL): Cardinal; stdcall;
@@ -705,52 +880,52 @@ type
        powinny byæ zwolnione t¹ funkcj¹. }
      procedure free(buff: Pointer); stdcall;
 
-         {   U¿ywanie zwyk³ego Sleep w g³ównym w¹tku najprêdzej doprowadzi
-             K do stanu chwilowej nieu¿ywalnoœci, bardzo mo¿liwe równie¿,
-             ¿e nast¹pi zupe³ny DeadLock.
-             Zamiast tego mo¿na u¿ywaæ tej funkcji, która po prostu zamiast Sleep
-             wywo³uje MsgWaitForMultipleObjectsEx. Nie jest wiêc gwarantowane, 
-             ¿e podany czas w ogóle minie. Trzeba pamiêtaæ te¿, ¿e nie jest gwarantowane,
-			 ¿e aktualny w¹tek nie wykona gdzieœ po drodze innego kodu w wyniku
-			 wywo³ania f-cji APC, timer'a czy windowsowej wiadomoœci...
-			 Podczas zamykania (w IM_END) nie powinny byæ wywo³ywane procedury APC ani
-			 prze³¹czanie w¹tków...
-             Generalnie, je¿eli musisz czekaæ na coœ w g³ównym w¹tku, u¿ywaj
-             MsgWaitForMultipleObjectsEx w po³¹czeniu z Ctrl->WMProcess, które
-             przegl¹da kolejkê oczekuj¹cych wiadomoœci w aktualnym w¹tku.
-         }
+     { U¿ywanie zwyk³ego Sleep w g³ównym w¹tku najprêdzej doprowadzi
+       K do stanu chwilowej nieu¿ywalnoœci, bardzo mo¿liwe równie¿,
+       ¿e nast¹pi zupe³ny DeadLock.
+       Zamiast tego mo¿na u¿ywaæ tej funkcji, która po prostu zamiast Sleep
+       wywo³uje MsgWaitForMultipleObjectsEx. Nie jest wiêc gwarantowane, 
+       ¿e podany czas w ogóle minie. Trzeba pamiêtaæ te¿, ¿e nie jest gwarantowane,
+       ¿e aktualny w¹tek nie wykona gdzieœ po drodze innego kodu w wyniku
+       wywo³ania f-cji APC, timer'a czy windowsowej wiadomoœci...
+       Podczas zamykania (w IM_END) nie powinny byæ wywo³ywane procedury APC ani
+       prze³¹czanie w¹tków...
+       Generalnie, je¿eli musisz czekaæ na coœ w g³ównym w¹tku, u¿ywaj
+       MsgWaitForMultipleObjectsEx w po³¹czeniu z Ctrl->WMProcess, które
+       przegl¹da kolejkê oczekuj¹cych wiadomoœci w aktualnym w¹tku.
+     }
      function Sleep(time: Cardinal): Integer; stdcall;
 
-		 {
-		     BeginThread dzia³a identycznie jak _beginthreadex z wyj¹tkiem
-			 tego, ¿e w trybie debug potrafi wychwytywaæ b³êdy w w¹tku
-			 i je raportowaæ... U¿ywanie wysoko zalecane!
-			 @warn Funkcja zwraca uchwyt w¹tku! Nale¿y go zamkn¹æ przy pomocy CloseHandle()!!!
-		 }
-		 function BeginThread( security: Pointer;
-			stack_size: Integer;
-			start_address: fBeginThread;
-			arglist: Pointer = nil;
-			initflag: Cardinal = 0;
-			thrdaddr: PCardinal = nil
-		 ): THandle; stdcall;
-		{** Tworzy w¹tek i czeka a¿ siê skoñczy.
-			Parametry te same co w cCtrl::BeginThread()
-		*}
-		function BeginThreadAndWait(security: THandle;	stack_size: Cardinal; start_address: fBeginThread; arglist: THandle = 0; initflag: THandle = 0; thrdaddr: THandle = 0): Integer;
+     {
+       BeginThread dzia³a identycznie jak _beginthreadex z wyj¹tkiem
+       tego, ¿e w trybie debug potrafi wychwytywaæ b³êdy w w¹tku
+       i je raportowaæ... U¿ywanie wysoko zalecane!
+       @warn Funkcja zwraca uchwyt w¹tku! Nale¿y go zamkn¹æ przy pomocy CloseHandle()!!!
+     }
+     function BeginThread( security: Pointer;
+      stack_size: Integer;
+      start_address: fBeginThread;
+      arglist: Pointer = nil;
+      initflag: Cardinal = 0;
+      thrdaddr: PCardinal = nil
+     ): THandle; stdcall;
+    {** Tworzy w¹tek i czeka a¿ siê skoñczy.
+      Parametry te same co w cCtrl::BeginThread()
+    *}
+    function BeginThreadAndWait(security: THandle;  stack_size: Cardinal; start_address: fBeginThread; arglist: THandle = 0; initflag: THandle = 0; thrdaddr: THandle = 0): Integer;
 
-		{ Pobiera poziom debugowania dla wtyczki }
-		function DebugLevel(level: enDebugLevel = DBG_ALL): Integer; stdcall;
+    { Pobiera poziom debugowania dla wtyczki }
+    function DebugLevel(level: enDebugLevel = DBG_ALL): Integer; stdcall;
 
-		{ Podaje, czy Konnekt jest zamykany w trybie natychmiastowym (np. podczas zamykania systemu).
-			Wtyczki nie powinny w tym czasie wykonywaæ d³ugich operacji, prze³¹czaæ w¹tków (#IMESSAGE_TS),
-			ani przetwarzaæ procedur APC (flaga Alertable w funkcjach oczekuj¹cych WinApi).
-		 }
+    { Podaje, czy Konnekt jest zamykany w trybie natychmiastowym (np. podczas zamykania systemu).
+      Wtyczki nie powinny w tym czasie wykonywaæ d³ugich operacji, prze³¹czaæ w¹tków (#IMESSAGE_TS),
+      ani przetwarzaæ procedur APC (flaga Alertable w funkcjach oczekuj¹cych WinApi).
+     }
     function QuickShutdown(): Boolean; stdcall;
 
-		{ Ustawia poziom debugowania wtyczki.
-		 }
-		function SetDebugLevel(levelMask: enDebugLevel; level: enDebugLevel = DBG_ALL): Cardinal; stdcall;
+    { Ustawia poziom debugowania wtyczki.
+     }
+    function SetDebugLevel(levelMask: enDebugLevel; level: enDebugLevel = DBG_ALL): Cardinal; stdcall;
 
     { Pobiera nazwe kolumny o podanym identyfikatorze.
          \param db Identyfikator tablicy
@@ -777,22 +952,22 @@ type
 
 
     { Zapisuje sfromatowan¹ informacjê do pliku konnekt.log (i ew. wyœwietla j¹ w oknie @Dev) }
- 		procedure IMLOG(const format: string; const arglist: array of const );
-		{ Loguje, je¿eli wtyczka ma w³¹czone logowanie na danym "poziomie" }
-		procedure IMDEBUG(level: enDebugLevel; const format: string; const arglist: array of const);
- 		procedure IMLOG_(level: enDebugLevel; const format: string; const va_list: array of const);
+    procedure IMLOG(const format: string; const arglist: array of const );
+    { Loguje, je¿eli wtyczka ma w³¹czone logowanie na danym "poziomie" }
+    procedure IMDEBUG(level: enDebugLevel; const format: string; const arglist: array of const);
+    procedure IMLOG_(level: enDebugLevel; const format: string; const va_list: array of const);
 
-		// ----
-		function IMessage(id: Cardinal; net: Integer = 0; type_: Cardinal = Cardinal(-1); p1: Integer = 0; p2: Integer = 0): Integer; overload;
-		function ICMessage(id: Cardinal; p1: Integer = 0; p2: Integer = 0): Integer;
-		function IMessageDirect(id: Cardinal; plug: Cardinal = 0; p1: Integer = 0; p2: Integer = 0): Integer; overload;
+    // ----
+    function IMessage(id: Cardinal; net: Integer = 0; type_: Cardinal = Cardinal(-1); p1: Integer = 0; p2: Integer = 0): Integer; overload;
+    function ICMessage(id: Cardinal; p1: Integer = 0; p2: Integer = 0): Integer;
+    function IMessageDirect(id: Cardinal; plug: Cardinal = 0; p1: Integer = 0; p2: Integer = 0): Integer; overload;
 
-		function UIActionInsert( _parent: Integer; _id: Integer; _pos: Integer; _status: Integer = 0; const _txt: PChar = nil; _p1: Integer = 0;  _w: Shortint = 0; _h: Shortint = 0; _p2: Integer = 0; _param: Integer = 0): Integer;
+    function UIActionInsert( _parent: Integer; _id: Integer; _pos: Integer; _status: Integer = 0; const _txt: PChar = nil; _p1: Integer = 0;  _w: Shortint = 0; _h: Shortint = 0; _p2: Integer = 0; _param: Integer = 0): Integer;
 
-		function SetColumn(table: tTable; id: Integer; type_: Integer; def: Integer; const name: PChar): Integer; overload;
-		function SetColumn(table: tTable; id: Integer; type_: Integer; const def: PChar; const name: PChar = nil):Integer; overload; {
-			return this->SetColumn(table , id , type , (int)def , name);
-		}
+    function SetColumn(table: tTable; id: Integer; type_: Integer; def: Integer; const name: PChar): Integer; overload;
+    function SetColumn(table: tTable; id: Integer; type_: Integer; const def: PChar; const name: PChar = nil):Integer; overload; {
+      return this->SetColumn(table , id , type , (int)def , name);
+    }
 end;
 
 { Identyfikatory podstawowych akcji w UI tworzacych grupy}
@@ -808,10 +983,9 @@ const
   IMIG_MAIN_CNT = 12;     ///< Dodaj kontakt
   IMIG_MAIN_PROFILE = 13;  ///< Profile
   IMIG_HISTORYWND = 14;
-  IMIG_PLUGINS = 15;  {< Grupa dla ikonek wtyczek w g³ównym oknie... U¿ytkownik mo¿e wybraæ
-										inn¹, wiêc numer aktualnej grupy nale¿y pobraæ przez #IMI_GETPLUGINSGROUP.
-									
-										}
+  IMIG_PLUGINS = 15;  { < Grupa dla ikonek wtyczek w g³ównym oknie... U¿ytkownik mo¿e wybraæ
+                          inn¹, wiêc numer aktualnej grupy nale¿y pobraæ przez #IMI_GETPLUGINSGROUP.
+                      }
   IMIG_STATUS = 50;  ///< Toolbar ze statusami
   IMIG_EVENT = 51;  ///< Menu z wiadomoœciami od serwerów.
   IMIG_EVENT_PARENT = IMIG_STATUS;
@@ -831,6 +1005,40 @@ const
   IMIG_NFO = 71;   ///< Drzewko kontrolek informacji
   IMIG_NFO_BAR = 72;   ///< Belka w oknie informacji o kontakcie
   IMIG_NFO_TB = 73;   ///< G³ówny toolbar w oknie informacji o kontakcie
+  IMIG_MSGTB  = 200;
+  IMIG_NFO_SAVE  = 400;
+  IMIG_NFO_REFRESH  = 402;
+  IMIG_NFO_DETAILS=410;
+
+const
+  ST_CONNECTING = $F1;
+  ST_NA = $21;
+  ST_DND = $22;
+  ST_OCCUPIED = $22;
+  ST_ONLINE = $40;
+  ST_AWAY = $41;
+  ST_AUTOAWAY = $44;
+  ST_HIDDEN = $42;
+  ST_CHAT = $43;
+  ST_OFFLINE = 0;
+  ST_IGNORE = $400;
+
+const
+  CFG_PROXY = 4 ;
+  CFG_PROXY_AUTO = 15;
+  CFG_PROXY_VERSION = 5;
+  CFG_PROXY_AUTH = 6;
+  CFG_PROXY_LOGIN = 7;
+  CFG_PROXY_PASS = 8;
+  CFG_PROXY_HOST = 9 ;
+  CFG_PROXY_PORT = 10;
+  CFG_PROXY_HTTP_ONLY = 21;
+  CFG_APPDIR = 3;
+  CFG_AUTO_CONNECT = 11;
+  CFG_TIMEOUT  = 24;
+
+
+
 
 type
   cMessagePtr = ^cMessage;
@@ -850,6 +1058,31 @@ type
 end;
 
 function cMessageB(): cMessage;
+
+type
+  cInsertMsgPtr = ^cInsertMsg;
+  cInsertMsg = record
+    actn: sUIActionNotify_base;
+    _message: cMessagePtr;
+    display: Pchar;
+    scroll: Boolean;
+end;
+
+function cInsertMsgB(): cInsertMsg;
+
+const
+  IMI_MSG_EDITCTRL_WNDPROC = IMI_BASE+3005;
+  IMI_HISTORY_ADD = IMI_BASE+3004;
+type
+  sHISTORYADDPtr = ^sHISTORYADD;
+  sHISTORYADD = Packed Record
+    s_size: Word;
+    m: cMessagePtr;
+    Dir: PChar;
+    cnt: Cardinal;
+    Name: PChar;
+    session :Integer;
+  end;
 
 const
   EXT_PARAM = Chr($1A);
@@ -1074,6 +1307,28 @@ begin
   Result := msg;
 end;
 
+function sIMessage_UIMakePopupB(action :sUiAction; uFlags :Integer; x :Integer; y :Integer; nReserved :Integer; hWnd :Cardinal; prcRect :PRect; startFrom :Integer = 0):sIMessage_UIMakePopup;
+var
+  msg: sIMessage_UIMakePopup;
+begin
+  msg.size := SizeOf(msg);
+  msg.id := IMI_ACTION_MAKEPOPUPMENU;
+  msg.flag := 0;
+  msg.sender := 0;
+  msg.net := 0;
+  msg.type_ := 0;
+  msg._action := Action;
+  msg._uFlags := uFlags;
+  msg._x := x;
+  msg._y := y;
+  msg._nReserved := nReserved;
+  msg._hWndMenu := hWnd;
+  msg._startFrom := startFrom;
+  msg.Rect := prcRect;
+  Result := msg;
+end;
+
+
 { Implementacje funkcji u³atwiaj¹cych wype³nianie struktury sIMessage_2params }
 function sUIActionInfoB(): sUIActionInfo;
 var
@@ -1283,13 +1538,14 @@ begin
 end;
 
 function cCtrl.BeginThread( security: Pointer;
-			stack_size: Integer;
-			start_address: fBeginThread;
-			arglist: Pointer = nil;
-			initflag: Cardinal = 0;
-			thrdaddr: PCardinal = nil
-		 ): THandle;
+      stack_size: Integer;
+      start_address: fBeginThread;
+      arglist: Pointer = nil;
+      initflag: Cardinal = 0;
+      thrdaddr: PCardinal = nil
+     ): THandle;
 begin
+  IsMultiThread := TRUE;
   Result := CtrlR.vptr.BeginThread(CtrlR, security, stack_size, start_address, arglist, initflag, thrdaddr);
 end;
 
@@ -1321,7 +1577,7 @@ begin
   Result := SetColumn( table, id, type_, idef, name );
 end;
 
-function cCtrl.BeginThreadAndWait(security: THandle;	stack_size: Cardinal; start_address: fBeginThread; arglist: THandle = 0; initflag: THandle = 0; thrdaddr: THandle = 0): Integer;
+function cCtrl.BeginThreadAndWait(security: THandle; stack_size: Cardinal; start_address: fBeginThread; arglist: THandle = 0; initflag: THandle = 0; thrdaddr: THandle = 0): Integer;
 begin
   Result:=0;
 end;
@@ -1559,6 +1815,21 @@ end;
 const
   sd_info = '';
 
+function sDIALOG_accessB(): sDIALOG_access;
+var
+  sde: sDIALOG_access;
+begin
+  sde.s_size := SizeOf(sde);
+  sde.info := sd_info;
+  sde.title := sd_info;
+  sde.handle := 0;
+  sde.param := nil;
+  sde.pass:=sd_info;
+  sde.login:=sd_info;
+  sde.save:=false;
+  result:=sde;
+end;
+
 const
   sde_val: PChar = '';
   sde_id: PChar = '';
@@ -1664,6 +1935,29 @@ begin
   Result := m;
 end;
 
+function cInsertMsgB(): cInsertMsg;
+var
+  m: cInsertMsg;
+begin
+  m._message.s_size := SizeOf(m);
+  m._message.id := 0;
+  m._message.net := 0;
+  m._message.flag := 0;
+  m._message.type_ := 0;
+  m._message.notify := 0;
+  m._message.time := 0;
+  m._message.action := sUIActionB(0,0);
+  m._message.fromUid := '';
+  m._message.toUid := '';
+  m._message.body := '';
+  m._message.ext := '';
+  m.display := '';
+  m.scroll := False;
+  Result := m;
+end;
+
+
+
 function sMESSAGESELECTB(): sMESSAGESELECT;
 var
   s: sMESSAGESELECT;
@@ -1679,7 +1973,7 @@ begin
   Result := s;
 end;
 
-function sMESSAGESELECTB(net: Integer; uid: PChar = nil; type_: Cardinal = Cardinal(-1); wflag: Cardinal = Cardinal(-1); woflag: Cardinal = Cardinal(-1)): sMESSAGESELECT; overload;
+function sMESSAGESELECTB(net: Integer; uid: PChar = nil; type_: Cardinal = Cardinal(-1); wflag: Cardinal = 0; woflag: Cardinal = 0): sMESSAGESELECT; overload;
 var
   s: sMESSAGESELECT;
 begin
@@ -1693,6 +1987,5 @@ begin
   s.position := 0;
   Result := s;
 end;
-
 
 end.

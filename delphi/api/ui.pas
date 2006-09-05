@@ -1,22 +1,23 @@
-unit ui;
+unit UI;
 {*
  * Konnekt Delphi SDK (Software Development Kit)
  *
  * Nag³ówek: UI shared
- * Modyfikowany: 2005-09-13
- * Zgodny z wersj¹: 0.6.16.x
- * Info: nag³ówek potrzebny przy korzystaniu z interfejsu dla Windowsa
+ * Modyfikowany: 2006-08-31
+ * Zgodny z wersj¹: 0.6.22.x
+ * Info: nag³ówek potrzebny przy korzystaniu z interfejsu dla Windowsa.
  *
  * Œrodowisko: Borland Delphi 7
  *
- * http://www.konnekt.info
+ * http://www.konnekt.info/
  *
- * (C)2002-2005 Stamina
+ * (C) 2002-2006 Stamina
  * SDK s³u¿y do przygotowywania oprogramowania wspó³pracuj¹cego
  * z programem Konnekt. Autorzy nie ponosz¹ ¿adnej odpowiedzialnoœci
  * za wykorzystanie tego kodu.
  * Kod zawarty w SDK mo¿e byæ u¿ywany tylko w projektach dotycz¹cych
- * programu Konnekt! *}
+ * programu Konnekt! 
+ *}
 
 interface
 
@@ -35,10 +36,10 @@ const
   IT_BLANK_MASK = $80000000;
 
 const
-   IMIB_        = $FF000000;
-   IMIB_CFG     = $11000000; ///< Maska dla ustawieñ programu.
-   IMIB_CNT     = $13000000; ///< Maska dla ustawieñ kontaktu.
-   IMIB_PROFILE = $12000000;
+  IMIB_        = $FF000000;
+  IMIB_CFG     = $11000000; ///< Maska dla ustawieñ programu.
+  IMIB_CNT     = $13000000; ///< Maska dla ustawieñ kontaktu.
+  IMIB_PROFILE = $12000000;
 
 type IML_enum = (
   IML_NONE = $0,
@@ -73,6 +74,23 @@ type
   end;
 
 function sUIIconRegisterB(): sUIIconRegister;
+
+type
+  sUIActionNotify_createWindowPtr = ^sUIActionNotify_createWindow;
+  sUIActionNotify_createWindow = record
+    sm: sUIActionNotify_base;
+    hWnd: Cardinal;
+    hwndParent: Cardinal;
+    x: Integer;   ///< Pozycja X na której trzeba wstawiæ okno. TRZEBA t¹ wartoœæ zwiêkszyæ o szerokoœæ utworzonego okna!
+    y: Integer;///< Pozycja Y na której trzeba wstawiæ okno. TRZEBA t¹ wartoœæ zwiêkszyæ o wysokoœæ utworzonego okna!
+    Status: Cardinal; ///< Kopia wartoœci \a status akcji
+    txt: Pchar;
+    flags :Cardinal;
+    font :Cardinal;
+    fontBold :Cardinal;
+    w :Cardinal;
+    h :Cardinal;
+  end;
 
 const
   ACTS_SHOW = 0;
@@ -147,9 +165,9 @@ const
   ACTT_TIME = $170000;
   ACTT_HTMLINFO = $180000;
   ACTT_RADIO = $190000;
-	ACTT_SPINNER = $1A0000;
+  ACTT_SPINNER = $1A0000;
   ACTT_SLIDER = $1B0000;
-	ACTT_TIPBUTTON = $1C0000;
+  ACTT_TIPBUTTON = $1C0000;
 
 const
   ACTR_INIT = $1000000;
@@ -188,9 +206,9 @@ const
   ACTN_DESTROYWINDOW = 221;
   
 const
-  AP_VALUE = Chr(2);
-  AP_ICO = Chr(3);
-  AP_PARAMS = Chr(4);
+  AP_VALUE = #2;
+  AP_ICO = #3;
+  AP_PARAMS = #4;
   AP_RADIOGRP = EXT_PARAM + 'grp=';
   AP_MINIMUM = EXT_PARAM + 'min=';
   AP_MAXIMUM = EXT_PARAM + 'max=';
@@ -199,7 +217,7 @@ const
   AP_TIP = EXT_PARAM + 'tip=';
   AP_TIP_WIDTH = EXT_PARAM + 'tipWidth=';
   AP_TIPRICH = EXT_PARAM + 'tipRich=';
-	AP_TIPRICH_WIDTH = AP_TIP_WIDTH;
+  AP_TIPRICH_WIDTH = AP_TIP_WIDTH;
   AP_TIPTITLE = EXT_PARAM + 'tipTitle=';
   AP_TIPIMAGEURL = EXT_PARAM + 'tipImg=';
   AP_TIPICON = EXT_PARAM + 'tipIco=';
@@ -216,7 +234,39 @@ const
   CFGVALUE = AP_VALUE;
   CFGICO = AP_ICO;
   CFGTIP = AP_TIP;
+  EXT_PARAM_CHAR = #26;
+  MEX_ADDINFO ='AddInfo';
+  MEX_DISPLAY ='Display';
+  MEX_TITLE  = 'Title';
+  MEX_NOSOUND = 'NoSound';
+  MEX_FILE_PATH = 'FilePath';
+  MEX_FILE_SIZE = 'FileSize';
+  MEX_FILE_TRANSFER_TIME = 'FileTransferTime';
+  MEX_FILE_TRANSFERED = 'FileTransfered';
+  MEX_FILE_ERROR = 'FileError';
 
+const
+  Konnekt_UI_ACT_msg_ctrlview = 250;
+  Konnekt_UI_ACT_msg_ctrlsend = 251;
+  Konnekt_UI_Notify_insertMsg = 310;
+
+const
+  PLUGP_LOWEST = $10;
+  PLUGP_LOW = $40;
+  PLUGP_STANDARD = $80;
+  PLUGP_HIGH = $B0;
+  PLUGP_HIGHEST = $E0;
+  PLUGP_NONE = $0;
+
+const
+  CFG_DESCR_AWAY = 125;
+  CFG_DESCR_AAWAY = 126;
+  CFG_DESCR_DND = 127;
+  CFG_DESCR_HIDDEN = 128;
+  CFG_DESCR_ONLINE = 130;
+  CFG_DESCR_OFFLINE = 131;
+  CFG_DESCR_USEMANUAL = 141;
+  CFG_DESCR_CLEARMANUAL = 169;
 
 implementation
 
