@@ -1,7 +1,7 @@
 ======================================================================
 * Konnekt Delphi SDK
 *
-* (c) 2005 Winthux
+* (c) 2005-2006 Winthux
 *
 * Delphi SDK jest t³umaczeniem oryginalnego SDK Konnekta.
 *
@@ -22,9 +22,6 @@ Informacje:
   Dziêki nim nie trzeba przejmowaæ siê ustawianiem za ka¿dym razem pola size.
 
   Nazwa funkcji: nazwa_strukturyB(); np. sIMessage_baseB();
-
-* Nie wiem jak siê obs³uguje zasoby w delphi wiêc ³adowanie ikonek, bitmap itp jest
-  na razie rzecz¹ otwart¹
 
 
 
