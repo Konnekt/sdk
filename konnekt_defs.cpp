@@ -126,7 +126,8 @@ char * __vsaprintf(const char *format, va_list ap)
             VSNPRINTF(buf, size + 1, format, ap);
             return buf;
     }
-#endif
+#endif
+
 #ifndef NO_PLUG_EXPORT
 
 using Tables::Value;
@@ -330,7 +331,6 @@ bool cCtrl::DTsetInt64(tTable db , unsigned int row , unsigned int col , __int64
 
 int cCtrl::BeginThreadAndWait(const char * name, void *security, unsigned stack_size, cCtrl::fBeginThread start_address,	void *arglist, unsigned initflag, unsigned *thrdaddr) {
 	HANDLE th = (HANDLE) this->BeginThread(name, security , stack_size , start_address , arglist , CREATE_SUSPENDED | initflag , thrdaddr);
-    unsigned long ec;
 	if (!th) return 0;
 	ResumeThread(th);
 /*    while (MsgWaitForMultipleObjectsEx(1 , &th , 250 , QS_ALLINPUT | QS_ALLPOSTMESSAGE , MWMO_ALERTABLE | MWMO_INPUTAVAILABLE) - WAIT_OBJECT_0 != 0) {
@@ -494,7 +494,11 @@ int SetColumn(tTable table , int id , int type , int def , const char * name){
 		icoUrl += (icoSize <= 16) ? "16" : "32";
 		icoUrl += "/";
 		char buff [15];
+#if (_MSC_VER >= 1400)
+		_itoa_s(ico, buff, 15, 10);
+#else
 		itoa(ico, buff, 10);
+#endif
 		icoUrl += buff;
 		icoUrl += ".ico";
 		UIActionCfgAddInfoBox(parent, title, info, icoUrl.c_str(), height, icoSize, icoSize);
@@ -612,11 +616,19 @@ int SetColumn(tTable table , int id , int type , int def , const char * name){
         // To, czego chcemy szukaæ
         size_t nameLen = strlen(name);
         char * find = new char [nameLen+3];
+#if (_MSC_VER >= 1400)
+		strcpy_s(find+1, nameLen+2, name);
+#else
         strcpy(find+1 , name);
+#endif
         find[0] = EXT_PARAM_CHAR;
+#if (_MSC_VER >= 1400)
+		strcpy_s(find + nameLen+1, 2, "=\0");
+#else
         strcpy(find + nameLen+1 , "=\0");
+#endif
         // Znajdujemy parametr
-        char * start = strstr(ext , find);
+        char * start = (char*)strstr(ext , find);
         size_t size = 0;
         delete [] find;
         if (!start) return false;
@@ -638,23 +650,48 @@ int SetColumn(tTable table , int id , int type , int def , const char * name){
         size_t extLen = strlen(ext);
         size_t valueLen = strlen(value);
         char * find = new char [nameLen+3]; // To, czego chcemy szukac
+#if (_MSC_VER >= 1400)
+		strcpy_s(find+1, nameLen+2, name);
+#else
         strcpy(find+1 , name);
+#endif
+
         find[0] = EXT_PARAM_CHAR;
+
+#if (_MSC_VER >= 1400)
+		strcpy_s(find + nameLen+1, 2, "=\0");
+#else
         strcpy(find + nameLen+1 , "=\0");
-        char * start = strstr(ext , find);   // Znajdujemy parametr
+#endif
+        char * start = (char*)strstr(ext , find);   // Znajdujemy parametr
         // Sprawdzamy, czy to co nam powstanie, w ogole zmiesci sie w pamieci.
         if (!start && buffSize < extLen + nameLen + valueLen + 3) {return false;}
         // Kopiujemy to, co i tak nie zostanie zmienione. Jezeli ext i extBuff to to samo - nie ma sensu kopiowac.
         // Nie kopiujemy calej czesci ze zmieniana wartoscia - ona powedruje na koniec...
-        if (ext != extBuff) strncpy(extBuff , ext , min(start?(start - ext):(extLen) , buffSize));
+        if (ext != extBuff)
+#if (_MSC_VER >= 1400)
+			strncpy_s(extBuff, buffSize, ext, min(start?(start - ext):(extLen), buffSize));
+#else
+			strncpy(extBuff , ext , min(start?(start - ext):(extLen) , buffSize));
+#endif
         char * end = start?strchr(start + 1 , EXT_PARAM_CHAR):0;
         // Kopiujemy reszte parametrow
-        if (end) strncpy(extBuff + (start - ext) , end , buffSize - (start - ext));
+        if (end) 
+#if (_MSC_VER >= 1400)
+			strncpy_s(extBuff + (start - ext), buffSize - (start-ext), end, buffSize - (start - ext));
+#else
+			strncpy(extBuff + (start - ext) , end , buffSize - (start - ext));
+#endif
         // Teraz mozemy dopiero zapisac nasz nowy parametr
         extLen = strlen(extBuff);
         if (buffSize < extLen + nameLen + valueLen + 3) return false;
+#if (_MSC_VER >= 1400)
+		strcpy_s(extBuff + extLen, buffSize - extLen, find);
+		strcpy_s(extBuff + extLen + nameLen + 2, buffSize - (extLen + nameLen + 2), value);
+#else
         strcpy(extBuff + extLen , find); // Zapisujemy nazwe
         strcpy(extBuff + extLen + nameLen + 2 , value);
+#endif
         delete [] find;
         return true;
     }
@@ -752,10 +789,17 @@ const char * CntGetInfoValue(bool fromWindow , int cntID , int colID) {
 cMessage * messageDuplicate(cMessage * m) {
     cMessage * mc = new cMessage;
     *mc = *m;
+#if (_MSC_VER >= 1400)
+	mc->body = _strdup(m->body);
+    mc->ext = _strdup(m->ext);
+    mc->fromUid = _strdup(m->fromUid);
+    mc->toUid = _strdup(m->toUid);
+#else
     mc->body = strdup(m->body);
     mc->ext = strdup(m->ext);
     mc->fromUid = strdup(m->fromUid);
     mc->toUid = strdup(m->toUid);
+#endif
     return mc;
 }
 void messageFree(cMessage * m, bool deleteObject) {
@@ -949,8 +993,13 @@ void testResult(const char * title, const char * should, const char * got, bool 
 }
 
 bool sIMessage_plugArgs::argEq(unsigned int i, const char * cmp) {
+#if (_MSC_VER >= 1400)
+	if (this->argc <= i) return true;
+	return _stricmp(this->argv[i], cmp) == 0;
+#else
 	if (this->argc <= i) return -2;
 	return stricmp(this->argv[i], cmp) == 0;
+#endif
 }
 
 
