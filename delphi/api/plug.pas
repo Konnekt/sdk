@@ -185,6 +185,28 @@ sIMessage_msgBox=packed record
   parent:integer;
 end;
 
+sIMessage_plugOutPtr = ^sIMessage_plugOut;
+sIMessage_plugOut = packed record
+  sm:sIMessage_base;
+  plugId:Integer;
+  reason:pchar;
+  restart:integer;
+  unload:integer;
+end;
+
+const
+  erNo = 0;
+  erAsk = 1;
+  erYes = 2;
+  erAskShut = 3;
+  erShut = 4;
+
+  euNow=1;
+  euNextStart=2;
+  euNowAndOnNextStart=3 ;
+
+
+type
 sIMessage_UIMakePopupPtr = ^sIMessage_UIMakePopup;
 sIMessage_UIMakePopup = packed record
   size: Word;
@@ -603,6 +625,7 @@ const
   IMC_MESSAGEGET = 106;
   IMC_MESSAGEREMOVE = 104;
   IMC_MESSAGEWAITING = 103;
+  IMC_ISWINXP = 60;
 
 type
   sMESSAGESELECTPtr = ^sMESSAGESELECT;
@@ -1009,6 +1032,7 @@ const
   IMIG_NFO_SAVE  = 400;
   IMIG_NFO_REFRESH  = 402;
   IMIG_NFO_DETAILS=410;
+  IMIG_NFO_SUMMARY=413;
 
 const
   ST_CONNECTING = $F1;
@@ -1036,6 +1060,7 @@ const
   CFG_APPDIR = 3;
   CFG_AUTO_CONNECT = 11;
   CFG_TIMEOUT  = 24;
+  CFG_RETRY  = 20;
 
 
 

@@ -115,7 +115,7 @@ end;
 
 procedure Plug_Deinit(p1: Integer; p2: Integer);
 begin
-  Ctrl.Destroy();
+  Ctrl.Destroy;
   Ctrl := nil;
 end;
 
