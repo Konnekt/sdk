@@ -92,6 +92,14 @@ type
     h :Cardinal;
   end;
 
+type
+  sUIActionNotify_destroyWindowPtr = ^sUIActionNotify_destroyWindow;
+  sUIActionNotify_destroyWindow = record
+    sm: sUIActionNotify_base;
+    hwnd:Cardinal;
+    flags :Integer;
+  end;
+
 const
   ACTS_SHOW = 0;
   ACTS_HIDDEN = 1;

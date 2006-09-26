@@ -30,7 +30,7 @@ function ACTIONONLY(notify: sUIActionNotify_basePtr): Boolean;
 function IconRegister(target: IML_enum; ID: Integer; const URL: PChar): Integer; overload;
 function IconRegister(target: IML_enum; ID: Integer; inst: HINSTANCE; icoID: Integer; type_: Integer = 1): Integer; overload;
 function IconRegister(target: IML_enum; ID: Integer; image: THandle; type_: Integer = 1): Integer; overload;
-function UIActionGet(nfo:sUIActionInfo):Integer;
+function UIActionGet(nfo:sUIActionInfoPtr):Integer;
 function UIActionAdd(parent: Integer; id: Integer; status: Integer = 0; const txt: PChar = nil; p1: Integer = 0; w: Smallint = 0; h: Smallint = 0; p2: Integer = 0; param: Integer = 0): Integer;
 function UIActionInsert(parent: Integer; id: Integer; pos: Integer; status: Integer = 0; const txt: PChar = nil; p1: Integer = 0; w: Smallint = 0; h: Smallint = 0; p2: Integer = 0; param: Integer = 0): Integer;
 function UIActionCfgAdd(parent: Integer; id: Integer; status: Integer = 0; const txt: PChar = nil; p1: Integer = 0; x: Smallint = 0; y: Smallint = 0; w: Smallint = 0; h: Smallint = 0; p2: Integer = 0; param: Integer = 0): Integer;
@@ -100,9 +100,9 @@ begin
   Result := ID;
 end;
 
-function UIActionGet(nfo:sUIActionInfo):Integer;
+function UIActionGet(nfo:sUIActionInfoPtr):Integer;
 begin
-  Result := ICMessage(IMI_ACTION_GET, Integer(@nfo), 0);
+  Result := ICMessage(IMI_ACTION_GET, Integer(nfo), 0);
 end;
 
 function UIActionAdd(parent: Integer; id: Integer; status: Integer = 0; const txt: PChar = nil; p1: Integer = 0; w: Smallint = 0; h: Smallint = 0; p2: Integer = 0; param: Integer = 0): Integer;
