@@ -1,10 +1,11 @@
+#pragma once
+
 /*
   nazwa="SMS"
   info="Nag³ówek wtyczki SMS."
   author="Stamina"
 */
 
-#pragma once
 /**
 @file 
 Nag³ówek wtyczki SMS.
@@ -33,12 +34,13 @@ bezpoœrednio do wtyczki komunikatem #IM_MSG_SEND wiadomoœæ:
 */
 
 namespace Sms {
-	const int net = NET_SMS;
-	const char * extFrom = "SMSfrom";
-	const char * extGate = "SMSgate";
-	const char * extWindowID = "SMSwinID";
-	const char * extPart = "SMSpart";
-	namespace IM {
+	static const int net = NET_SMS;
+	static const char * extFrom = "SMSfrom";
+	static const char * extGate = "SMSgate";
+	static const char * extWindowID = "SMSwinID";
+	static const char * extPart = "SMSpart";
+
+  namespace IM {
 		/** Zwraca listê bramek obs³uguj¹cych podany numer, któr¹ mo¿na wype³niæ combobox (razem z opisami, bez ikon).
 			@param p1 (const char *) numer telefonu do sprawdzenia
 			@return (const char *) lista bramek
