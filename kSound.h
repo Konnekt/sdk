@@ -1,3 +1,5 @@
+#pragma once
+
 /*
   nazwa="kSound API"
   data="2003-05-13"
@@ -29,6 +31,7 @@
    kSound::action::Play | id - Play/Stop
  @{
 */
+
 namespace kSound {
 	const int REGISTER = IM_USER + 3000;
 	const int PLAY = IM_USER + 3001;
@@ -82,6 +85,5 @@ namespace kSound {
 		return (const char*)Ctrl->IMessage(&sIMessage_2params(GETFILE , NET_SOUND , IMT_CONFIG , (int)name , cntID));
 	}
 };
-
 
 /// @}
