@@ -185,6 +185,15 @@ sIMessage_msgBox=packed record
   parent:integer;
 end;
 
+sIMessage_plugArgsPtr = ^sIMessage_plugArgs;
+sIMessage_plugArgs = packed record
+  sm:sIMessage_base;
+  argc :Cardinal;
+  argv :array of PChar;
+end;
+
+
+
 sIMessage_plugOutPtr = ^sIMessage_plugOut;
 sIMessage_plugOut = packed record
   sm:sIMessage_base;
@@ -193,6 +202,7 @@ sIMessage_plugOut = packed record
   restart:integer;
   unload:integer;
 end;
+
 
 const
   erNo = 0;
@@ -408,6 +418,7 @@ const
   IM_MSG_SEND = IM_SHARE+100 ;
   IM_MSG_CHARLIMIT = IM_BASE + 105;
   IM_CNT_DOWNLOAD = IM_SHARE+4001;
+
   IM_CNT_UPLOAD = IM_SHARE+4000 ;
   IM_CNT_ADD = IM_BASE+4003 ;
   IM_IGN_CHANGED = IM_BASE+4021;
@@ -442,7 +453,9 @@ const
   IMI_ACTION_GETOWNER = IMI_BASE+123;
   IMI_ICONREGISTER = IMI_BASE+130;
   IMI_ACTION_MAKEPOPUPMENU = IMI_BASE+150;
-
+  IMI_LST_SELCOUNT =  IMI_BASE+2020;
+  IMI_LST_GETSELPOS = IMI_BASE+2021;
+ 
   IMI_WARNING = IMI_BASE+200;
   IMI_ERROR = IMI_BASE+201;
   IMI_CONFIRM = IMI_BASE+202;
@@ -488,6 +501,7 @@ const
   IM_PLUG_NETNAME = IM_SHARE+17;
   IM_PLUG_NETSHORTNAME = IM_SHARE+25;
   IM_PLUG_UIDNAME = IM_SHARE+26 ;
+  IM_PLUG_ARGS = IM_BASE + 24;
 
 const
   IMIA_CNT_SEP = 131;
@@ -614,6 +628,7 @@ const
   IMC_PLUG_VERSION = 26;
   IMC_PLUGID_POS = 245;
   IMC_CNT_COUNT = 201;
+  IMC_CNT_IDEXISTS  = 233; 
   IMC_PROFILESDIR = 23;
   IMC_GETPROFILE  = 2;
   IMC_FINDCONTACT = 200;
@@ -627,6 +642,8 @@ const
   IMC_MESSAGEWAITING = 103;
   IMC_ISWINXP = 60;
   IMC_CNT_CHANGED =  232;
+  IMC_ARGV = 6;
+  IMC_KONNEKTDIR  = IMC_RESTORECURDIR;
 
 type
   sMESSAGESELECTPtr = ^sMESSAGESELECT;
@@ -1034,6 +1051,7 @@ const
   IMIG_NFO_REFRESH  = 402;
   IMIG_NFO_DETAILS=410;
   IMIG_NFO_SUMMARY=413;
+
 
 const
   ST_CONNECTING = $F1;
