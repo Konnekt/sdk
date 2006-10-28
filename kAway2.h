@@ -6,14 +6,17 @@
  *
  *  @filesource
  *  @copyright    Copyright (c) 2005-2006 Sijawusz Pur Rahnama
- *  @link         svn://kplugins.net/kaway2/ kAway2 plugin SVN Repo
- *  @version      $Revision: 44 $
+ *  @link         svn://konnekt.info/kaway2/ kAway2 plugin SVN Repo
+ *  @version      $Revision: 51 $
  *  @modifiedby   $LastChangedBy: sija $
- *  @lastmodified $Date: 2006-04-12 11:48:32 +0200 (Śr, 12 kwi 2006) $
+ *  @lastmodified $Date: 2006-10-28 21:39:17 +0200 (So, 28 paź 2006) $
  *  @license      http://creativecommons.org/licenses/LGPL/2.1/
  */
 
 #pragma once
+
+#ifndef __KAWAY2_H__
+#define __KAWAY2_H__
 
 namespace kAway2 {
   /*
@@ -26,7 +29,7 @@ namespace kAway2 {
   };
 
   const unsigned int net = 667;
-  const char poweredBy[] = "Susumu Yokota";
+  const char poweredBy[] = "planet boelex";
 
   namespace api {
     const unsigned int api = net * 1000 + IM_USER;
@@ -42,6 +45,7 @@ namespace kAway2 {
 
     const unsigned int isAway = api + 7;
     const unsigned int isBack = api + 8;
+    const unsigned int isAutoAway = api + 9;
   }
 
   namespace ui {
@@ -52,16 +56,13 @@ namespace kAway2 {
 
     const unsigned int statusCfgGroup = ui + 3;
     const unsigned int replyCfgGroup = ui + 4;
-    const unsigned int forwardCfgGroup = ui + 5;
-    const unsigned int smsCfgGroup = ui + 6;
-    const unsigned int emailCfgGroup = ui + 7;
 
-    const unsigned int powerInMainWnd = ui + 8;
-    const unsigned int powerInCntWnd = ui + 9;
-    const unsigned int powerInTrayMenu = ui + 10;
+    const unsigned int powerInMainWnd = ui + 5;
+    const unsigned int powerInCntWnd = ui + 6;
+    const unsigned int powerInTrayMenu = ui + 7;
 
-    const unsigned int ignoreBtn = ui + 11;
-    const unsigned int msgTbGrp = ui + 12;
+    const unsigned int ignoreBtn = ui + 8;
+    const unsigned int msgTbGrp = ui + 9;
   }
 
   namespace ico {
@@ -84,6 +85,7 @@ namespace kAway2 {
 
     const unsigned int help = ico + 11;
     const unsigned int trash = ico + 12;
+
     const unsigned int msg = ico + 13;
   }
 
@@ -105,10 +107,7 @@ namespace kAway2 {
     const unsigned int dynAct = net * 1000 + 300;
 
     const unsigned int reply = dynAct + 10;
-    const unsigned int sms = dynAct + 20;
-    const unsigned int email = dynAct + 30;
-    const unsigned int forward = dynAct + 40;
-    const unsigned int status = dynAct + 50;
+    const unsigned int status = dynAct + 20;
   }
 
   namespace cfg {
@@ -144,6 +143,20 @@ namespace kAway2 {
       const unsigned int onEnableSt = wnd + 4;
     }
 
+    namespace summary {
+      const unsigned int summary = cfg + 75;
+
+      const unsigned int interval = summary + 1;
+      const unsigned int inAutoAway = summary + 2;
+      const unsigned int minMsgCount = summary + 3;
+    }
+
+    namespace fwd {
+      const unsigned int fwd = cfg + 85;
+
+      const unsigned int inAutoAway = fwd + 1;
+    }
+
     namespace tpl {
       const unsigned int tpl = cfg + 100;
 
@@ -151,9 +164,6 @@ namespace kAway2 {
       const unsigned int disable = tpl + 2;
 
       const unsigned int reply = tpl + 3;
-      const unsigned int forward = tpl + 4;
-
-      const unsigned int sms = tpl + 5;
       const unsigned int email = tpl + 6;
 
       const unsigned int status = tpl + 7;
@@ -179,14 +189,6 @@ namespace kAway2 {
       const unsigned int minIntervalType = reply + 11;
     }
 
-    namespace sms {
-      const unsigned int sms = cfg + 300;
-
-      const unsigned int interval = sms + 1;
-      const unsigned int gate = sms + 2;
-      const unsigned int number = sms + 3;
-    }
-
     namespace email {
       const unsigned int email = cfg + 400;
 
@@ -205,14 +207,6 @@ namespace kAway2 {
       }
     }
 
-    namespace forward {
-      const unsigned int forward = cfg + 500;
-
-      const unsigned int interval = forward + 1;
-      const unsigned int net = forward + 2;
-      const unsigned int to = forward + 3;
-    }
-
     namespace status {
       const unsigned int status = cfg + 600;
 
@@ -228,3 +222,5 @@ namespace kAway2 {
     }
   }
 }
+
+#endif // __KAWAY2_H__
