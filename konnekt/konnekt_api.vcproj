@@ -1,101 +1,151 @@
 <?xml version="1.0" encoding="windows-1250"?>
 <VisualStudioProject
 	ProjectType="Visual C++"
-	Version="7.10"
+	Version="8,00"
 	Name="_KonnektAPI"
 	ProjectGUID="{5646B5BC-8FB1-4CCD-80D7-E5BD27CD9C2E}"
 	RootNamespace="_KonnektAPI"
-	Keyword="Win32Proj">
+	Keyword="Win32Proj"
+	>
 	<Platforms>
 		<Platform
-			Name="Win32"/>
+			Name="Win32"
+		/>
 	</Platforms>
+	<ToolFiles>
+	</ToolFiles>
 	<Configurations>
 		<Configuration
 			Name="Debug|Win32"
 			OutputDirectory="."
-			IntermediateDirectory="../../_temp/$(ProjectName)/$(ConfigurationName)/"
+			IntermediateDirectory="$(ConfigurationName)"
 			ConfigurationType="4"
-			CharacterSet="2">
+			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC71.vsprops"
+			CharacterSet="2"
+			>
+			<Tool
+				Name="VCPreBuildEventTool"
+			/>
+			<Tool
+				Name="VCCustomBuildTool"
+			/>
+			<Tool
+				Name="VCXMLDataGeneratorTool"
+			/>
+			<Tool
+				Name="VCWebServiceProxyGeneratorTool"
+			/>
+			<Tool
+				Name="VCMIDLTool"
+			/>
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="..\"
+				AdditionalIncludeDirectories="..\..\depends\stamina.lib; ..\..\depends\stamina.lib\depends"
 				PreprocessorDefinitions="WIN32;_DEBUG;_LIB"
-				MinimalRebuild="TRUE"
+				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
 				UsePrecompiledHeader="0"
 				WarningLevel="3"
-				Detect64BitPortabilityProblems="FALSE"
-				DebugInformationFormat="4"/>
+				Detect64BitPortabilityProblems="false"
+				DebugInformationFormat="4"
+			/>
 			<Tool
-				Name="VCCustomBuildTool"/>
+				Name="VCManagedResourceCompilerTool"
+			/>
+			<Tool
+				Name="VCResourceCompilerTool"
+			/>
+			<Tool
+				Name="VCPreLinkEventTool"
+			/>
 			<Tool
 				Name="VCLibrarianTool"
 				OutputFile="$(OutDir)/konnekt_api_d.lib"
-				IgnoreAllDefaultLibraries="TRUE"/>
+				IgnoreAllDefaultLibraries="true"
+			/>
 			<Tool
-				Name="VCMIDLTool"/>
+				Name="VCALinkTool"
+			/>
 			<Tool
-				Name="VCPostBuildEventTool"/>
+				Name="VCXDCMakeTool"
+			/>
 			<Tool
-				Name="VCPreBuildEventTool"/>
+				Name="VCBscMakeTool"
+			/>
 			<Tool
-				Name="VCPreLinkEventTool"/>
+				Name="VCFxCopTool"
+			/>
 			<Tool
-				Name="VCResourceCompilerTool"/>
-			<Tool
-				Name="VCWebServiceProxyGeneratorTool"/>
-			<Tool
-				Name="VCXMLDataGeneratorTool"/>
-			<Tool
-				Name="VCManagedWrapperGeneratorTool"/>
-			<Tool
-				Name="VCAuxiliaryManagedWrapperGeneratorTool"/>
+				Name="VCPostBuildEventTool"
+			/>
 		</Configuration>
 		<Configuration
 			Name="Release|Win32"
 			OutputDirectory="."
-			IntermediateDirectory="../../_temp/$(ProjectName)/$(ConfigurationName)/"
+			IntermediateDirectory="$(ConfigurationName)"
 			ConfigurationType="4"
-			CharacterSet="2">
+			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC71.vsprops"
+			CharacterSet="2"
+			>
+			<Tool
+				Name="VCPreBuildEventTool"
+			/>
+			<Tool
+				Name="VCCustomBuildTool"
+			/>
+			<Tool
+				Name="VCXMLDataGeneratorTool"
+			/>
+			<Tool
+				Name="VCWebServiceProxyGeneratorTool"
+			/>
+			<Tool
+				Name="VCMIDLTool"
+			/>
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				InlineFunctionExpansion="1"
-				OmitFramePointers="TRUE"
+				OmitFramePointers="true"
 				AdditionalIncludeDirectories="..\"
 				PreprocessorDefinitions="WIN32;NDEBUG;_LIB"
-				StringPooling="TRUE"
+				StringPooling="true"
 				RuntimeLibrary="2"
 				UsePrecompiledHeader="0"
 				WarningLevel="3"
-				Detect64BitPortabilityProblems="FALSE"
-				DebugInformationFormat="3"/>
+				Detect64BitPortabilityProblems="false"
+				DebugInformationFormat="3"
+			/>
 			<Tool
-				Name="VCCustomBuildTool"/>
+				Name="VCManagedResourceCompilerTool"
+			/>
+			<Tool
+				Name="VCResourceCompilerTool"
+			/>
+			<Tool
+				Name="VCPreLinkEventTool"
+			/>
 			<Tool
 				Name="VCLibrarianTool"
-				OutputFile="$(OutDir)/konnekt_api.lib"/>
+				OutputFile="$(OutDir)/konnekt_api.lib"
+			/>
 			<Tool
-				Name="VCMIDLTool"/>
+				Name="VCALinkTool"
+			/>
 			<Tool
-				Name="VCPostBuildEventTool"/>
+				Name="VCXDCMakeTool"
+			/>
 			<Tool
-				Name="VCPreBuildEventTool"/>
+				Name="VCBscMakeTool"
+			/>
 			<Tool
-				Name="VCPreLinkEventTool"/>
+				Name="VCFxCopTool"
+			/>
 			<Tool
-				Name="VCResourceCompilerTool"/>
-			<Tool
-				Name="VCWebServiceProxyGeneratorTool"/>
-			<Tool
-				Name="VCXMLDataGeneratorTool"/>
-			<Tool
-				Name="VCManagedWrapperGeneratorTool"/>
-			<Tool
-				Name="VCAuxiliaryManagedWrapperGeneratorTool"/>
+				Name="VCPostBuildEventTool"
+			/>
 		</Configuration>
 	</Configurations>
 	<References>
@@ -103,137 +153,178 @@
 	<Files>
 		<Filter
 			Name="Source Files"
-			Filter="cpp;c;cxx;def;odl;idl;hpj;bat;asm">
+			Filter="cpp;c;cxx;def;odl;idl;hpj;bat;asm"
+			>
 			<File
-				RelativePath=".\core_ctrl.cpp">
+				RelativePath=".\core_ctrl.cpp"
+				>
 			</File>
 			<File
-				RelativePath=".\core_tables.cpp">
+				RelativePath=".\core_tables.cpp"
+				>
 			</File>
 			<File
-				RelativePath=".\konnekt_defs.cpp">
+				RelativePath=".\konnekt_defs.cpp"
+				>
 			</File>
 			<Filter
 				Name="test"
-				Filter="">
+				>
 				<File
-					RelativePath=".\test\test_cppunit.cpp">
+					RelativePath=".\test\test_cppunit.cpp"
+					>
 				</File>
 			</Filter>
 		</Filter>
 		<Filter
 			Name="Header Files"
-			Filter="h;hpp;hxx;hm;inl;inc">
+			Filter="h;hpp;hxx;hm;inl;inc"
+			>
 			<File
-				RelativePath="..\konnekt\core_assert.h">
+				RelativePath="..\konnekt\core_assert.h"
+				>
 			</File>
 			<File
-				RelativePath="..\konnekt\core_ctrl.h">
+				RelativePath="..\konnekt\core_ctrl.h"
+				>
 			</File>
 			<File
-				RelativePath="..\konnekt\core_exception.h">
+				RelativePath="..\konnekt\core_exception.h"
+				>
 			</File>
 			<File
-				RelativePath=".\core_imessage.h">
+				RelativePath=".\core_imessage.h"
+				>
 			</File>
 			<File
-				RelativePath=".\core_net.h">
+				RelativePath=".\core_net.h"
+				>
 			</File>
 			<File
-				RelativePath="..\konnekt\core_object.h">
+				RelativePath="..\konnekt\core_object.h"
+				>
 			</File>
 			<File
-				RelativePath="..\konnekt\core_plugin.h">
+				RelativePath="..\konnekt\core_plugin.h"
+				>
 			</File>
 			<File
-				RelativePath="..\konnekt\core_tables.h">
+				RelativePath="..\konnekt\core_tables.h"
+				>
 			</File>
 			<File
-				RelativePath=".\core_tables_defs.h">
+				RelativePath=".\core_tables_defs.h"
+				>
 			</File>
 			<File
-				RelativePath="..\konnekt\core_unique.h">
+				RelativePath="..\konnekt\core_unique.h"
+				>
 			</File>
 			<File
-				RelativePath="..\konnekt\dwuTlenek.h">
+				RelativePath="..\konnekt\dwuTlenek.h"
+				>
 			</File>
 			<File
-				RelativePath="..\konnekt\exPiMP.h">
+				RelativePath="..\konnekt\exPiMP.h"
+				>
 			</File>
 			<File
-				RelativePath="..\konnekt\GG.h">
+				RelativePath="..\konnekt\GG.h"
+				>
 			</File>
 			<File
-				RelativePath="..\konnekt\kJabber.h">
+				RelativePath="..\konnekt\kJabber.h"
+				>
 			</File>
 			<File
-				RelativePath="..\konnekt\kLAN.h">
+				RelativePath="..\konnekt\kLAN.h"
+				>
 			</File>
 			<File
-				RelativePath="..\konnekt\KNotify.h">
+				RelativePath="..\konnekt\KNotify.h"
+				>
 			</File>
 			<File
-				RelativePath="..\konnekt\KONNferencja.h">
+				RelativePath="..\konnekt\KONNferencja.h"
+				>
 			</File>
 			<File
-				RelativePath="..\konnekt\kSound.h">
+				RelativePath="..\konnekt\kSound.h"
+				>
 			</File>
 			<File
-				RelativePath="..\konnekt\kStyle.h">
+				RelativePath="..\konnekt\kStyle.h"
+				>
 			</File>
 			<File
-				RelativePath="..\konnekt\kTransfer.h">
+				RelativePath="..\konnekt\kTransfer.h"
+				>
 			</File>
 			<File
-				RelativePath="..\konnekt\kUpdate.h">
+				RelativePath="..\konnekt\kUpdate.h"
+				>
 			</File>
 			<File
-				RelativePath="lib.h">
+				RelativePath="lib.h"
+				>
 			</File>
 			<File
-				RelativePath="..\konnekt\obsolete.h">
+				RelativePath="..\konnekt\obsolete.h"
+				>
 			</File>
 			<File
-				RelativePath=".\obsolete_defines.h">
+				RelativePath=".\obsolete_defines.h"
+				>
 			</File>
 			<File
-				RelativePath="..\konnekt\plug.h">
+				RelativePath="..\konnekt\plug.h"
+				>
 			</File>
 			<File
-				RelativePath=".\plug_defs.h">
+				RelativePath=".\plug_defs.h"
+				>
 			</File>
 			<File
-				RelativePath="..\konnekt\plug_export.h">
+				RelativePath="..\konnekt\plug_export.h"
+				>
 			</File>
 			<File
-				RelativePath="..\konnekt\plug_func.h">
+				RelativePath="..\konnekt\plug_func.h"
+				>
 			</File>
 			<File
-				RelativePath=".\plugin_test.h">
+				RelativePath=".\plugin_test.h"
+				>
 			</File>
 			<File
-				RelativePath="..\konnekt\sms.h">
+				RelativePath="..\konnekt\sms.h"
+				>
 			</File>
 			<File
-				RelativePath="..\konnekt\UI.h">
+				RelativePath="..\konnekt\UI.h"
+				>
 			</File>
 			<File
-				RelativePath="..\konnekt\ui_message_controls.h">
+				RelativePath="..\konnekt\ui_message_controls.h"
+				>
 			</File>
 			<Filter
 				Name="test"
-				Filter="">
+				>
 				<File
-					RelativePath=".\test_cppunit.h">
+					RelativePath=".\test_cppunit.h"
+					>
 				</File>
 			</Filter>
 		</Filter>
 		<Filter
 			Name="Resource Files"
-			Filter="rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe">
+			Filter="rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe"
+			>
 		</Filter>
 		<File
-			RelativePath=".\Identyfikatory.txt">
+			RelativePath=".\Identyfikatory.txt"
+			>
 		</File>
 	</Files>
 	<Globals>

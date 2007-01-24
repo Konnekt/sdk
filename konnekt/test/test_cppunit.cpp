@@ -3,9 +3,9 @@
 
 #include <map>
 
-#include "konnekt/plug.h"
-#include "konnekt/plugin_test.h"
-#include "konnekt/plug_export.h"
+#include "..\plug.h"
+#include "..\plugin_test.h"
+#include "..\plug_export.h"
 
 #include <cppunit/extensions/TestFactoryRegistry.h>
 #include <cppunit/TestResult.h>

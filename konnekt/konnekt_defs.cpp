@@ -7,6 +7,7 @@
 
 #define WIN32_LEAN_AND_MEAN
 #define _WIN32_WINNT 0x0500
+#include <Stamina/Stamina.h>
 
 #include <stdio.h>
 #include <stdarg.h>
@@ -15,16 +16,18 @@
 #include <string>
 
 #include <Stamina/Lib.h>
+#include <Stamina/DataTable/DTDeprecated.h>
+using Stamina::DT::OldValue;
 
 #define KONNEKT_SDK_NOEXPORT
-#include "konnekt/plug_export.h"
+#include "plug_export.h"
 
 
-#include "konnekt/plug.h"
-#include "konnekt/core_assert.h"
+#include "plug.h"
+#include "core_assert.h"
 
-#include "konnekt/ui.h"
-#include "konnekt/plug_func.h"
+#include "ui.h"
+#include "plug_func.h"
 
 
 
@@ -122,7 +125,8 @@ char * __vsaprintf(const char *format, va_list ap)
             VSNPRINTF(buf, size + 1, format, ap);
             return buf;
     }
-#endif
+#endif
+
 #ifndef NO_PLUG_EXPORT
 
      bool SETSTR(int id , const char * val) {
@@ -375,7 +379,7 @@ void IMERROR() {  //Windows errors
 		icoUrl += (icoSize <= 16) ? "16" : "32";
 		icoUrl += "/";
 		char buff [15];
-		itoa(ico, buff, 10);
+		_itoa(ico, buff, 10);
 		icoUrl += buff;
 		icoUrl += ".ico";
 		UIActionCfgAddInfoBox(parent, title, info, icoUrl.c_str(), height, icoSize, icoSize);
@@ -497,7 +501,7 @@ void IMERROR() {  //Windows errors
         find[0] = EXT_PARAM_CHAR;
         strcpy(find + nameLen+1 , "=\0");
         // Znajdujemy parametr
-        char * start = strstr(ext , find);
+        const char * start = strstr(ext , find);
         size_t size = 0;
         delete [] find;
         if (!start) return false;
@@ -522,13 +526,13 @@ void IMERROR() {  //Windows errors
         strcpy(find+1 , name);
         find[0] = EXT_PARAM_CHAR;
         strcpy(find + nameLen+1 , "=\0");
-        char * start = strstr(ext , find);   // Znajdujemy parametr
+        const char * start = strstr(ext , find);   // Znajdujemy parametr
         // Sprawdzamy, czy to co nam powstanie, w ogole zmiesci sie w pamieci.
         if (!start && buffSize < extLen + nameLen + valueLen + 3) {return false;}
         // Kopiujemy to, co i tak nie zostanie zmienione. Jezeli ext i extBuff to to samo - nie ma sensu kopiowac.
         // Nie kopiujemy calej czesci ze zmieniana wartoscia - ona powedruje na koniec...
         if (ext != extBuff) strncpy(extBuff , ext , min(start?(start - ext):(extLen) , buffSize));
-        char * end = start?strchr(start + 1 , EXT_PARAM_CHAR):0;
+        const char * end = start?strchr(start + 1 , EXT_PARAM_CHAR):0;
         // Kopiujemy reszte parametrow
         if (end) strncpy(extBuff + (start - ext) , end , buffSize - (start - ext));
         // Teraz mozemy dopiero zapisac nasz nowy parametr
@@ -633,10 +637,10 @@ const char * CntGetInfoValue(bool fromWindow , int cntID , int colID) {
 cMessage * messageDuplicate(cMessage * m) {
     cMessage * mc = new cMessage;
     *mc = *m;
-    mc->body = strdup(m->body);
-    mc->ext = strdup(m->ext);
-    mc->fromUid = strdup(m->fromUid);
-    mc->toUid = strdup(m->toUid);
+    mc->body = _strdup(m->body);
+    mc->ext = _strdup(m->ext);
+    mc->fromUid = _strdup(m->fromUid);
+    mc->toUid = _strdup(m->toUid);
     return mc;
 }
 void messageFree(cMessage * m, bool deleteObject) {
@@ -704,7 +708,7 @@ void testResult(const StringRef& title, const StringRef& should, const StringRef
 
 bool sIMessage_plugArgs::argEq(unsigned int i, const char * cmp) {
 	if (this->argc <= i) return -2;
-	return stricmp(this->argv[i], cmp) == 0;
+	return _stricmp(this->argv[i], cmp) == 0;
 }
 
 

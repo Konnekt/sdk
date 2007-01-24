@@ -11,7 +11,6 @@ Dodatkowo kilka funkcji / makr dla Waszej wygody :)
 
 #ifndef PLUGEXPORTH
 #define PLUGEXPORTH
-
 #include <Stamina/VersionControl.h>
 #include "plug.h"
 
@@ -290,7 +289,8 @@ najwygodniej jest z nich po prostu korzystac :)
 #endif
 #ifdef IMLOG_AUTOALLOC
     char * __vsaprintf(const char *format, va_list ap);
-#endif
+#endif
+
 /** @sa Controler::IMLOG() */
 void IMLOG(const char *format, ...);
 /** @sa Controler::IMDEBUG() */

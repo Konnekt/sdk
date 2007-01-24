@@ -1,10 +1,11 @@
 #define WIN32_LEAN_AND_MEAN
 #define _WIN32_WINNT 0x0500
+#include <Stamina/Stamina.h>
 
 #include <stdlib.h>
-#include "konnekt/plug_export.h"
-#include "konnekt/core_tables.h"
-#include "konnekt/core_assert.h"
+#include "plug_export.h"
+#include "core_tables.h"
+#include "core_assert.h"
 
 using namespace Konnekt;
 using namespace Stamina;
@@ -44,11 +45,11 @@ DT::oColumn Tables::iTable::setColumn(Tables::tColId id , Tables::tColType type,
 	return this->setColumn(Ctrl, id , type , name);
 }
 
-inline oColumn iTable::setColumn(Controler* plugin, const Stamina::StringRef& name, tColType type) {
+oColumn iTable::setColumn(Controler* plugin, const Stamina::StringRef& name, tColType type) {
 	return this->setColumn(plugin, colByName, type, name);
 }
 
-extern inline oColumn iTable::setColumn(const Stamina::StringRef& name, tColType type) {
+oColumn iTable::setColumn(const Stamina::StringRef& name, tColType type) {
 	return this->setColumn(Ctrl, name, type);
 }
 

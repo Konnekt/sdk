@@ -1,6 +1,6 @@
 #define WIN32_LEAN_AND_MEAN
 #define _WIN32_WINNT 0x0500
-
+#include <Stamina/Stamina.h>
 #include <stdio.h>
 #include <stdarg.h>
 #include <windows.h>
@@ -8,19 +8,20 @@
 #include <string>
 
 #include <Stamina/Lib.h>
+#include <Stamina/DataTable/DTDeprecated.h>
 
-#include "konnekt/plug.h"
-#include "konnekt/core_assert.h"
+#include "plug.h"
+#include "core_assert.h"
 
-#include "konnekt/ui.h"
-#include "konnekt/plug_func.h"
+#include "ui.h"
+#include "plug_func.h"
 
 Controler * Ctrl = 0;
 
 
 using namespace Konnekt;
 
-
+using Stamina::DT::OldValue;
 
 int Controler::IMessage(unsigned int  id , tNet net , enIMessageType type , int p1 , int p2) {
 	return (this->IMessage)(&sIMessage (id,net,type,p1,p2));
