@@ -4,7 +4,10 @@
 
 */
 
+#include <Stamina/String.h>
 #include <Stamina/iArray.h>
+
+#pragma pack(push, 1)
 
 namespace Konnekt {
 
@@ -17,14 +20,7 @@ namespace Konnekt {
 		*/
 		const tIMid getTests = IM_BASE + 200;
 
-		/** Uruchamia test. (sIMessage_plugArgs).
-		Przekazane w sIMessage_plugArgs argumenty to:
-		test SIG KOMENDA PARAMETRY
-		SIG - wpisana sygnatura wtyczki. Mo¿e byæ sygnatur¹ wtyczki, która otrzyma³a komunikat, lub * oznaczaj¹ca wszystkie wtyczki
-		KOMENDA - Komenda testu (zadeklarowana wczeœniej w getTests w TestInfo::command) 
-		PARAMETRY - wszystkie dodatkowo wpisane parametry...
-
-		@return Nale¿y zwróciæ liczbê @b b³êdów w testach!
+		/** Uruchamia test. (IM::RunTests).
 		*/
 		const tIMid runTests = IM_BASE + 201;
 
@@ -38,15 +34,36 @@ namespace Konnekt {
 				flagNone = 0,
 				flagSubOpen = 1, ///< Otwiera podgrupê testów
 				flagSubClose = 2, ///< Zamyka podgrupê testów
+				flagFailed = 4, ///< Oznacza test jako nieudany
 			};
 
-			TestInfo(const StringRef& name, const StringRef& command = "", enFlags flags = flagNone):name(name), command(command), flags(flags) {}
+			TestInfo(const Stamina::StringRef& name, const Stamina::StringRef& command = "", enFlags flags = flagNone):name(name), command(command), flags(flags) {}
 
 			TestInfo(enFlags flags):flags(flags) {}
 
 			Stamina::String name;
 			Stamina::String command;
+			Stamina::String info;
 			enFlags flags;
+
+			const Stamina::String& getCommand() {
+				if (this->command.empty()) 
+					return this->name;
+				else
+					return this->command;
+			}
+
+			void setFlag(enFlags flag, bool value) {
+				if (value) {
+					this->flags = (enFlags)(this->flags | flag);
+				} else {
+					this->flags = (enFlags)(this->flags & ~flag);
+				}
+			}
+
+			bool getFlag(enFlags flag) {
+				return (this->flags & flag) != 0;
+			}
 
 		private:
 			void* reserved;
@@ -83,9 +100,27 @@ namespace Konnekt {
 		};
 
 
+		/**
+		
+		*/
+		class RunTests:public GetTests {
+		public:
+
+			RunTests(const Stamina::oArray<TestInfo>& array):GetTests(array) {
+				this->id = runTests;
+				S_ASSERT(array.isValid());
+				this->tests = array;
+				this->s_size=sizeof(*this);
+			}
+
+
+		};
+
 
 	};
 
 
 
 };
+
+#pragma pack(pop)

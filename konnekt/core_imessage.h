@@ -1,5 +1,7 @@
 #pragma once
 
+#pragma pack(push, 1)
+
 namespace Konnekt {
 
 	/** 
@@ -142,3 +144,5 @@ namespace Konnekt {
 
 
 };
+
+#pragma pack(pop)
