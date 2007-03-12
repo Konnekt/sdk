@@ -349,7 +349,7 @@ Komunikat przesy³any jest przy pomocy @b sIMessage_plugArgs .*/
             struct sIMessage_StatusChange:public sIMessage_base {
                 union {
                     unsigned int cntID; ///< ID kontaktu
-                    unsigned int plugID; ///< ID wtyczki zmieniaj¹cej status.
+                    tPluginId plugID; ///< ID wtyczki zmieniaj¹cej status.
                 };
                 unsigned int status; ///< Nowy status, który zaraz zostanie ustawiony. -1 oznacza brak zmiany.
                 const char * info; ///< Nowy opis statusu, który zaraz zostanie ustawiony. 0 oznacza brak zmiany.

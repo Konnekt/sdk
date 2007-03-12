@@ -208,6 +208,11 @@ namespace Konnekt {
 		/** Resetuje wszystkie zmiany spowodowane przez subclassIMessageProc() */
 		virtual void resetSubclassing()=0;
 
+		/** Zwraca skrócon¹ nazwê sieci, któr¹ obs³uguje wtyczka (o ile obs³uguje) */
+		virtual const Stamina::String& getNetShortName()=0;
+
+		/** Zwraca nazwê identyfikatora sieci, któr¹ obs³uguje wtyczka (o ile obs³uguje) */
+		virtual const Stamina::String& getUIDName()=0;
 
 		tPluginId getId() {
 			return getPluginId();

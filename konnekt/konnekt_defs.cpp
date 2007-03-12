@@ -70,7 +70,7 @@ extern inline int IMessageDirect(tPluginId plug , sIMessage_base * msg) {
 	return Ctrl->IMessageDirect(plug , msg);
 }
 
-inline int iPlugin::IMessageDirect(tIMid id, int p1, int p2) {
+int iPlugin::IMessageDirect(tIMid id, int p1, int p2) {
 	return this->IMessageDirect(Ctrl, &sIMessage_2params(id, p1, p2));
 }
 
