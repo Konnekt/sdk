@@ -86,7 +86,8 @@ namespace Tables {
 		optUseTemporary = 0x800,
 		/** Nie wyœwietla ¿adnych komunikatów o b³êdach */
 		optSilent = 0x1000,
-
+		/** Otwiera tablicê w trybie tylko do odczytu */
+		optReadOnly = 0x2000,
 
 		optDefaultSet = /*optBroadcastEvents | */ optUseTemporary,
 	};
@@ -98,7 +99,7 @@ namespace Tables {
 	class iTable: public ::Stamina::iSharedObject {
 	public:
 
-		STAMINA_OBJECT_CLASS_VERSION(Konnekt::Tables::iTable, ::Stamina::iSharedObject, ::Stamina::Version(1, 1, 0, 0));
+		STAMINA_OBJECT_CLASS_VERSION(Konnekt::Tables::iTable, ::Stamina::iSharedObject, ::Stamina::Version(1, 2, 0, 0));
 
 
         /** Zamienia (lub nie) identyfikator na numer wiersza.*/
@@ -282,6 +283,25 @@ namespace Tables {
 
  		 virtual void setTablePassword(const StringRef& password)=0;
 
+		 /**
+		 Zwraca liczbê wierszy w podanym, lub domyœlnym pliku
+		 */
+		 virtual unsigned int getFileRowCount(const StringRef& filepath = StringRef()) = 0;
+
+		 /**
+		 Do³adowuje podan¹ liczbê wierszy.
+
+		 Deskryptor kolumn ³adowany jest w razie potrzeby (zale¿nie od opcji optDiscardLoadedColumns), tylko przy pierwszym ³adowaniu.
+		 
+		 @param start Liczba wierszy które ma pomin¹æ
+		 @param count Liczba wierszy które ma wczytaæ
+		 @param seek (opcjonalny) WskaŸnik do miejsca (w bajtach) w pliku od którego ma byæ rozpoczête ³adowanie. Po wczytaniu zostanie ustawiony na znak po ostatnim wczytanym wierszu. Pozycja POWINNA siê pokrywaæ z pozycjami wierszy w pliku (najlepiej gdy jest uprzednio zwrócon¹ wartoœci¹)!
+
+		 @warning Wywo³anie save NADPISZE istniej¹cy plik danymi wczytanymi teraz! Dlatego bezpieczniej jest operowaæ na tabelce z w³¹czonym optReadOnly
+		 @warning Istniej¹ce w tabelce wiersze NIE S¥ usuwane
+		 */
+		 virtual enResult loadPartial(unsigned int start, unsigned int count, unsigned int* seek = 0, const StringRef& filepath = StringRef()) = 0;
+		 
 
 		 // wczytywanie danych
 
@@ -535,7 +555,116 @@ namespace Tables {
 		};
 	};
 
-};};
+};
+
+// Szybkie metody do u¿ywania zamiast GETSTR itp.
+
+inline Stamina::String getDTString(Tables::tTableId table, Tables::tRowId row, Tables::tColId id) {
+	Tables::oTable dt(table);
+	return Stamina::PassStringRef( dt->getString(row, id) );
+}
+inline Stamina::String getDTString(Tables::tTableId table, Tables::tRowId row, const Stamina::StringRef& id) {
+	Tables::oTable dt(table);
+	return Stamina::PassStringRef( dt->getString(row, id) );
+}
+
+inline int getDTInt(Tables::tTableId table, Tables::tRowId row, Tables::tColId id) {
+	Tables::oTable dt(table);
+	return dt->getInt(0, id);
+}
+inline int getDTInt(Tables::tTableId table, Tables::tRowId row, const Stamina::StringRef& id) {
+	Tables::oTable dt(table);
+	return dt->getInt(row, id);
+}
+
+inline void setDTString(Tables::tTableId table, Tables::tRowId row, Tables::tColId id, const Stamina::StringRef& value) {
+	Tables::oTable dt(table);
+	dt->setString(row, id, value);
+}
+inline void setDTString(Tables::tTableId table, Tables::tRowId row, const Stamina::StringRef& id, const Stamina::StringRef& value) {
+	Tables::oTable dt(table);
+	dt->setString(row, id, value);
+}
+
+inline void setDTInt(Tables::tTableId table, Tables::tRowId row, Tables::tColId id, int value, int mask = -1) {
+	Tables::oTable dt(table);
+    if (mask != -1) { // maskowanie
+		value = (dt->getInt(row, id) & ~mask) | value;
+	}
+	dt->setInt(row, id, value);
+}
+inline void setDTInt(Tables::tTableId table, Tables::tRowId row, const Stamina::StringRef& id, int value, int mask = -1) {
+	Tables::oTable dt(table);
+    if (mask != -1) { // maskowanie
+		value = (dt->getInt(row, id) & ~mask) | value;
+	}
+	dt->setInt(row, id, value);
+}
+
+
+
+
+
+inline Stamina::String getCntString(unsigned int cntId, Tables::tColId id) {
+	return Stamina::PassStringRef( getDTString(Tables::tableContacts, cntId, id) );
+}
+inline Stamina::String getCntString(unsigned int cntId, const Stamina::StringRef& id) {
+	return Stamina::PassStringRef( getDTString(Tables::tableContacts, cntId, id) );
+}
+
+inline int getCntInt(unsigned int cntId, Tables::tColId id) {
+	return getDTInt(Tables::tableContacts, cntId, id);
+}
+inline int getCntInt(unsigned int cntId, const Stamina::StringRef& id) {
+	return getDTInt(Tables::tableContacts, cntId, id);
+}
+
+inline void setCntString(unsigned int cntId, Tables::tColId id, const Stamina::StringRef& value) {
+	setDTString(Tables::tableContacts, cntId, id, value);
+}
+inline void setCntString(unsigned int cntId, const Stamina::StringRef& id, const Stamina::StringRef& value) {
+	setDTString(Tables::tableContacts, cntId, id, value);
+}
+
+inline void setCntInt(unsigned int cntId, Tables::tColId id, int value, int mask = -1) {
+	setDTInt(Tables::tableContacts, cntId, id, value, mask);
+}
+inline void setCntInt(unsigned int cntId, const Stamina::StringRef& id, int value, int mask = -1) {
+	setDTInt(Tables::tableContacts, cntId, id, value, mask);
+}
+
+
+
+inline Stamina::String getCfgString(Tables::tColId id) {
+	return Stamina::PassStringRef( getDTString(Tables::tableConfig, 0, id) );
+}
+inline Stamina::String getCfgString(const Stamina::StringRef& id) {
+	return Stamina::PassStringRef( getDTString(Tables::tableConfig, 0, id) );
+}
+
+inline int getCfgInt(Tables::tColId id) {
+	return getDTInt(Tables::tableConfig, 0, id);
+}
+inline int getCfgInt(const Stamina::StringRef& id) {
+	return getDTInt(Tables::tableConfig, 0, id);
+}
+
+inline void setCfgString(Tables::tColId id, const Stamina::StringRef& value) {
+	setDTString(Tables::tableConfig, 0, id, value);
+}
+inline void setCfgString(const Stamina::StringRef& id, const Stamina::StringRef& value) {
+	setDTString(Tables::tableConfig, 0, id, value);
+}
+
+inline void setCfgInt(Tables::tColId id, int value, int mask = -1) {
+	setDTInt(Tables::tableConfig, 0, id, value, mask);
+}
+inline void setCfgInt(const Stamina::StringRef& id, int value, int mask = -1) {
+	setDTInt(Tables::tableConfig, 0, id, value, mask);
+}
+
+
+};
 
 #ifndef _DTABLE_
 //typedef Konnekt::Tables::Value sDTValue;

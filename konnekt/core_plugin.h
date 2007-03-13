@@ -250,8 +250,21 @@ namespace Konnekt {
 		oPlugin(tPluginId pluginId) {
 			setById(pluginId);
 		}
-		oPlugin() {
+
+		oPlugin(iPlugin & obj) {
+			this->set(obj);
 		}
+		oPlugin(iPlugin * obj = 0) {
+			this->set(obj);
+		}
+		oPlugin(const oPlugin & b) {
+			this->set(*b);
+		}
+		oPlugin & operator = (const oPlugin & b) {
+			this->set(*b);
+			return *this;
+		}
+
 		void setById(tPluginId pluginId);
 	};
 
