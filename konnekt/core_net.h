@@ -238,7 +238,11 @@ namespace Konnekt {
 			}
 
 			inline tNet getOnlyNet() const {
-				return (flag && startType == startNet) ? (tNet)start : Net::all;
+				if (flag) {
+					return (startType == startNet) ? (tNet)start : Net::all;
+				} else {
+					return value;
+				}
 			}
 
 			inline tNet getNotNet() const {
