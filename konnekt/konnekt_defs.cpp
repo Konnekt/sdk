@@ -633,7 +633,7 @@ const char * CntGetInfoValue(bool fromWindow , int cntID , int colID) {
 }
 
 
-
+/*
 cMessage * messageDuplicate(cMessage * m) {
     cMessage * mc = new cMessage;
     *mc = *m;
@@ -651,7 +651,7 @@ void messageFree(cMessage * m, bool deleteObject) {
 	if (deleteObject)
 		delete m;
 }
-
+*/
 
 bool ShowBits::checkBits(ShowBits::enShowBits show) {
 	return (getAllBits() & (int)show) == show;

@@ -41,7 +41,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="..\..\depends\stamina.lib; ..\..\depends\stamina.lib\depends"
+				AdditionalIncludeDirectories="..\..\depends\stamina.lib_0.7;..\..\depends\stamina.lib_0.7\depends"
 				PreprocessorDefinitions="WIN32;_DEBUG;_LIB"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -160,11 +160,19 @@
 				>
 			</File>
 			<File
+				RelativePath=".\core_imessage.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\core_message.cpp"
 				>
 			</File>
 			<File
 				RelativePath=".\core_tables.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\core_tools.cpp"
 				>
 			</File>
 			<File
@@ -185,15 +193,15 @@
 			Filter="h;hpp;hxx;hm;inl;inc"
 			>
 			<File
-				RelativePath="..\konnekt\core_assert.h"
+				RelativePath=".\core_assert.h"
 				>
 			</File>
 			<File
-				RelativePath="..\konnekt\core_ctrl.h"
+				RelativePath=".\core_ctrl.h"
 				>
 			</File>
 			<File
-				RelativePath="..\konnekt\core_exception.h"
+				RelativePath=".\core_exception.h"
 				>
 			</File>
 			<File
@@ -209,15 +217,15 @@
 				>
 			</File>
 			<File
-				RelativePath="..\konnekt\core_object.h"
+				RelativePath=".\core_object.h"
 				>
 			</File>
 			<File
-				RelativePath="..\konnekt\core_plugin.h"
+				RelativePath=".\core_plugin.h"
 				>
 			</File>
 			<File
-				RelativePath="..\konnekt\core_tables.h"
+				RelativePath=".\core_tables.h"
 				>
 			</File>
 			<File
@@ -225,59 +233,67 @@
 				>
 			</File>
 			<File
-				RelativePath="..\konnekt\core_unique.h"
+				RelativePath=".\core_tools.h"
 				>
 			</File>
 			<File
-				RelativePath="..\konnekt\dwuTlenek.h"
+				RelativePath=".\core_unique.h"
 				>
 			</File>
 			<File
-				RelativePath="..\konnekt\exPiMP.h"
+				RelativePath=".\dwuTlenek.h"
 				>
 			</File>
 			<File
-				RelativePath="..\konnekt\GG.h"
+				RelativePath=".\exPiMP.h"
 				>
 			</File>
 			<File
-				RelativePath="..\konnekt\kJabber.h"
+				RelativePath=".\GG.h"
 				>
 			</File>
 			<File
-				RelativePath="..\konnekt\kLAN.h"
+				RelativePath=".\kaway.h"
 				>
 			</File>
 			<File
-				RelativePath="..\konnekt\KNotify.h"
+				RelativePath=".\kJabber.h"
 				>
 			</File>
 			<File
-				RelativePath="..\konnekt\KONNferencja.h"
+				RelativePath=".\kLAN.h"
 				>
 			</File>
 			<File
-				RelativePath="..\konnekt\kSound.h"
+				RelativePath=".\KNotify.h"
 				>
 			</File>
 			<File
-				RelativePath="..\konnekt\kStyle.h"
+				RelativePath=".\KONNferencja.h"
 				>
 			</File>
 			<File
-				RelativePath="..\konnekt\kTransfer.h"
+				RelativePath=".\kSound.h"
 				>
 			</File>
 			<File
-				RelativePath="..\konnekt\kUpdate.h"
+				RelativePath=".\kStyle.h"
 				>
 			</File>
 			<File
-				RelativePath="lib.h"
+				RelativePath=".\kTransfer.h"
 				>
 			</File>
 			<File
-				RelativePath="..\konnekt\obsolete.h"
+				RelativePath=".\kUpdate.h"
+				>
+			</File>
+			<File
+				RelativePath=".\lib.h"
+				>
+			</File>
+			<File
+				RelativePath=".\obsolete.h"
 				>
 			</File>
 			<File
@@ -285,7 +301,7 @@
 				>
 			</File>
 			<File
-				RelativePath="..\konnekt\plug.h"
+				RelativePath=".\plug.h"
 				>
 			</File>
 			<File
@@ -293,11 +309,11 @@
 				>
 			</File>
 			<File
-				RelativePath="..\konnekt\plug_export.h"
+				RelativePath=".\plug_export.h"
 				>
 			</File>
 			<File
-				RelativePath="..\konnekt\plug_func.h"
+				RelativePath=".\plug_func.h"
 				>
 			</File>
 			<File
@@ -305,15 +321,15 @@
 				>
 			</File>
 			<File
-				RelativePath="..\konnekt\sms.h"
+				RelativePath=".\sms.h"
 				>
 			</File>
 			<File
-				RelativePath="..\konnekt\UI.h"
+				RelativePath=".\UI.h"
 				>
 			</File>
 			<File
-				RelativePath="..\konnekt\ui_message_controls.h"
+				RelativePath=".\ui_message_controls.h"
 				>
 			</File>
 			<Filter

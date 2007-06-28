@@ -15,6 +15,8 @@
 using ::Stamina::StringRef;
 using ::Stamina::String;
 
+#include "ui.h"
+
 /**
 \addtogroup imi_action_
 \{
@@ -206,9 +208,9 @@ inline int SetColumn(tTable table , int id , int type , const char * def  , cons
     w osobnym w¹tku. Tworzymy kopiê w IMessageProcess, a zwalniamy
     na koñcu w¹tku. F-cja alokuje ca³¹ strukturê!
 */
-cMessage * messageDuplicate(cMessage * m);
+//cMessage * messageDuplicate(cMessage * m);
 /** Zwalnia cMessage (to co zaalokowa³ messageDuplicate. */
-void messageFree(cMessage * m, bool deleteObject = true);
+//void messageFree(cMessage * m, bool deleteObject = true);
 
 void testResult(const StringRef& title, int should, int got, bool swap = false);
 void testResult(const StringRef& title, const StringRef& should, const StringRef& got, bool swap = false);

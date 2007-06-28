@@ -11,13 +11,16 @@ Dodatkowo kilka funkcji / makr dla Waszej wygody :)
 
 #ifndef PLUGEXPORTH
 #define PLUGEXPORTH
+
+/** Wskaznik do struktury #Controler.*/
+
 #include <Stamina/VersionControl.h>
 #include "plug.h"
 
+extern Controler * Ctrl;
+
 #pragma pack(push, 1)
 
-/** Wskaznik do struktury #Controler.*/
-extern Controler * Ctrl;
 
 #ifndef KONNEKT_SDK_NOEXPORT
 /*

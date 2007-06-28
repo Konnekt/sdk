@@ -139,5 +139,121 @@
   /** @} */ // imerror_
 
 
+/*
+            #define MT_MESSAGE      1    ///< Zwyk³a wiadomoœæ.
+            #define MT_QUICKEVENT   2    ///< Krótka notka (kasowana automatycznie w kolejce) (np. wiadomoœæ nie dosz³a itp.)
+            #define MT_CNTEVENT     3    ///< wydarzenie (np. ktoœ mnie doda³ do swojej listy itp.) zwi¹zane z kontaktem na liœcie
+            #define MT_EVENT        (MT_CNTEVENT|MT_MASK_NOTONLIST)    ///< wydarzenie (np. ktoœ mnie doda³ do swojej listy itp.)
+            #define MT_SERVEREVENT  (4|MT_MASK_NOTONLIST)    ///< Wiadomoœæ od serwera.
+            #define MT_AUTHORIZE    5    ///< Proœba o autoryzacje (ICQ).
+            #define MT_CONFERENCE   6    ///< Wiadomoœæ konferencyjna.
+            #define MT_FILE         7 ///< Przes³anie pliku.
+            #define MT_MAIL         8 ///< Email.
+            #define MT_SMS          9 ///< Np. potwierdzenie dotarcia sms'ów.
+            #define MT_SOUND        10 ///< Rozmowa g³osowa.
+            #define MT_URL         (11|MT_MASK_NOTONLIST)    ///< URL. 
+                                                                /// Jako dodatkowe parametry w ext przyjmuje Width i Heigth
+            #define MT_SPECIAL      12 ///< Nieokreslona wiadomosc.
+            #define MT_SPECIAL_NOL (13|MT_MASK_NOTONLIST) ///< Nieokreslona wiadomosc spoza listy.
+			#define MT_IMAGE		15 ///< Obraz, sciezka do pliku w cMessage::ext - #MEX_FILE_PATH
+
+			#define MT_BOARD        16 ///< 
+
+            #define MT_MASK_NOTONLIST 0x1000  ///< Oznacza ¿e ta wiadomosc nie zostanie
+                                            ///  wyœwietlona na liscie, ani nie zostanie
+                                            ///  sprawdzone czy docelowy kontakt na liœcie
+                                            ///  siê znajduje
+			#define MT_MASK 0xFFF ///< Maskuje bity odpowiedzialne za sam typ wiadomoœci.
+	*/
+
+#ifdef KONNEKT_OBSOLETE_ALL
+
+    /**
+        \defgroup mf_ flagi wiadomoœci tekstowych
+        \brief \no
+        @{
+    */
+            #define MF_SEND         2 ///< Wiadomoœæ przeznaczona do wys³ania
+            #define MF_NOEVENTS     4 ///< #MT_QUICKEVENT maj¹ nie byæ wysy³ane
+            #define MF_NOSAVE       8 ///< Wiadomoœæ nie zostanie zapisana na dysk ...
+            #define MF_REQUESTOPEN  0x10 ///< \brief #IM_MSG_OPEN / #IM_MSG_SEND zostanie wys³ane z #IMC_MESSSAGEQUEUE tylko
+                                        ///  gdy zostanie ono wywo³ane dla tego typu i sieci wiadomoœci.
+            #define MF_PROCESSING   0x20 ///< Flaga wewnêtrzna oznaczaj¹ca ¿e wiadomoœæ jest w trakcie przetwarzania, Nie powinna byæ u¿ywana!
+            #define MF_OPENED       0x40   ///< Wiadomoœæ ju¿ zosta³a otwarta. Teraz czeka w kolejce na usuniêcie.
+                                            ///  Flaga ta jest czyszczona podczas zamykania. 
+            #define MF_HANDLEDBYUI  0x80 ///< Wiadomoœæ zostanie obs³u¿ona przez UI
+            #define MF_AUTOMATED    0x100   ///< Wiadomoœæ zosta³a stworzona przez jakiœ "automatyczny"
+                                            /// proces, wiêc, gdy jesteœmy ukryci, nie powinna byæ
+                                            /// wysy³ana.
+            #define MF_HTML    0x200     ///< Treœæ wiadomoœci zawiera znaczniki HTML, a znaki specjalne s¹ kodowane (przynajmniej > = &gt; < = &lt; i " = &quot;
+										 ///  Html powinien byæ sformatowany jak XHTML (<img/>, wszystkie atrybuty w "" itd..)
+			#define MF_MENUBYUI     0x400 /**< Interfejs obs³u¿y wyœwietlanie wiadomoœci w menu.
+											Za ikonkê pos³u¿y cMessage::notify, nazwê pozycji w menu ustawiamy
+											w Ext jako parametr "ActionTitle". Je¿eli ustawiona jest cMessage::action
+											zostanie ona wys³ana po otwarciu wiadomoœci. W przeciwnym razie zostanie
+											wywo³ane IM_MSG_OPEN.
+											Wtyczka musi w #IM_MSG_RCV zadeklarowaæ obs³ugê wiadomoœci.
+										  */
+			#define MF_LEAVEASIS 0x800 /**< Zabrania wtyczkom zmiany treœci, w tym wyœwietlania emotikon */
+			#define MF_HIDE 0x1000 /**< Nie wyœwietla wiadomoœci w interfejsie (w tej chwili w oknie rozmowy) */
+			#define MF_DONTADDTOHISTORY 0x2000 /**< Nie zapisuje w historii */
+
+            #define MF_QE_NORMAL    0x10000 ///< MT_QUICKEVENT narysuje zwyk³¹ czcionk¹...
+            #define MF_QE_SHOWTIME  0x20000 ///< MT_QUICKEVENT poka¿e czas nadejœcia...
+
+            
+    /** @} */ // mf_
+
+#endif
 
 /** @} */
+
+
+
+#define IMC_NEWMESSAGE     Message::imcNewMessage
+
+#define IMC_MESSAGEQUEUE   imcMessageQueue 
+        #define IMC_MESSAGENOTIFY  
+        #define IMC_MESSAGEWAITING 103 ///< 
+                                        ///  \param p1 (sMESSAGESELECT*) które wiadomoœci maj¹ zostaæ uwzglêdnione
+                                        ///  \return (int) liczba wiadomoœci spe³niaj¹cych kryteria
+        #define IMC_MESSAGEREMOVE  104 ///< Usuwa wiadomoœci z kolejki.
+                                        ///  \param p1 (sMESSAGESELECT*) Rodzaj wiadomoœci do usuniêcia
+                                        ///  \param p2 (int) Ile maxymalnie usun¹æ
+                                        ///  \return false gdy siê nie powiedzie
+        #define IMC_MESSAGEGET     106 ///< Pobiera pierwsz¹ wiadomoœæ która spe³nia kryteria.
+                                        ///  \param p1 (sMESSAGESELECT*) Rodzaj wiadomoœci do pobrania.
+                                        ///  \param p2 (cMessage*) Struktura do której zostanie zapisana wiadomoœæ.
+                                        ///  \retrun 1 - jeœli siê powiod³o
+        #define IMC_MESSAGEACK     107 ///< Potwierdzenie wys³ania wiadomoœci.
+                                        ///  W cMessageAck::id \b musimy podaæ ID potwierdzanej wiadomoœci.
+                                        ///  Ustawienie msg i ext jest opcjonalne.
+                                        ///  \param p1 (cMessageAck*) Struktura z potwierdzeniem.
+        #define IMC_MESSAGEPROCESSED 108 ///< Zakoñczenie przetwarzania.
+                                          /// Po skoñczeniu przetwarzania wiadomoœci, na któr¹ odpowiedzieliœmy flag¹ IM_MSG_processing
+                                          /// wysy³amy ten komunikat, by rdzeñ "odznaczy³" nasz¹ wiadomoœæ. 
+                                          /// #IMC_MESSAGEPROCESSED wysy³a siê tylko, gdy wiadomoœæ nie zosta³a od razu usuniêta.
+                                          /// \param p1 (int) ID wiadomoœci.
+                                          /// \param p2 (bool) true - wiadomoœæ mo¿e zostaæ usuniêta
+
+
+         /** Wtyczka powinna sprawdziæ czy obs³uguje dany typ wiadomoœci.
+           Wtyczki odpytywane s¹ "od koñca". Ostatnia, która zwróci
+           IM_MSG_RCV_ok bêdzie otrzymywaæ równie¿ IM_MSG_OPEN.
+           \param p1 (cMessage *) wiadomoœæ.
+           \param p2 (bool) \i true - wiadomoœæ w³aœnie przysz³a , \i false - wiadomoœæ zosta³a za³adowana z pliku.
+           \return (int) Po³¹czone flagi \ref im_msg_, lub 0 jeœli nie obs³uguje takich wiadomoœci.
+         */
+		 #define IM_MSG_RCV       IM_BASE+100
+
+		 /** Wiadomoœæ powinna zostaæ wys³ana.
+           \param p1 (cMessage *) Wiadomoœæ
+           \return Jeœli siê uda³o powinno zróciæ \ref im_msg_.
+         */
+		 #define IM_MSG_SEND      IM_SHARE+100 
+		 
+		 /** Wiadomoœæ powinna zostaæ otwarta.
+           \param p1 (cMessage *) Wiadomoœæ
+           \return Jeœli siê uda³o powinno zróciæ \ref im_msg_.
+         */
+		 #define IM_MSG_OPEN      IM_SHARE+101  

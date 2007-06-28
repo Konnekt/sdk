@@ -187,37 +187,7 @@ Komunikat przesy³any jest przy pomocy @b sIMessage_plugArgs .*/
 
 
 
-		 #define IM_MSG_RCV       IM_BASE+100
-         /**< Wtyczka powinna sprawdziæ czy obs³uguje dany typ wiadomoœci.
-           Wtyczki odpytywane s¹ "od koñca". Ostatnia, która zwróci
-           IM_MSG_RCV_ok bêdzie otrzymywaæ równie¿ IM_MSG_OPEN.
-           \param p1 (cMessage *) wiadomoœæ.
-           \param p2 (bool) \i true - wiadomoœæ w³aœnie przysz³a , \i false - wiadomoœæ zosta³a za³adowana z pliku.
-           \return (int) Po³¹czone flagi \ref im_msg_, lub 0 jeœli nie obs³uguje takich wiadomoœci.
-         */
-         #define IM_MSG_SEND      IM_SHARE+100 /**< Wiadomoœæ powinna zostaæ wys³ana.
-           \param p1 (cMessage *) Wiadomoœæ
-           \return Jeœli siê uda³o powinno zróciæ \ref im_msg_.
-         */
-         #define IM_MSG_OPEN      IM_SHARE+101    /**< Wiadomoœæ powinna zostaæ otwarta.
-           \param p1 (cMessage *) Wiadomoœæ
-           \return Jeœli siê uda³o powinno zróciæ \ref im_msg_.
-         */
-         #define IM_MSG_ACK      IM_BASE+102    /**< Potwierdzenie wys³ania wiadomoœci.
-           \param p1 (cMessageAck *) Potwierdzenie. ID jest ustawiony na ID potwierdzanej wiadomoœci (która jeszcze siedzi w kolejce i mo¿na j¹ odczytaæ).
-         */
 
-         /** @defgroup im_msg_ Zwroty z IM_MSG_* 
-             #IM_MSG_RCV , #IM_MSG_SEND i #IM_MSG_OPEN mog¹ zwróciæ po³¹czone
-             takie flagi.
-             @{
-            */
-            #define IM_MSG_ok     1 ///< Flaga zwrotna #IM_MSG_RCV - Musi byæ ustawiona jesli wtyczka zamierza obs³u¿yæ wiadomoœæ.
-            #define IM_MSG_delete 2 ///< Wiadomoœæ powinna zostaæ niezw³ocznie usuniêta...
-            #define IM_MSG_update 4 ///< Zawartoœæ wiadomoœci zosta³a zmieniona i powinna zostaæ zaktualizowana jej kopia w kolejce.
-            #define IM_MSG_processing 8 ///< Flaga zwrotna #IM_MSG_OPEN i #IM_MSG_SEND - Wiadomoœæ jest dalej przetwarzana (np w osobnym w¹tku) i zostanie usuniêta z kolejki poprzez #IMC_MESSAGEREMOVE,
-                                         ///  lub zakoñczy przetwarzanie poprzez #IMC_MESSAGEPROCESSED.
-         /** @} */
          #define IM_MSG_CHARLIMIT IM_BASE+105    ///< Zapytanie o limit znaków na wiadomoœæ
                                             ///  \return Limit iloœci znaków na wiadomoœæ. 0 - bez limitu
          // Config (IMT_CONFIG)
@@ -515,66 +485,20 @@ Przy jego pomocy mo¿na odró¿niæ dwie instancje korzystaj¹ce z ró¿nych profili...
         #define IMC_THREADSTART     50 // Wiadomoœæ wykorzystywana TYLKO przez UI
         #define IMC_THREADEND	   51   // Wiadomoœæ wykorzystywana TYLKO przez UI
 
-        #define IMC_NEWMESSAGE     100 ///< Dodaje wiadomoœæ do kolejki.
-                                        ///  \attention Zawartoœæ struktury mo¿e ulec zmianie! Je¿eli tworzymy bufory tekstowe, zwalniaæ trzeba je przez
-                                        ///  lokalne kopie adresów, a nie wskaŸniki w strukturze!!!
-                                        ///  \param p1 (cMessage*) wiadomoœæ.
-                                        ///  \return (int) id wiadomosci
 
-        //       #define NMF_SEND      1   // Flagi wiadomosci
+        #define EXT_PARAM "\x1A" /**< Znak parametru.
+                    W cMessage i cMessageAck mo¿emy podawaæ listê dodatkowych parametrów.
+                    Ka¿dy parametr sk³ada siê z po³¹czonych: #EXT_PARAM nazwy '=' wartoœci
+                    Dziêki zastosowaniu "nietypowego znaku, unikamy potrzeby escape'owania znaków.
+                    Nazwa mo¿e byæ dowolnym ci¹giem znaków z wyj¹tkiem znaków #EXT_PARAM, '=' i \0.
+                    Wartoœæ mo¿e byæ dowolnym ci¹giem znaków z wyj¹tkiem znaków #EXT_PARAM i \0.
+                    Nazwa jest case-sensitive.
 
-        #define IMC_MESSAGEQUEUE   101 ///< Sprawdza kolejkê wiadomoœci.
-                                        ///  Próbuje przyj¹æ/rozes³aæ oczekuj¹ce wiadomoœci.
-                                        ///  \param p1 (sMESSAGESELECT*) które wiadomoœci  maja zostaæ sprawdzone.
-        #define IMC_MESSAGENOTIFY  102 ///< Szuka powiadomienia o nowej wiadomoœci dla danego UIDa w kolejce wiadomoœci.
-                                        ///  \param p1 (sMESSAGENOTIFY*) struktura podaj¹ca czego szukaæ i przyjmuj¹ca wynik.
-        #define IMC_MESSAGEWAITING 103 ///< Podaje ile wiadomoœci oczekuje w kolejce
-                                        ///  \param p1 (sMESSAGESELECT*) które wiadomoœci maj¹ zostaæ uwzglêdnione
-                                        ///  \return (int) liczba wiadomoœci spe³niaj¹cych kryteria
-        #define IMC_MESSAGEREMOVE  104 ///< Usuwa wiadomoœci z kolejki.
-                                        ///  \param p1 (sMESSAGESELECT*) Rodzaj wiadomoœci do usuniêcia
-                                        ///  \param p2 (int) Ile maxymalnie usun¹æ
-                                        ///  \return false gdy siê nie powiedzie
-        #define IMC_MESSAGEGET     106 ///< Pobiera pierwsz¹ wiadomoœæ która spe³nia kryteria.
-                                        ///  \param p1 (sMESSAGESELECT*) Rodzaj wiadomoœci do pobrania.
-                                        ///  \param p2 (cMessage*) Struktura do której zostanie zapisana wiadomoœæ.
-                                        ///  \retrun 1 - jeœli siê powiod³o
-        #define IMC_MESSAGEACK     107 ///< Potwierdzenie wys³ania wiadomoœci.
-                                        ///  W cMessageAck::id \b musimy podaæ ID potwierdzanej wiadomoœci.
-                                        ///  Ustawienie msg i ext jest opcjonalne.
-                                        ///  \param p1 (cMessageAck*) Struktura z potwierdzeniem.
-        #define IMC_MESSAGEPROCESSED 108 ///< Zakoñczenie przetwarzania.
-                                          /// Po skoñczeniu przetwarzania wiadomoœci, na któr¹ odpowiedzieliœmy flag¹ IM_MSG_processing
-                                          /// wysy³amy ten komunikat, by rdzeñ "odznaczy³" nasz¹ wiadomoœæ. 
-                                          /// #IMC_MESSAGEPROCESSED wysy³a siê tylko, gdy wiadomoœæ nie zosta³a od razu usuniêta.
-                                          /// \param p1 (int) ID wiadomoœci.
-                                          /// \param p2 (bool) true - wiadomoœæ mo¿e zostaæ usuniêta
+                    Najlepiej u¿ywaæ gotowych f-cji zadeklarowanych w plug_func.h:
+                    GetExtParam i SetExtParam .
+                    */
+        #define EXT_PARAM_CHAR char(0x1A)
 
-        /** Struktura s³u¿¹ca do wybierania wiadomoœci.
-            \sa #IMC_MESSAGEREMOVE #IMC_MESSAGEWAITING #IMC_MESSAGEGET #IMC_MESSAGEQUEUE*/
-        typedef  struct sMESSAGESELECT {
-            unsigned short s_size;
-            int net; ///< Sieæ kontaktu. Ustaw na #NET_BC aby u¿yæ wszystkich sieci.
-            const char * uid;  ///< UID kontaktu. Ustaw 0 aby u¿yæ wszystkich.
-            int type; ///< Typ wiadomoœci. Ustaw na -1 ¿eby u¿yæ wszystkich.
-            unsigned int wflag; ///< Tylko wiadomoœci posiadaj¹ce te flagi. 0 ¿eby u¿yæ wszystkich.
-            unsigned int woflag; ///< Tylko wiadomoœci nie posiadaj¹ce tych flag. 0 ¿eby u¿yæ wszystkich.
-            int id; ///< ID wiadomoœci, -1 ¿eby u¿yæ wszystkich.
-			unsigned int position; ///< Które z kolei przyj¹æ dopasowanie?
-			sMESSAGESELECT() {s_size=sizeof(sMESSAGESELECT);net=Net::broadcast;uid=0;type=-1;wflag=0;woflag=0;id=-1;position=0;}
-            sMESSAGESELECT(int _net , const char * _uid=0 , unsigned int _type = -1 , unsigned int _wflag=0 , unsigned int _woflag=0) {
-                s_size=sizeof(sMESSAGESELECT);
-                net=_net;
-                uid=_uid;
-                type=_type;
-                wflag=_wflag;
-                woflag=_woflag;
-                id=-1;
-				position = 0;
-            }
-
-        } sMESSAGEPOP , sMESSAGEWAITING;
-        #define sMESSAGEWAITING_V1 22
 
 /** Zwraca ID kontaktu.
 Je¿eli @a net bêdzie ustawiony na NET_NONE w UID mo¿na przekazaæ (tekstem) ID kontaktu. Je¿eli kontakt o danym ID istnieje, ID zostanie zwrócone. Funkcjonalnoœæ ta mo¿e s³u¿yæ g³ównie do "przemycania" bezpoœrednich identyfikatorów kontaktów do f-cji które przyjmuj¹ tylko wartoœci net i uid.
@@ -1573,197 +1497,8 @@ Obs³uguje komunikaty WM_KEYDOWN i WM_SYSKEYDOWN
 
   /** @} */ // st_
 // ------------------------------------------------------------------------------------------------
-  /** @defgroup gr_msg Obs³uga wiadomoœci tekstowych.
-      @brief @no
-      @{
-      */
 
-        #define EXT_PARAM "\x1A" /**< Znak parametru.
-                    W cMessage i cMessageAck mo¿emy podawaæ listê dodatkowych parametrów.
-                    Ka¿dy parametr sk³ada siê z po³¹czonych: #EXT_PARAM nazwy '=' wartoœci
-                    Dziêki zastosowaniu "nietypowego znaku, unikamy potrzeby escape'owania znaków.
-                    Nazwa mo¿e byæ dowolnym ci¹giem znaków z wyj¹tkiem znaków #EXT_PARAM, '=' i \0.
-                    Wartoœæ mo¿e byæ dowolnym ci¹giem znaków z wyj¹tkiem znaków #EXT_PARAM i \0.
-                    Nazwa jest case-sensitive.
 
-                    Najlepiej u¿ywaæ gotowych f-cji zadeklarowanych w plug_func.h:
-                    GetExtParam i SetExtParam .
-                    */
-        #define EXT_PARAM_CHAR char(0x1A)
-        /**
-        Struktura do przekazywania wiadomoœci tekstowych .
-        \attention Zawartoœæ struktury jest tylko tymczasow¹ \i kopi¹ wiadomoœci z \i kolejki.
-        \sa \ref msg
-        */
-        struct cMessage{
-            unsigned short s_size;
-            unsigned int id;              /**< Identyfikator wiadomoœci.
-                                    \attention ustawiany przez "rdzeñ". */
-            unsigned int net;             /**< Sieæ wtyczek do których skierowana jest wiadomoœæ.
-                                    \sa net_ */
-            unsigned int type;            /**< Typ wiadomoœci.
-                                    \sa mt_ */
-            char * fromUid;      ///< UID odbiorcy.
-            char * toUid;        ///< UID nadawcy.
-            char * body;         ///< Treœæ wiadomoœci.
-            char * ext;          ///< Informacje rozszerzone.
-                                  /**  Zapisane jako 
-                                        \code 
-                                        #EXT_PARAM nazwa=wartoœæ #EXT_PARAM nazwa2=wartoœæ2
-                                        ...
-                                        \endcode
-                                        patrz: #EXT_PARAM .
-                                  */
-            unsigned int flag;            ///< Flaga.
-                                    ///< \sa mf_
-            struct sUIAction action;    ///< Akcja powiadomienia dla wiadomoœci.
-            unsigned int notify;          ///< Akcja i ikonka powiadomienia dla wiadomoœci.
-                                ///< \sa \ref action \ref msg
-            __int64 time;        ///< czas odebrania wiadomoœci w formacie zgodnym z cTime64 (zapisane jako __int64).
-
-            cMessage() {s_size=sizeof(cMessage);id=net=type=flag=notify=0; action = sUIAction(0,0); fromUid=toUid=body=ext="";time=0;}
-        };
-        /**
-        Struktura do przekazywania informacji o stanie przesy³anych wiadomoœci.
-        Mo¿na ni¹ podawaæ jakie wyst¹pi³y problemy, lub co sta³o siê z wiadomoœci¹
-        po wys³aniu (np. czeka na serwerze, lub dosz³a do odbiorcy...)
-        \attention \a id \b musi byæ ustawiony na numer potwierdzanej i \b istniej¹cej wiadomoœci.
-        W miêdzyczasie wiadomoœæ ta nie mo¿e byæ usuniêta przez inny w¹tek.
-
-        \sa \ref msg
-        */
-        struct cMessageAck {
-            unsigned short s_size;
-            unsigned int id;   /**< Identyfikator wiadomoœci któr¹ potwierdzamy.
-                                    */
-            char * msg; /**< Tekst potwierdzenia. */
-            char * ext; /**< Dodatkowe parametry. */
-            unsigned int flag; ///< Flagi \ref mack_.
-            cMessageAck() {s_size=sizeof(cMessageAck);}
-
-        };
-
-    /**  
-        \defgroup mt_ Typy wiadomoœci tekstowych
-		Do typu wiadomoœci mo¿na dodaæ bit #MT_MASK_NOTONLIST oznaczaj¹c tym samym, 
-		¿e wiadomoœæ nie jest zwi¹zana z list¹ kontaktów.
-		Czêœæ typów ma ten bit ustawiony domyœlnie...
-        \{
-    */
-            typedef unsigned int tMsgType;
-            #define MT_MESSAGE      1    ///< Zwyk³a wiadomoœæ.
-            #define MT_QUICKEVENT   2    ///< Krótka notka (kasowana automatycznie w kolejce) (np. wiadomoœæ nie dosz³a itp.)
-            #define MT_CNTEVENT     3    ///< wydarzenie (np. ktoœ mnie doda³ do swojej listy itp.) zwi¹zane z kontaktem na liœcie
-            #define MT_EVENT        (MT_CNTEVENT|MT_MASK_NOTONLIST)    ///< wydarzenie (np. ktoœ mnie doda³ do swojej listy itp.)
-            #define MT_SERVEREVENT  (4|MT_MASK_NOTONLIST)    ///< Wiadomoœæ od serwera.
-            #define MT_AUTHORIZE    5    ///< Proœba o autoryzacje (ICQ).
-            #define MT_CONFERENCE   6    ///< Wiadomoœæ konferencyjna.
-            #define MT_FILE         7 ///< Przes³anie pliku.
-            #define MT_MAIL         8 ///< Email.
-            #define MT_SMS          9 ///< Np. potwierdzenie dotarcia sms'ów.
-            #define MT_SOUND        10 ///< Rozmowa g³osowa.
-            #define MT_URL         (11|MT_MASK_NOTONLIST)    ///< URL. 
-                                                                /// Jako dodatkowe parametry w ext przyjmuje Width i Heigth
-            #define MT_SPECIAL      12 ///< Nieokreslona wiadomosc.
-            #define MT_SPECIAL_NOL (13|MT_MASK_NOTONLIST) ///< Nieokreslona wiadomosc spoza listy.
-			#define MT_IMAGE		15 ///< Obraz, sciezka do pliku w cMessage::ext - #MEX_FILE_PATH
-
-			#define MT_BOARD        16 ///< 
-
-            #define MT_MASK_NOTONLIST 0x1000  ///< Oznacza ¿e ta wiadomosc nie zostanie
-                                            ///  wyœwietlona na liscie, ani nie zostanie
-                                            ///  sprawdzone czy docelowy kontakt na liœcie
-                                            ///  siê znajduje
-			#define MT_MASK 0xFFF ///< Maskuje bity odpowiedzialne za sam typ wiadomoœci.
-    /** @} */ // mt_
-    // ------------------------------------------------------------------------------------------------
-    /**
-        \defgroup mf_ flagi wiadomoœci tekstowych
-        \brief \no
-        @{
-    */
-            #define MF_SEND         2 ///< Wiadomoœæ przeznaczona do wys³ania
-            #define MF_NOEVENTS     4 ///< #MT_QUICKEVENT maj¹ nie byæ wysy³ane
-            #define MF_NOSAVE       8 ///< Wiadomoœæ nie zostanie zapisana na dysk ...
-            #define MF_REQUESTOPEN  0x10 ///< \brief #IM_MSG_OPEN / #IM_MSG_SEND zostanie wys³ane z #IMC_MESSSAGEQUEUE tylko
-                                        ///  gdy zostanie ono wywo³ane dla tego typu i sieci wiadomoœci.
-            #define MF_PROCESSING   0x20 ///< Flaga wewnêtrzna oznaczaj¹ca ¿e wiadomoœæ jest w trakcie przetwarzania, Nie powinna byæ u¿ywana!
-            #define MF_OPENED       0x40   ///< Wiadomoœæ ju¿ zosta³a otwarta. Teraz czeka w kolejce na usuniêcie.
-                                            ///  Flaga ta jest czyszczona podczas zamykania. 
-            #define MF_HANDLEDBYUI  0x80 ///< Wiadomoœæ zostanie obs³u¿ona przez UI
-            #define MF_AUTOMATED    0x100   ///< Wiadomoœæ zosta³a stworzona przez jakiœ "automatyczny"
-                                            /// proces, wiêc, gdy jesteœmy ukryci, nie powinna byæ
-                                            /// wysy³ana.
-            #define MF_HTML    0x200     ///< Treœæ wiadomoœci zawiera znaczniki HTML, a znaki specjalne s¹ kodowane (przynajmniej > = &gt; < = &lt; i " = &quot;
-										 ///  Html powinien byæ sformatowany jak XHTML (<img/>, wszystkie atrybuty w "" itd..)
-			#define MF_MENUBYUI     0x400 /**< Interfejs obs³u¿y wyœwietlanie wiadomoœci w menu.
-											Za ikonkê pos³u¿y cMessage::notify, nazwê pozycji w menu ustawiamy
-											w Ext jako parametr "ActionTitle". Je¿eli ustawiona jest cMessage::action
-											zostanie ona wys³ana po otwarciu wiadomoœci. W przeciwnym razie zostanie
-											wywo³ane IM_MSG_OPEN.
-											Wtyczka musi w #IM_MSG_RCV zadeklarowaæ obs³ugê wiadomoœci.
-										  */
-			#define MF_LEAVEASIS 0x800 /**< Zabrania wtyczkom zmiany treœci, w tym wyœwietlania emotikon */
-			#define MF_HIDE 0x1000 /**< Nie wyœwietla wiadomoœci w interfejsie (w tej chwili w oknie rozmowy) */
-			#define MF_DONTADDTOHISTORY 0x2000 /**< Nie zapisuje w historii */
-
-            #define MF_QE_NORMAL    0x10000 ///< MT_QUICKEVENT narysuje zwyk³¹ czcionk¹...
-            #define MF_QE_SHOWTIME  0x20000 ///< MT_QUICKEVENT poka¿e czas nadejœcia...
-
-            
-    /** @} */ // mf_
-    /**
-        \defgroup mex_ Nazwy wartoœci w polach cMessage::ext
-        \brief \no
-        @{
-    */
-            #define MEX_ADDINFO "AddInfo"
-            #define MEX_DISPLAY "Display"
-			#define MEX_TITLE   "Title"
-			#define MEX_NOSOUND "NoSound" ///< Nie zostanie odegrany dŸwiêk
-			#define MEX_FILE_PATH "FilePath"
-			#define MEX_FILE_SIZE "FileSize"
-			#define MEX_FILE_TRANSFER_TIME "FileTransferTime"
-			#define MEX_FILE_TRANSFERED "FileTransfered"
-            #define MEX_FILE_ERROR "FileError"
-
-            
-    /** @} */ // mf_
-    /**
-        \defgroup mack_ Flagi potwierdzeñ wiadomoœci (#IMC_MESSAGEACK i #IM_MSG_ACK)
-        \brief \no
-        \{
-    */
-            #define MACK_FAILED  0x1 ///< Wyst¹pi³ b³¹d
-            #define MACK_PROCESSING 0x2 ///< W trakcie przetwarzania
-
-            #define MACK_NOBROADCAST 0x100 /**< Ack nie zostanie rozes³ane do wtyczek #IMT_MESSAGEACK.
-                                                 Przydatne, jeœli chcemy tylko zmieniæ informacjê pokazywan¹ w oknie
-                                                 kolejki.
-                                                 */
-
-            #define MACK_IMPORTANT 0x10 ///< Komunikat jest istotny, bêdzie pokazywany d³u¿ej
-            #define MACK_VERYIMPORTANT 0x20 ///< Komunikat jest bardzo istotny.
-    /** @} */ // mack_
-
-/** @} */
-/** @addtogroup imc_ 
-    @{*/
-    /** Struktura wykorzystywana przez #IMC_MESSAGENOTIFY.
-        Podajemy w niej net i uid kontaktu i otrzymujemy action i notify s³u¿¹ce
-        do otwarcia tego typu wiadomoœci. Struktura jest przede wszystkim 
-        wykorzystywana przez UI do pokazywania odpowiednich ikonek przychodz¹cych wiadomoœci.*/ 
-    struct sMESSAGENOTIFY {
-        unsigned short s_size;
-        int net;       ///< Sieæ kontaktu.
-        char * uid;   ///< UID kontaktu.
-        sUIAction action;  ///< Akcja otwieraj¹ca wiadomoœæ.
-        int notify;       ///< Ikonka wiadomoœci.
-        unsigned int id; ///< Identyfikator wiadomoœci.
-        sMESSAGENOTIFY() {s_size=sizeof(sMESSAGENOTIFY);id = 0;}
-    };
-
-/**@}*/
 
 //-------------------------------------------------------------------------------------------------
   /**
@@ -1787,22 +1522,7 @@ Obs³uguje komunikaty WM_KEYDOWN i WM_SYSKEYDOWN
 
             \{
         */
-            // Msg
-            #define MSG_ID             ((unsigned int)0) ///< #DT_CT_INT ID.
-            #define MSG_NET            1 ///< #DT_CT_INT Sieæ.
-            #define MSG_TYPE           2 ///< #DT_CT_INT Typ.
-            #define MSG_FROMUID        3 ///< #DT_CT_PCHAR Od UIDa (odebrana).
-            #define MSG_TOUID          4 ///< #DT_CT_PCHAR Do UIDa (wysy³ana).
-            #define MSG_BODY           5 ///< #DT_CT_PCHAR Treœæ.
-            #define MSG_EXT            6 ///< #DT_CT_PCHAR Dodatkowe informacje.
-            #define MSG_FLAG           7 ///< #DT_CT_INT Flaga.
-            #define MSG_ACTIONP        8 ///< #DT_CT_INT | #DT_CF_NOSAVE  Grupa akcji.
-            #define MSG_ACTIONI        12 ///< #DT_CT_INT | #DT_CF_NOSAVE Akcja.
-            #define MSG_NOTIFY         9 ///< #DT_CT_INT | #DT_CF_NOSAVE  Ikonka powiadomienia.
-            #define MSG_HANDLER        10 ///< #DT_CT_INT | #DT_CF_NOSAVE Wtyczka obs³uguj¹ca.
-            #define MSG_TIME           11 ///< #DT_CT_64 Czas jako cTime64 Czas odebrania/wys³ania.
 
-//            #define C_MSG_COLCOUNT     13 // ostatni
 
         /**
             @}
@@ -1933,7 +1653,7 @@ Obs³uguje komunikaty WM_KEYDOWN i WM_SYSKEYDOWN
 /** @} */
 
 
-
+#include "core_message.h"
 #include "core_ctrl.h"
 
 #include "obsolete_defines.h"
