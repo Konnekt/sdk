@@ -9,6 +9,7 @@ using namespace Stamina;
 inline void setObsoleteString(const Stamina::StringRef& value, Stamina::String& modern, char*& obsolete, bool useModern) {
 	if (useModern) {
 		modern = value;
+		obsolete = (char*)modern.a_str();
 	} else {
 		// alokuje miejsce
 		obsolete = (char*)Ctrl->GetTempBuffer(value.getDataSize<char>() + 1);

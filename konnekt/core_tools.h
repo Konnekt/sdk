@@ -7,7 +7,7 @@ namespace Konnekt {
 
 
 	inline Stamina::String getObsoleteString(const Stamina::String& modern, const char* obsolete, bool useModern) {
-		if (useModern) {
+		if (useModern && modern.a_str() == obsolete) {
 			return modern;
 		} else {
 			return obsolete;

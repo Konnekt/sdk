@@ -209,6 +209,8 @@
 /** @} */
 
 
+#ifdef KONNEKT_OBSOLETE_MESSAGE
+	
 
 #define IMC_NEWMESSAGE     Message::imcNewMessage
 
@@ -237,7 +239,7 @@
                                           /// \param p2 (bool) true - wiadomoœæ mo¿e zostaæ usuniêta
 
 
-         /** Wtyczka powinna sprawdziæ czy obs³uguje dany typ wiadomoœci.
+/** Wtyczka powinna sprawdziæ czy obs³uguje dany typ wiadomoœci.
            Wtyczki odpytywane s¹ "od koñca". Ostatnia, która zwróci
            IM_MSG_RCV_ok bêdzie otrzymywaæ równie¿ IM_MSG_OPEN.
            \param p1 (cMessage *) wiadomoœæ.
@@ -257,3 +259,6 @@
            \return Jeœli siê uda³o powinno zróciæ \ref im_msg_.
          */
 		 #define IM_MSG_OPEN      IM_SHARE+101  
+
+
+#endif

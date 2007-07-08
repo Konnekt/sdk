@@ -1,6 +1,7 @@
 #pragma once
 
 #include <Stamina\DataTable\DT.h>
+#include <Stamina\ObjectImpl.h>
 #include "plug_func.h"
 #include "core_tools.h"
 
@@ -356,28 +357,29 @@ namespace Konnekt {
 
 
 	public:
+		 /** Zwroty z IM_MSG_* 
+			 #IM_MSG_RCV , #IM_MSG_SEND i #IM_MSG_OPEN mog¹ zwróciæ po³¹czone takie flagi.
+             
+			*/
+		enum enMessageResult {
+			 resultOk     = 1, ///< Flaga zwrotna #resultRCV - Musi byæ ustawiona jesli wtyczka zamierza obs³u¿yæ wiadomoœæ.
+			 resultDelete = 2, ///< Wiadomoœæ powinna zostaæ niezw³ocznie usuniêta...
+			 resultUpdate = 4, ///< Zawartoœæ wiadomoœci zosta³a zmieniona i powinna zostaæ zaktualizowana jej kopia w kolejce.
+			 /** Flaga zwrotna #resultOPEN i #resultSEND - Wiadomoœæ jest dalej przetwarzana (np w osobnym w¹tku) i zostanie usuniêta z kolejki poprzez #IMC_MESSAGEREMOVE,
+			 lub zakoñczy przetwarzanie poprzez #IMC_MESSAGEPROCESSED.*/
+			 resultProcessing = 8, 
+		};
 
 		/** Struktura do przesy³ania komunikatów o wiadomoœciach.
 		
 		*/
 		class IM: public sIMessage_base {
 		public:
-			 /** Zwroty z IM_MSG_* 
-				 #IM_MSG_RCV , #IM_MSG_SEND i #IM_MSG_OPEN mog¹ zwróciæ po³¹czone takie flagi.
-	             
-				*/
-			enum enMessageResult {
-				 resultOk     = 1, ///< Flaga zwrotna #resultRCV - Musi byæ ustawiona jesli wtyczka zamierza obs³u¿yæ wiadomoœæ.
-				 resultDelete = 2, ///< Wiadomoœæ powinna zostaæ niezw³ocznie usuniêta...
-				 resultUpdate = 4, ///< Zawartoœæ wiadomoœci zosta³a zmieniona i powinna zostaæ zaktualizowana jej kopia w kolejce.
-				 /** Flaga zwrotna #resultOPEN i #resultSEND - Wiadomoœæ jest dalej przetwarzana (np w osobnym w¹tku) i zostanie usuniêta z kolejki poprzez #IMC_MESSAGEREMOVE,
-				 lub zakoñczy przetwarzanie poprzez #IMC_MESSAGEPROCESSED.*/
-				 resultProcessing = 8, 
-			};
 
 			/** Obiekt wiadomoœci. */
 			Message* msg;
 			int param2;
+			class iMessageHandler* handler;
 
 			IM(tIMid IMid, Net::tNet net, enIMessageType type, Message* msg, int param2 = 0):sIMessage_base(IMid, net, type), msg(msg), param2(param2) {
 				this->s_size = sizeof(*this);
@@ -449,8 +451,8 @@ namespace Konnekt {
 		return (tMsgFlags)((int)a | (int)b);
 	}
 
-	inline Message::IM::enMessageResult operator | (Message::IM::enMessageResult a, Message::IM::enMessageResult b) {
-		return (Message::IM::enMessageResult)((int)a | (int)b);
+	inline Message::enMessageResult operator | (Message::enMessageResult a, Message::enMessageResult b) {
+		return (Message::enMessageResult)((int)a | (int)b);
 	}
 
 
@@ -755,9 +757,58 @@ namespace Konnekt {
     };
 
 
+
+	// Handler wiadomoœci
+
+	class iMessageHandler: public Stamina::iSharedObject {
+	public:
+		enum enMessageQueue {
+			mqReceive = 1,
+			mqOpen = 2,
+			mqSend = 4,
+		};
+
+		virtual Message::enMessageResult handleMessage(Message& msg, enMessageQueue queue, Konnekt::enPluginPriority priority) = 0;
+		
+
+	private:
+		virtual void zzPlaceHolder_iMsgHandler1() {}
+		virtual void zzPlaceHolder_iMsgHandler2() {}
+		virtual void zzPlaceHolder_iMsgHandler3() {}
+		virtual void zzPlaceHolder_iMsgHandler4() {}
+		virtual void zzPlaceHolder_iMsgHandler5() {}
+	};
   
 		 
+	class MessageHandler: public Stamina::SharedObject< iMessageHandler > {
+	public:
 
+	public:
+
+		bool registerHandler(enMessageQueue queue, Konnekt::enPluginPriority priority);
+		bool unregisterHandler(enMessageQueue queue, Konnekt::enPluginPriority priority);
+
+	public:
+
+		class IM: public sIMessage_base {
+		public:
+
+			/** Obiekt wiadomoœci. */
+			iMessageHandler* handler;
+			enMessageQueue queue;
+			Konnekt::enPluginPriority priority;
+
+			IM(tIMid IMid, iMessageHandler* handler, enMessageQueue queue, Konnekt::enPluginPriority priority):sIMessage_base(IMid, Net::core, imtCore), queue(queue), priority(priority) {
+				this->s_size = sizeof(*this);
+			}
+
+		public:
+
+			static const tIMCid imcRegisterMessageHandler = 109;
+			static const tIMCid imcUnregisterMessageHandler = 110;
+
+		};
+	};
 
 };
 
