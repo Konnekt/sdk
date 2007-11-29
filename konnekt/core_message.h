@@ -82,7 +82,7 @@ namespace Konnekt {
 			typeQuickEvent	= 2,    ///< Krótka notka (kasowana automatycznie w kolejce) (np. wiadomoœæ nie dosz³a itp.)
 			typeCntEvent      = 3,    ///< wydarzenie (np. ktoœ mnie doda³ do swojej listy itp.) zwi¹zane z kontaktem na liœcie
 			typeEvent         = (typeCntEvent | typeMask_NotOnList),    ///< wydarzenie (np. ktoœ mnie doda³ do swojej listy itp.)
-			typeSetverEvent   = (4 | typeMask_NotOnList),    ///< Wiadomoœæ od serwera.
+			typeServerEvent   = (4 | typeMask_NotOnList),    ///< Wiadomoœæ od serwera.
 			typeAuthorize     = 5,    ///< Proœba o autoryzacje (ICQ).
 			typeConference    = 6,    ///< Wiadomoœæ konferencyjna.
 			typeFile          = 7, ///< Przes³anie pliku.
