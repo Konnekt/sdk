@@ -810,6 +810,9 @@ namespace Konnekt {
 		};
 	};
 
+	STAMINA_REGISTER_CLASS_VERSION(Message);
+
+
 };
 
 
