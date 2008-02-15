@@ -8,29 +8,27 @@
   Kod udostêpniany na licencji GPL, której treœæ powinna byæ dostarczona
   razem z tym kodem.
   Licensed under GPL.
+
 */ 
 
 #pragma once
 
 namespace konnfer {
-  const int net = 20;
+    const int net = 20;
 
-  // akcje
-  namespace Action {
-    const int start_conference = 20000;
-    const int show_recipients = 20001;
-    const int nfo_dummy = 20002;
-  };
+	namespace Action {
+		const int start_conference = 20000;
+		const int show_recipients = 20001;
+		const int nfo_dummy = 20002;
+	};
+	// tabela kontaktów
+	namespace Cnt {
+	}
+	namespace Ico {
+		const int group_active = UIIcon(IT_STATUS , konnfer::net , ST_ONLINE , 0);
+		const int group_inactive = UIIcon(IT_STATUS , konnfer::net , ST_OFFLINE , 0);
+		const int group_msg = UIIcon(IT_MESSAGE , konnfer::net , MT_MESSAGE , 0);
+		const int group_show = 20003;
+	}
 
-  // tabela kontaktów
-  namespace Cnt {
-  };
-
-  // ikonki
-  namespace Ico {
-    const int group_active = UIIcon(IT_STATUS, konnfer::net, ST_ONLINE, 0);
-    const int group_inactive = UIIcon(IT_STATUS, konnfer::net, ST_OFFLINE, 0);
-    const int group_msg = UIIcon(IT_MESSAGE, konnfer::net, MT_MESSAGE, 0);
-    const int group_show = 20003;
-  };
-};
+}
