@@ -2,9 +2,9 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="8,00"
-	Name="_KonnektAPI"
+	Name="KonnektAPI"
 	ProjectGUID="{5646B5BC-8FB1-4CCD-80D7-E5BD27CD9C2F}"
-	RootNamespace="_KonnektAPI"
+	RootNamespace="KonnektAPI"
 	Keyword="Win32Proj"
 	>
 	<Platforms>
@@ -20,7 +20,6 @@
 			OutputDirectory="."
 			IntermediateDirectory="$(ConfigurationName)"
 			ConfigurationType="4"
-			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC71.vsprops"
 			CharacterSet="2"
 			>
 			<Tool
@@ -86,7 +85,6 @@
 			OutputDirectory="."
 			IntermediateDirectory="$(ConfigurationName)"
 			ConfigurationType="4"
-			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC71.vsprops"
 			CharacterSet="2"
 			>
 			<Tool
@@ -229,10 +227,6 @@
 				>
 			</File>
 			<File
-				RelativePath=".\core_tables_defs.h"
-				>
-			</File>
-			<File
 				RelativePath=".\core_tools.h"
 				>
 			</File>
@@ -250,10 +244,6 @@
 			</File>
 			<File
 				RelativePath=".\GG.h"
-				>
-			</File>
-			<File
-				RelativePath=".\kaway.h"
 				>
 			</File>
 			<File

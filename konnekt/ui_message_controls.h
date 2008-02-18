@@ -1,7 +1,3 @@
-/*
-  nazwa="UI message controls"
-  info="Nag³ówek do obs³ugi kontrolek w oknach wiadomoœci i historii"
-*/
 /** \file
     Nag³ówek do obs³ugi kontrolek w oknach wiadomoœci i historii.
 
@@ -17,18 +13,17 @@
 	przez #IMI_ACTION_REMOVE i tworz¹c w ich miejsce nowe o tym
 	samym identyfikatorze...
 	W oknie rozmowy:
-	sUIAction(IMIG_MSGWND , konnekt::UI::act::msg_ctrlview)  -  podgl¹d rozmowy
-	sUIAction(IMIG_MSGWND , konnekt::UI::act::msg_ctrlsend)  -  wpisywanie treœci
+	sUIAction(IMIG_MSGWND, konnekt::UI::act::msg_ctrlview)  -  podgl¹d rozmowy
+	sUIAction(IMIG_MSGWND, konnekt::UI::act::msg_ctrlsend)  -  wpisywanie treœci
 	W oknie historii:
-	sUIAction(IMIG_HISTORYWND , konnekt::UI::act::msg_ctrlview)  -  podgl¹d rozmowy
+	sUIAction(IMIG_HISTORYWND, konnekt::UI::act::msg_ctrlview)  -  podgl¹d rozmowy
 
 	Uk³ad namespace'ów i nazwy sta³ych i klas mo¿e siê jeszcze zmieniæ!
 */
 
-
 namespace Konnekt {
 	namespace UI {
-		namespace ACT{
+		namespace ACT {
 			const int msg_ctrlview = 250; ///< Kontrolka, w której pojawiaj¹ siê wiadomoœci
 			const int msg_ctrlsend = 251; ///< Kontrolka, z której wiadomoœci s¹ wysy³ane
 			const int msg_ctrlsend_menu = 260; ///< Menu msg_ctrlsend
@@ -44,8 +39,8 @@ namespace Konnekt {
 			const int msg_ctrlsend_menu_hist_previous = 270;
 			const int msg_ctrlsend_menu_hist_next = 271;
 			const int msg_ctrlsend_menu_hist_clear = 272;
-
 		};
+
 		namespace Notify {
 			// kontrolka do wyœwietlania
 			const int lock = 300;  ///< Odœwie¿anie okna powinno byæ zablokowane
@@ -65,32 +60,46 @@ namespace Konnekt {
 			const int supportsFormatting = 317;  ///< Czy kontrolka (wpisywania) obs³uguje formatowanie
 			const int setSelection = 318;  ///< Ustawia aktualne zaznaczenie (_setSelection *).
 			const int insertText = 319;  ///< Ustawia aktualne zaznaczenie (_insertText *).
+
 			class _insertMsg: public sUIActionNotify_base {
 			public:
 				cMessage * _message; ///< Wiadomoœæ do wyœwietlenia
 				const char * _display; ///< Nazwa kontaktu jako autora (je¿eli "" - to na podstawie wiadomoœci)
 				bool _scroll; ///< Czy przewin¹æ ekran do dodanej wiadomoœci
-				_insertMsg(cMessage * message , const char * display , bool scroll):_message(message),_display(display),_scroll(scroll) 
-					{code = insertMsg; s_size = sizeof(*this);}
+
+				_insertMsg(cMessage * message, const char * display, bool scroll): sUIActionNotify_base(insertMsg), _message(message), _display(display), _scroll(scroll) {
+				  s_size = sizeof(*this);
+				}
 			};
+
 			class _insertStatus: public sUIActionNotify_base {
 			public:
 				int _status; ///< Status
 				const char * _info; ///< Opis
-				_insertStatus(int status , const char * info):_status(status),_info(info) {code = insertStatus; s_size = sizeof(*this);}
+
+				_insertStatus(int status, const char * info): sUIActionNotify_base(insertStatus), _status(status), _info(info) {
+				  s_size = sizeof(*this);
+				}
 			};
+
 			class _getMessage: public sUIActionNotify_base {
 			public:
 				cMessage * _message; ///< Wiadomoœæ do wyœwietlenia. cMessage::body trzyma wskaŸnik do bufora, którego rozmiar zosta³ ustawiony w getMessageSize
 				int _size;
-				_getMessage(cMessage * message , int size):_message(message),_size(size) 
-				{code = getMessage; s_size = sizeof(*this);}
+
+				_getMessage(cMessage * message, int size): sUIActionNotify_base(getMessage), _message(message), _size(size) {
+				  s_size = sizeof(*this);
+				}
 			};
+
 			class _getSelection: public sUIActionNotify_base {
 			public:
 				int _start; ///< Pocz¹tek zaznaczenia
 				int _end; ///< Koniec zaznaczenia.
-				_getSelection():sUIActionNotify_base(getSelection),_start(0),_end(0) {s_size = sizeof(*this);}
+
+				_getSelection(): sUIActionNotify_base(getSelection), _start(0), _end(0) {
+				  s_size = sizeof(*this);
+				}
 			};
 			typedef _getSelection _setSelection;
 
@@ -99,9 +108,11 @@ namespace Konnekt {
 				const char * _text; ///< Treœæ do wstawienia/zast¹pienia
 				bool _isHtml; ///< Czy jest formatowana?
 				int _position; ///< Miejsce do wklejenia. -1 - aktualna pozycja/zaznaczenie
-				_insertText():sUIActionNotify_base(insertText),_text(""),_isHtml(false),_position(-1) {s_size = sizeof(*this);}
-			};
 
+				_insertText(): sUIActionNotify_base(insertText), _text(""), _isHtml(false), _position(-1) {
+				  s_size = sizeof(*this);
+				}
+			};
 		};
 	};
 };
