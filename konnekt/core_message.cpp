@@ -4,11 +4,11 @@
 #include <Stamina/Stamina.h>
 
 #include <stdlib.h>
+
 #include "plug_export.h"
 #include "core_tables.h"
 #include "core_message.h"
 #include "core_assert.h"
-
 #include "core_tools.h"
 
 using namespace Konnekt;

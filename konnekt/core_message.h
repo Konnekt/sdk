@@ -441,13 +441,14 @@ namespace Konnekt {
 
   typedef Message::enType tMsgType;
   typedef Message::enFlags tMsgFlags;
+  typedef Message::enMessageResult tMsgResult;
 
   inline tMsgFlags operator | (tMsgFlags a, tMsgFlags b) {
     return (tMsgFlags) ((int) a | (int) b);
   }
 
-  inline Message::enMessageResult operator | (Message::enMessageResult a, Message::enMessageResult b) {
-    return (Message::enMessageResult) ((int) a | (int) b);
+  inline tMsgResult operator | (tMsgResult a, tMsgResult b) {
+    return (tMsgResult) ((int) a | (int) b);
   }
 
   /** 
@@ -490,6 +491,7 @@ namespace Konnekt {
     MessageSelect(Net::tNet net = Net::broadcast, const char * uid = 0, Message::enType type = Message::typeAll, Message::enFlags wflag = Message::flagNone, Message::enFlags woflag = Message::flagNone) {
       _s_size = sizeof(*this);
       this->net = net;
+      this->_chUid = uid;
       this->_uid = uid;
       this->type = type;
       this->wflag = wflag;
@@ -498,7 +500,7 @@ namespace Konnekt {
       this->position = 0;
     }
 
-    const static unsigned int sizeV1 = 22;
+    const static unsigned int sizeV1 = 30;
 
   private:
     Stamina::String _uid;
