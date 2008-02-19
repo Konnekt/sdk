@@ -150,10 +150,12 @@ int Controler::BeginThreadAndWait(const char * name, void *security, unsigned st
   if (!th) return 0;
 
   ResumeThread(th);
-  /* while (MsgWaitForMultipleObjectsEx(1, &th, 250, QS_ALLINPUT | QS_ALLPOSTMESSAGE, MWMO_ALERTABLE | MWMO_INPUTAVAILABLE) - WAIT_OBJECT_0 != 0) {
+  /* 
+  while (MsgWaitForMultipleObjectsEx(1, &th, 250, QS_ALLINPUT | QS_ALLPOSTMESSAGE, MWMO_ALERTABLE | MWMO_INPUTAVAILABLE) - WAIT_OBJECT_0 != 0) {
     this->WMProcess();
-    // SleepEx(0, TRUE); // metoda, która mo¿e pomo¿e przy problemach z W98. Pomog³a ju¿ kiedyœ...
-    } */
+    // SleepEx(0, true); // metoda, która mo¿e pomo¿e przy problemach z W98. Pomog³a ju¿ kiedyœ...
+  }
+  */
   while (WaitForSingleObjectEx(th, 10, TRUE) != WAIT_OBJECT_0) {
     this->WMProcess();
   }

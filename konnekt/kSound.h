@@ -1,36 +1,32 @@
-/** @file Nag³ówek wtyczki kSound
-*/
-/** @defgroup SOUND_shared_h Wtyczka kSound.dll.
-
- kSound odpowiada za odtwarzanie dŸwiêków. 
- Przy pomocy kSound::SoundRegister() mo¿na dodaæ
- nowy dŸwiêk do listy, a nastêpnie go odtworzyæ przez
- kSound::SoundPlay().
-
- @warning kSound::SoundRegister() mo¿e byæ wywo³any @b tylko
-  w momencie otrzymania przez wtyczkê komunikatu
-  kSound::DOREGISTER .
-  DOREGISTER wywo³ywane jest dwukrotnie. Podczas rejestrowania kolumn i tworzenia
-  interfejsu.
-  Za ka¿dym razem trzeba zarejestrowaæ TE SAME dŸwiêki!
-
- Kolumny w konfiguracji nazywane s¹ jako "SOUND_" + nazwa_dŸwiêku.
- Akcje w konfiguracji maj¹ identyfikatory (@a id - ID kolumny z dŸwiêkiem):
-   kSound::action::Check | id - Checkbox
-   kSound::action::Value | id - Wartoœæ
-   kSound::action::Play | id - Play/Stop
-
- Standardowe typy dŸwiêków:
-
-  newUser - Ktoœ jest dostêpny.
-  newMsg - Wiadomoœæ (zamkniête okno)
-  newMsgAct - Wiadomoœæ, aktywne okno
-  newMsgInact - Wiadomoœæ, nieaktywne okno rozmowy
-  quickEvent - Zdarzenie (np. niedostarczenie wiadomoœci)
-  msgSent - Wiadomoœæ wys³ana
-
- @{
-*/
+/** 
+ * @file Nag³ówek wtyczki kSound
+ * @defgroup SOUND_shared_h Wtyczka kSound.dll.
+ * 
+ * kSound odpowiada za odtwarzanie dŸwiêków. 
+ * Przy pomocy kSound::SoundRegister() mo¿na dodaæ
+ * nowy dŸwiêk do listy, a nastêpnie go odtworzyæ przez kSound::SoundPlay().
+ * 
+ * @warning kSound::SoundRegister() mo¿e byæ wywo³any @b tylko
+ * w momencie otrzymania przez wtyczkê komunikatu kSound::DOREGISTER.
+ * DOREGISTER wywo³ywane jest dwukrotnie. Podczas rejestrowania kolumn i tworzenia
+ * interfejsu.
+ * Za ka¿dym razem trzeba zarejestrowaæ TE SAME dŸwiêki!
+ *
+ * Kolumny w konfiguracji nazywane s¹ jako "SOUND_" + nazwa_dŸwiêku.
+ * Akcje w konfiguracji maj¹ identyfikatory (@a id - ID kolumny z dŸwiêkiem):
+ * - kSound::action::Check | id - Checkbox
+ * - kSound::action::Value | id - Wartoœæ
+ * - kSound::action::Play  | id - Play/Stop
+ *
+ * Standardowe typy dŸwiêków:
+ * - newUser - Ktoœ jest dostêpny.
+ * - newMsg - Wiadomoœæ (zamkniête okno)
+ * - newMsgAct - Wiadomoœæ, aktywne okno
+ * - newMsgInact - Wiadomoœæ, nieaktywne okno rozmowy
+ * - quickEvent - Zdarzenie (np. niedostarczenie wiadomoœci)
+ * - msgSent - Wiadomoœæ wys³ana
+ * @{
+ */
 
 namespace kSound {
   const int REGISTER = IM_USER + 3000;
@@ -45,11 +41,11 @@ namespace kSound {
   public:
     const static int minimumSize = 16; ///< rozmiar poprzedniej wersji...
 
-    int colID; ///< konkretny identyfikator kolumny, lub -1
-    const char * name; ///< Jednoznaczna nazwa dŸwiêku (nazwa kolumny w konfiguracji i pola w XMLu)
-    const char * info; ///< Informacja przy polu w konfiguracji.
-    int flags; ///< Flagi kSound::flags .
-    const char * defSound; ///< Domyœlnie ustawiony dŸwiêk dla kolumny
+    int colID;              ///< konkretny identyfikator kolumny, lub -1
+    const char * name;      ///< Jednoznaczna nazwa dŸwiêku (nazwa kolumny w konfiguracji i pola w XMLu)
+    const char * info;      ///< Informacja przy polu w konfiguracji.
+    int flags;              ///< Flagi kSound::flags .
+    const char * defSound;  ///< Domyœlnie ustawiony dŸwiêk dla kolumny
 
     sIMessage_SoundRegister(const char * name, const char * info, int flags = 0, int colID = -1, const char* defSound = 0)
       : sIMessage_base(REGISTER), colID(colID), name(name), info(info), flags(flags), defSound(defSound)
@@ -61,9 +57,9 @@ namespace kSound {
   };
 
   namespace flags {
-    const char contacts = 1; ///< Dla ka¿dego kontaktu przechowywane jest osobne ustawienie.
-    const char no_column_register = 2; ///< kSound nie zarejestruje kolumny w konfiguracji.
-    const char no_action_register = 4; ///< kSound nie utworzy akcji...
+    const char contacts = 1;            ///< Dla ka¿dego kontaktu przechowywane jest osobne ustawienie.
+    const char no_column_register = 2;  ///< kSound nie zarejestruje kolumny w konfiguracji.
+    const char no_action_register = 4;  ///< kSound nie utworzy akcji...
   };
 
   namespace action {

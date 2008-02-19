@@ -1,7 +1,8 @@
 #pragma once
 
-/** @file Deklaracje do obs³ugi testów
-*/
+/** 
+ * @file Deklaracje do obs³ugi testów
+ */
 
 #include <Stamina/String.h>
 #include <Stamina/iArray.h>
@@ -30,9 +31,9 @@ namespace Konnekt {
     public:
       enum enFlags {
         flagNone = 0,
-        flagSubOpen = 1, ///< Otwiera podgrupê testów
+        flagSubOpen = 1,  ///< Otwiera podgrupê testów
         flagSubClose = 2, ///< Zamyka podgrupê testów
-        flagFailed = 4 ///< Oznacza test jako nieudany
+        flagFailed = 4    ///< Oznacza test jako nieudany
       };
 
       TestInfo(const Stamina::StringRef& name, const Stamina::StringRef& command = "", enFlags flags = flagNone): name(name), command(command), flags(flags) { }

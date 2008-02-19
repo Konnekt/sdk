@@ -1,29 +1,30 @@
 #pragma once
 
 /**
-@file 
-  Nag³ówek wtyczki SMS.
-  ¯eby wys³aæ wiadomoœæ sms nale¿y wstawiæ do kolejki wiadomoœci, lub wys³aæ
-  bezpoœrednio do wtyczki komunikatem #IM_MSG_SEND wiadomoœæ:
-@code
-  cMessage m;
-  m.net = Sms::net;
-  m.type = MT_SMS;
-  m.fromUid = "";
-  m.body = "TREŒÆ WIADOMOŒCI";
-  m.toUid = "DOCELOWY NUMER";
-  m.flag = MF_SEND;
-  m.time = _time64(0);
-  std::string ext;
-  // W EXT ustawiamy parametry wysy³ania:
-  ext = SetExtParam(ext, Sms::extFrom, "PODPIS WYSY£AJ¥CEGO"); // nie zawsze wymagany
-  ext = SetExtParam(ext, Sms::extGate, "IDENTYFIKATOR BRAMKI");  // wymagany!
-  // Je¿eli NIE chcemy, ¿eby wtyczka SMS dzieli³a wiadomoœæ, ustawiamy parametr extPart...
-  // ext = SetExtParam(ext, Sms::extPart, "0");
-
-  m.ext = (char*) ext.c_str();
-@endcode
-*/
+ * @file 
+ * Nag³ówek wtyczki SMS.
+ * ¯eby wys³aæ wiadomoœæ sms nale¿y wstawiæ do kolejki wiadomoœci, lub wys³aæ
+ * bezpoœrednio do wtyczki komunikatem #IM_MSG_SEND wiadomoœæ:
+ *
+ * @code
+ * cMessage m;
+ * m.net = Sms::net;
+ * m.type = MT_SMS;
+ * m.fromUid = "";
+ * m.body = "TREŒÆ WIADOMOŒCI";
+ * m.toUid = "DOCELOWY NUMER";
+ * m.flag = MF_SEND;
+ * m.time = _time64(0);
+ * std::string ext;
+ * // W EXT ustawiamy parametry wysy³ania:
+ * ext = SetExtParam(ext, Sms::extFrom, "PODPIS WYSY£AJ¥CEGO");  // nie zawsze wymagany
+ * ext = SetExtParam(ext, Sms::extGate, "IDENTYFIKATOR BRAMKI"); // wymagany!
+ * // Je¿eli NIE chcemy, ¿eby wtyczka SMS dzieli³a wiadomoœæ, ustawiamy parametr extPart...
+ * // ext = SetExtParam(ext, Sms::extPart, "0");
+ * 
+ * m.ext = (char*) ext.c_str();
+ * @endcode
+ */
 
 namespace Sms {
   const int net = NET_SMS;

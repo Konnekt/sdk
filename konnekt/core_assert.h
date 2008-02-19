@@ -2,8 +2,8 @@
 
 #include <crtdbg.h>
 
-#define K_ASSERT(a) _ASSERTE(a);
 #define K_ASSERT_MSG(a, msg) _ASSERTE(a);
+#define K_ASSERT(a) _ASSERTE(a);
 
 #ifdef _DEBUG
   #define K_ASSERT_LOGMSG(a, log) if (!(a)) { IMDEBUG(DBG_ASSERT, log #a " (" __FUNCTION__ " : " __FILE__ ":%d)", __LINE__ ); }

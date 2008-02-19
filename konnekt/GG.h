@@ -1,42 +1,43 @@
 #pragma once
 #pragma pack(push, 1)
 
-/** @file Nag³ówek wtyczki GG.DLL 
-*/
-/** @defgroup GG_shared_h Wtyczka GG.dll.
-
-W API od wersji 1.1 znajduje siê obs³uga zdarzeñ w libgadu. 
-Potrzebne bêd¹ równie¿ przynajmniej nag³ówki libgadu, które dostêpne jest do pobrania
-na stronie domowej SDK.
-
-Poni¿szy przyk³ad powinien wszystko wyjaœniæ...
-@code
-    #include "gg_shared.h"
-    // (...)
-  // Gdzieœ w kodzie "rejestrujemy" nasz¹ wtyczkê. Np. w #IM_START
-  IMessage(IM_GG_REGISTERHANDLER,NET_GG,IMT_PROTOCOL,GGER_LOGIN|GGER_EVENT);
-  // Dziêki GGER_LOGIN bêdziemy mogli zmieniæ parametry logowania do 
-  // poszczególnych serwerów, a GGER_EVENT przyœle ka¿d¹ odpowiedŸ serwera.
-  // Mo¿liwoœci jest jeszcze kilka...
-
-  // W IMessageProc musimy jeszcze obs³u¿yæ #IM_GG_EVENT
-  case IM_GG_EVENT: {
-    sIMessage_GGEvent * me = static_cast<sIMessage_GGEvent*>(msgBase);
-    // W zale¿noœci od typu zdarzenia wykonujemy ró¿ne operacje
-    switch (me->event_type) {
-        // (...)
-    }
-    break;}
-  // Je¿eli bêdziemy chcieli gdzieœ w kodzie skorzystaæ z sesji libgadu to:
-  gg_session * sess = IMessage(IM_GG_GETSESSION,NET_GG,IMT_PROTOCOL); // Pobieramy sesjê
-  if (sess) {
-    // (...) operacje na sesji z wykorzystaniem libgaduw32.dll
-    // Ka¿d¹ pobran¹ sesjê TRZEBA zwolniæ, ale TYLKO gdy zwrócona sesja jest != 0
-    IMessage(IM_GG_RELEASESESSION,NET_GG,IMT_PROTOCOL);
-  }
-@endcode    
-@{
-*/
+/** 
+ * @file Nag³ówek wtyczki GG.DLL 
+ * @defgroup GG_shared_h Wtyczka GG.dll.
+ * 
+ * W API od wersji 1.1 znajduje siê obs³uga zdarzeñ w libgadu. 
+ * Potrzebne bêd¹ równie¿ przynajmniej nag³ówki libgadu, które dostêpne jest do pobrania
+ * na stronie domowej SDK.
+ * 
+ * Poni¿szy przyk³ad powinien wszystko wyjaœniæ...
+ * @code
+ * #include "gg_shared.h"
+ * // (...)
+ * // Gdzieœ w kodzie "rejestrujemy" nasz¹ wtyczkê. Np. w #IM_START
+ * IMessage(IM_GG_REGISTERHANDLER, NET_GG, IMT_PROTOCOL, GGER_LOGIN | GGER_EVENT);
+ * // Dziêki GGER_LOGIN bêdziemy mogli zmieniæ parametry logowania do 
+ * // poszczególnych serwerów, a GGER_EVENT przyœle ka¿d¹ odpowiedŸ serwera.
+ * // Mo¿liwoœci jest jeszcze kilka...
+ * 
+ * // W IMessageProc musimy jeszcze obs³u¿yæ #IM_GG_EVENT
+ * case IM_GG_EVENT: {
+ *   sIMessage_GGEvent * me = static_cast<sIMessage_GGEvent*>(msgBase);
+ *   // W zale¿noœci od typu zdarzenia wykonujemy ró¿ne operacje
+ *   switch (me->event_type) {
+ *     // (...)
+ *   }
+ *   break;
+ * }
+ * // Je¿eli bêdziemy chcieli gdzieœ w kodzie skorzystaæ z sesji libgadu to:
+ * gg_session * sess = IMessage(IM_GG_GETSESSION, NET_GG, IMT_PROTOCOL); // Pobieramy sesjê
+ * if (sess) {
+ *   // (...) operacje na sesji z wykorzystaniem libgaduw32.dll
+ *   // Ka¿d¹ pobran¹ sesjê TRZEBA zwolniæ, ale TYLKO gdy zwrócona sesja jest != 0
+ *   IMessage(IM_GG_RELEASESESSION, NET_GG, IMT_PROTOCOL);
+ * }
+ * @endcode    
+ * @{
+ */
 
 /** 
  * Zwraca wskaŸnik do sesji libgadu (gg_session) lub 0
@@ -168,4 +169,4 @@ struct sIMessage_GGHtmlFormat: public sIMessage_base {
 
 #pragma pack(pop)
 
-/**@}*/
+/** @} */

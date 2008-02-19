@@ -162,75 +162,77 @@ namespace Konnekt {
      * @param quiet Czy wyœwietliæ przyczynê u¿ytkownikowi?
      * @param unload Typ wypiêcia - enPlugOutUnload
      *
-     * @return Zwraca true je¿eli operacja siê powiod³a... W przypadku poUnloadNowAndOnNextStart zwraca false, je¿li wtyczka nie mog³a byæ wypiêta natychmiast, ale nie zostanie ona za³adowana przy nastêpnym uruchomieniu.
+     * @return Zwraca true je¿eli operacja siê powiod³a... W przypadku poUnloadNowAndOnNextStart zwraca false, 
+     * je¿li wtyczka nie mog³a byæ wypiêta natychmiast, ale nie zostanie ona za³adowana przy nastêpnym uruchomieniu.
      * @sa enPlugOutUnload, HotPlug
      */
     virtual bool plugOut(Controler* sender, const Stamina::StringRef& reason, bool quiet, enPlugOutUnload unload) = 0;
 
-    /** Subclassuje f-cjê obs³uguj¹c¹ komunikaty wtyczki.
-
-    Subclassowanie pozwala na przechwytywanie komunikatów zanim dotr¹ do docelowej wtyczki. Technika mo¿e byæ przydatna przy obchodzeniu pewnych ograniczeñ w API, ale @b nie powinna byæ nadu¿ywana!
-
-    @param proc WskaŸnik do nowej f-cji obs³uguj¹cej. Przekazanie 0 spowoduje tylko zwrócenie aktualnych wskaŸników
-    @param proc WskaŸnik do obiektu dla którego ta f-cja ma byæ wywo³ywana, lub 0
-    @return Zwraca true je¿eli operacja siê powiod³a. W zmiennych proc i object znajduj¹ siê poprzednio ustawione dla wtyczki wartoœci.
-
-    @warning Wtyczka subclassuj¹ca jest odpowiedzialna za przechowanie poprzednio ustawionych wartoœci @a proc i @a object, oraz wywo³ywanie oryginalnej funkcji przy ich pomocy (najlepiej przy u¿yciu f-cji iPlugin::callIMessageProc() ).
-
-    @warning Jest to zaawansowana funkcja API! U¿ywaj jej tylko je¿eli jesteœ œwiadomy tego co robisz! Mo¿na w ten sposób wiêcej popsuæ ni¿ naprawiæ!
-
-    @warning F-cja nie jest w ¿aden sposób zabezpieczona przed wielow¹tkowoœci¹! Subclassowaæ nale¿y jak najszybciej jest to mo¿liwe, dopóki wtyczki nie uruchomi¹ swoich w¹tków...
-
-    Przyk³ad 1 (wersja bez obiektu)
-    @code
-      void* subclassUI_proc;
-      void* subclassUI_object;
-
-      int __stdcall newUIProc(sIMessage_base* msg) {
-        switch (msg->id) {
-          ....
-        }
-        return iPlugin::callIMessageProc(msg, subclassUI_proc, subclassUI_object);
-      }
-
-      void subclassUI() {
-        oPlugin ui = Ctrl->getPlugin(pluginUI);
-        subclassUI_proc = newUIProc;
-        subclassUI_object = 0;
-        bool ret = ui->subclassIMessageProc(Ctrl, subclassUI_proc, subclassUI_object);
-        S_ASSERT(ret);
-      }
-    @endcode
-
-
-    Przyk³ad 2 (wersja z obiektem)
-    @code
-      class Subclass {
-        public:
-        Subclass(const oPlugin& plugin) {
-          _proc = newProc;
-          _object = this;
-          bool ret = plugin->subclassIMessageProc(Ctrl, _proc, _object);
-          S_ASSERT(ret);
-        }
-
-        private:
-        void* _proc;
-        void* _object;
-
-        // newProc bêdzie wywo³ywany w kontekœcie tego obiektu
-        int __stdcall newProc(sIMessage_base* msg) {
-          switch (msg->id) {
-            ....
-          }
-          return iPlugin::callIMessageProc(msg, _proc, _object);
-      }
-
-      void subclassUI() {
-        new Subclass(Ctrl->getPlugin(pluginUI));
-      }
-    @endcode
-    */
+    /** 
+     * Subclassuje f-cjê obs³uguj¹c¹ komunikaty wtyczki.
+     * Subclassowanie pozwala na przechwytywanie komunikatów zanim dotr¹ do docelowej wtyczki. 
+     * Technika mo¿e byæ przydatna przy obchodzeniu pewnych ograniczeñ w API, ale @b nie powinna byæ nadu¿ywana!
+     * 
+     * @param proc WskaŸnik do nowej f-cji obs³uguj¹cej. Przekazanie 0 spowoduje tylko zwrócenie aktualnych wskaŸników
+     * @param proc WskaŸnik do obiektu dla którego ta f-cja ma byæ wywo³ywana, lub 0
+     * 
+     * @return Zwraca true je¿eli operacja siê powiod³a. W zmiennych proc i object znajduj¹ siê poprzednio ustawione dla wtyczki wartoœci.
+     * 
+     * @warning Wtyczka subclassuj¹ca jest odpowiedzialna za przechowanie poprzednio ustawionych wartoœci @a proc i @a object, 
+     * oraz wywo³ywanie oryginalnej funkcji przy ich pomocy (najlepiej przy u¿yciu f-cji iPlugin::callIMessageProc() ).
+     * @warning Jest to zaawansowana funkcja API! U¿ywaj jej tylko je¿eli jesteœ œwiadomy tego co robisz! Mo¿na w ten sposób wiêcej popsuæ ni¿ naprawiæ!
+     * @warning F-cja nie jest w ¿aden sposób zabezpieczona przed wielow¹tkowoœci¹! Subclassowaæ nale¿y jak najszybciej jest to mo¿liwe, 
+     * dopóki wtyczki nie uruchomi¹ swoich w¹tków...
+     * 
+     * Przyk³ad 1 (wersja bez obiektu)
+     * @code
+     *   void* subclassUI_proc;
+     *   void* subclassUI_object;
+     * 
+     *   int __stdcall newUIProc(sIMessage_base* msg) {
+     *     switch (msg->id) {
+     *       ....
+     *     }
+     *     return iPlugin::callIMessageProc(msg, subclassUI_proc, subclassUI_object);
+     *   }
+     * 
+     *   void subclassUI() {
+     *     oPlugin ui = Ctrl->getPlugin(pluginUI);
+     *     subclassUI_proc = newUIProc;
+     *     subclassUI_object = 0;
+     *     bool ret = ui->subclassIMessageProc(Ctrl, subclassUI_proc, subclassUI_object);
+     *     S_ASSERT(ret);
+     *   }
+     * @endcode
+     * 
+     * Przyk³ad 2 (wersja z obiektem)
+     * @code
+     *   class Subclass {
+     *     public:
+     *     Subclass(const oPlugin& plugin) {
+     *       _proc = newProc;
+     *       _object = this;
+     *       bool ret = plugin->subclassIMessageProc(Ctrl, _proc, _object);
+     *       S_ASSERT(ret);
+     *     }
+     * 
+     *     private:
+     *     void* _proc;
+     *     void* _object;
+     * 
+     *     // newProc bêdzie wywo³ywany w kontekœcie tego obiektu
+     *     int __stdcall newProc(sIMessage_base* msg) {
+     *       switch (msg->id) {
+     *         ....
+     *       }
+     *       return iPlugin::callIMessageProc(msg, _proc, _object);
+     *   }
+     * 
+     *   void subclassUI() {
+     *     new Subclass(Ctrl->getPlugin(pluginUI));
+     *   }
+     * @endcode
+     */
     virtual bool subclassIMessageProc(Controler* sender, void*& proc, void*& object) = 0;
 
     /** 

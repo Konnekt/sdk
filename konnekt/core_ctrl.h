@@ -9,7 +9,7 @@ namespace Konnekt {
    * Klasa s³u¿¹ca do komunikowania siê z "rdzeniem" systemu wtyczek.
    *
    * Adres tej struktury (zaalokowanej w rdzeniu) przekazywany jest
-   * jako parametr w pierwszej wiadomosci do wtyczki - #IM_INIT ...<br>
+   * jako parametr w pierwszej wiadomosci do wtyczki - #IM_INIT ...<br/>
    * Ka¿da wtyczka posiada w³asn¹ kopiê Controler.
    *
    * @sa IMessageProc()
@@ -20,7 +20,7 @@ namespace Konnekt {
     virtual tPluginId __stdcall ID() = 0;     ///< Zwraca identyfikator wtyczki.
     virtual HINSTANCE __stdcall hInst() = 0;  ///< Zwraca uchwyt procesu (HINSTANCE).
     virtual HINSTANCE __stdcall hDll() = 0;   ///< Zwraca uchwyt biblioteki wtyczki.
-  
+
     virtual enIMessageError __stdcall getError() = 0; ///< Zwraca kod ostatniego b³êdu.
     /**
      * Powinien byc ustawiony gdy wystapil blad przy ODBIORZE wiadomosci (np wiadomosc jest nieobslugiwana).
@@ -35,7 +35,7 @@ namespace Konnekt {
     virtual bool __stdcall isRunning() = 0;
     /**
      * Wysy³a wiadomoœæ do wtyczek.
-     * Aby przes³aæ wiadomoœæ do rdzenia lub ui jako \i net i \i type trzeba podaæ 0
+     * Aby przes³aæ wiadomoœæ do rdzenia lub ui jako @i net i @i type trzeba podaæ 0
      *
      * @param msg Wiadomoœæ do przes³ania
      * @sa im_ net_ imt_
@@ -83,7 +83,7 @@ namespace Konnekt {
      * @sa @ref cfg dt_ct_
      */
     virtual int __stdcall DTgetNameID(tTable db, const char * name) = 0;
-  
+
     /**
      * Zwraca @a thID jeœli aktualny w¹tek jest ró¿ny od @a thID. Lub 0 gdy s¹ równe. 
      * Jako @a thID mo¿na podaæ 0 - zostanie zamienione na g³ówny w¹tek aplikacji.
@@ -91,7 +91,7 @@ namespace Konnekt {
     virtual unsigned int __stdcall Is_TUS(unsigned int thID) = 0;
     virtual int __stdcall RecallTS(HANDLE th = 0, bool wait = 1) = 0;
     virtual int __stdcall RecallIMTS(HANDLE th, bool wait, sIMessage_base * msg, tPluginId plugID) = 0;
-  
+
     /**
      * Opró¿nienie kolejki wiadomoœci windowsowych.
      * Powinno byæ wykonywane TYLKO w g³ównym w¹tku, w d³ugich
@@ -105,7 +105,7 @@ namespace Konnekt {
      * @attention Nie mo¿na zwalniaæ tej pamiêci!
      */
     virtual void * __stdcall GetTempBuffer(unsigned int size) = 0;
-  
+
     /** 
      * Pobiera wartosc wiersza z tablicy danych z konwersj¹ typów.
      * Konwersja odbywa siê gdy Tables::Value::type jest ró¿ny od DT_CT_UNKNOWN.
@@ -172,7 +172,7 @@ namespace Konnekt {
      * powinny byæ zwolnione t¹ funkcj¹. 
      */
     virtual void __stdcall free(void * buff) = 0;
-  
+
     /** 
      * U¿ywanie zwyk³ego Sleep w g³ównym w¹tku najprêdzej doprowadzi
      * K do stanu chwilowej nieu¿ywalnoœci, bardzo mo¿liwe równie¿,
@@ -189,9 +189,9 @@ namespace Konnekt {
      * przegl¹da kolejkê oczekuj¹cych wiadomoœci w aktualnym w¹tku.
      */
     virtual int __stdcall Sleep(unsigned int time) = 0;
-  
+
     typedef unsigned int ( __stdcall * fBeginThread)( void * );
-  
+
     /**
      * BeginThread dzia³a identycznie jak _beginthreadex z wyj¹tkiem
      * tego, ¿e w trybie debug potrafi wychwytywaæ b³êdy w w¹tku
@@ -211,22 +211,24 @@ namespace Konnekt {
      * Parametry te same co w Controler::BeginThread()
      */
     int BeginThreadAndWait(const char * name, void *security, unsigned stack_size, fBeginThread start_address, void *arglist = 0, unsigned initflag = 0, unsigned *thrdaddr = 0);
-  
-    /** Pobiera poziom debugowania dla wtyczki */
-    virtual unsigned int __stdcall DebugLevel(enDebugLevel level = DBG_ALL) = 0;
-  
+
     /** 
      * Podaje, czy Konnekt jest zamykany w trybie natychmiastowym (np. podczas zamykania systemu).
      * Wtyczki nie powinny w tym czasie wykonywaæ d³ugich operacji, prze³¹czaæ w¹tków (#IMESSAGE_TS),
      * ani przetwarzaæ procedur APC (flaga Alertable w funkcjach oczekuj¹cych WinApi).
      */
     virtual bool __stdcall QuickShutdown() = 0;
-  
+
+    /** 
+     * Pobiera poziom debugowania dla wtyczki
+     */
+    virtual unsigned int __stdcall DebugLevel(enDebugLevel level = DBG_ALL) = 0;
+
     /** 
      * Ustawia poziom debugowania wtyczki.
      */
     virtual unsigned int __stdcall SetDebugLevel(enDebugLevel levelMask, enDebugLevel level = DBG_ALL) = 0;
-  
+
     /** 
      * Pobiera nazwe kolumny o podanym identyfikatorze.
      *
@@ -340,7 +342,7 @@ namespace Konnekt {
     int UIActionInsert(int _parent, int _id, int _pos, int _status = 0, const char * _txt = 0, int _p1 = 0, short _w = 0, short _h = 0, int _p2 = 0, int _param = 0);
 
     int SetColumn(tTable table, int id, int type, int def, const char * name);
-    inline int SetColumn(tTable table, int id, int type, const char * def , const char * name = 0) {
+    inline int SetColumn(tTable table, int id, int type, const char * def, const char * name = 0) {
       return this->SetColumn(table, id, type, (int) def, name);
     }
 

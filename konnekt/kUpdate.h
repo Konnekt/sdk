@@ -27,7 +27,7 @@ namespace kUpdate {
     const int showHelp = 4102;
   };
 
-  namespace IM { // wiadomoœci
+  namespace IM {
     const int startInterface = 4000; ///< wewn.
     const int destroyInterface = 4001; ///< wewn.
   };

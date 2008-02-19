@@ -1,28 +1,26 @@
 /**
-@file Nag³ówek wtyczki K.Notify wyœwietlaj¹cej komunikaty nad zegarkiem systemowym.
-*/
-
-/** @defgroup KNotify_shared_h Wtyczka K.Notify
-  Wtyczka s³u¿y do wyœwietlania informacji w ma³ym, skinowanym okienku
-  nad zasobnikiem systemowym.
-
-  Sposób u¿ycia na przyk³adzie:
-  @code
-   // Poka¿e zwyk³y komunikat...
-  Ctrl->IMessage(&KNotify::sIMessage_notify("Hello!"));
-   // Poka¿e komunikat b³êdu...
-  Ctrl->IMessage(&KNotify::sIMessage_notify("B³¹d!", 0, KNotify::sIMessage_notify::tError));
-   // Poka¿e komunikat z ikonk¹ - Logo sieci GG...
-  Ctrl->IMessage(&KNotify::sIMessage_notify("Hello!", UIIcon(IT_LOGO, NET_GG, 0, 0)));
-   // Aby w³¹czyæ mo¿liwoœæ klikania, trzeba to uruchomiæ poza konstruktorem
-   KNotify::sIMessage_notify notify("Hello!", UIIcon(IT_LOGO, NET_GG, 0, 0));
-   notify._action = sUIAction(  ); // Oczywiœcie trzeba podaæ identyfikatory akcji
-   notify._actionParam = 1; // Akcja otrzyma sUIActionNotify_2params::notify1 == 1
-   Ctrl->IMessage(&notify);
-  @endcode
-
-@{
-*/
+ * @file Nag³ówek wtyczki K.Notify wyœwietlaj¹cej komunikaty nad zegarkiem systemowym.
+ * @defgroup KNotify_shared_h Wtyczka K.Notify
+ *
+ * Wtyczka s³u¿y do wyœwietlania informacji w ma³ym, skinowanym okienku
+ * nad zasobnikiem systemowym.
+ * 
+ * Sposób u¿ycia na przyk³adzie:
+ * @code
+ * // Poka¿e zwyk³y komunikat...
+ * Ctrl->IMessage(&KNotify::sIMessage_notify("Hello!"));
+ * // Poka¿e komunikat b³êdu...
+ * Ctrl->IMessage(&KNotify::sIMessage_notify("B³¹d!", 0, KNotify::sIMessage_notify::tError));
+ * // Poka¿e komunikat z ikonk¹ - Logo sieci GG...
+ * Ctrl->IMessage(&KNotify::sIMessage_notify("Hello!", UIIcon(IT_LOGO, NET_GG, 0, 0)));
+ * // Aby w³¹czyæ mo¿liwoœæ klikania, trzeba to uruchomiæ poza konstruktorem
+ * KNotify::sIMessage_notify notify("Hello!", UIIcon(IT_LOGO, NET_GG, 0, 0));
+ * notify._action = sUIAction(  ); // Oczywiœcie trzeba podaæ identyfikatory akcji
+ * notify._actionParam = 1; // Akcja otrzyma sUIActionNotify_2params::notify1 == 1
+ * Ctrl->IMessage(&notify);
+ * @endcode
+ * @{
+ */
 
 namespace KNotify {
   const int net = 774;  
@@ -112,11 +110,11 @@ namespace KNotify {
     const static unsigned char tWarning = 2;  ///< _msgType - Ostrze¿enie
 
   public:
-    const char * _text; ///< Treœæ komunikatu
-    unsigned char _icoType : 4; ///< Typ ikonki @sa itIcoID itHICON
-    unsigned char _msgType : 4; ///< Typ komunikatu @sa tInform tError tWarning
-    signed   char _timeToLive : 8; ///< Jak d³ugo komunikat bêdzie dostêpny, jako wielokrotnoœæ wyœwietlania jednej linijki, lub -1 jeœli ma czekaæ na klikniêcie.
-    unsigned char _clickable : 8; ///< Czy dzia³a action @sa _action
+    const char * _text;             ///< Treœæ komunikatu
+    unsigned char _icoType : 4;     ///< Typ ikonki @sa itIcoID itHICON
+    unsigned char _msgType : 4;     ///< Typ komunikatu @sa tInform tError tWarning
+    signed   char _timeToLive : 8;  ///< Jak d³ugo komunikat bêdzie dostêpny, jako wielokrotnoœæ wyœwietlania jednej linijki, lub -1 jeœli ma czekaæ na klikniêcie.
+    unsigned char _clickable : 8;   ///< Czy dzia³a action @sa _action
 
   private:
     unsigned char align__ : 8;
