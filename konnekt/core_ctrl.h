@@ -84,7 +84,11 @@ namespace Konnekt {
      */
     virtual int __stdcall DTgetNameID(tTable db, const char * name) = 0;
   
-    virtual unsigned int __stdcall Is_TUS(unsigned int thID) = 0; ///< Zwraca \a thID jeœli aktualny w¹tek jest ró¿ny od \a thID. Lub 0 gdy s¹ równe. Jako \a thID mo¿na podaæ 0 - zostanie zamienione na g³ówny w¹tek aplikacji.
+    /**
+     * Zwraca @a thID jeœli aktualny w¹tek jest ró¿ny od @a thID. Lub 0 gdy s¹ równe. 
+     * Jako @a thID mo¿na podaæ 0 - zostanie zamienione na g³ówny w¹tek aplikacji.
+     */
+    virtual unsigned int __stdcall Is_TUS(unsigned int thID) = 0;
     virtual int __stdcall RecallTS(HANDLE th = 0, bool wait = 1) = 0;
     virtual int __stdcall RecallIMTS(HANDLE th, bool wait, sIMessage_base * msg, tPluginId plugID) = 0;
   
@@ -201,7 +205,7 @@ namespace Konnekt {
       void *arglist = 0,
       unsigned initflag = 0,
       unsigned *thrdaddr = 0
-      ) = 0;
+    ) = 0;
     /** 
      * Tworzy w¹tek i czeka a¿ siê skoñczy.
      * Parametry te same co w Controler::BeginThread()
@@ -254,10 +258,11 @@ namespace Konnekt {
       void *arglist = 0,
       unsigned initflag = 0,
       unsigned *thrdaddr = 0
-      ) = 0;
+    ) = 0;
 
     /** 
-     * Nadaje nazwê wykonywanemu w¹tkowi, inicjalizuje bufory tymczasowe i dodaje do listy kontrolowanych w¹tków (które zostan¹ np. zatrzymane w chwili wyst¹pienia b³êdu krytycznego).
+     * Nadaje nazwê wykonywanemu w¹tkowi, inicjalizuje bufory tymczasowe i dodaje do listy 
+     * kontrolowanych w¹tków (które zostan¹ np. zatrzymane w chwili wyst¹pienia b³êdu krytycznego).
      *
      * @warning Musi byæ wywo³ane Z poziomu w¹tku!
      * @notice Funkcja ta wywo³ywana jest automatycznie zaraz po utworzeniu w¹tku.
@@ -286,7 +291,8 @@ namespace Konnekt {
      * @param where Dowolna treœæ okreœlaj¹ca miejsce zdarzenia, lub NULL
      * @param msg Treœæ do zapisania
      * 
-     * Parametry module i where s³u¿¹ tylko i wy³¹cznie czytelnoœci logów. Najlepiej okreœlaæ logowane treœci w jednolity sposób. Np. informacjê o obs³u¿eniu komunikatu IM_CONNECT mo¿na zapisaæ jako:
+     * Parametry module i where s³u¿¹ tylko i wy³¹cznie czytelnoœci logów. Najlepiej okreœlaæ logowane 
+     * treœci w jednolity sposób. Np. informacjê o obs³u¿eniu komunikatu IM_CONNECT mo¿na zapisaæ jako:
      * @code
      * Ctrl->log(logFunc, "IMessage", "Connect", "Connected");
      * @endcode
