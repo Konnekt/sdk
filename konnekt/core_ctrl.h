@@ -197,7 +197,7 @@ namespace Konnekt {
      * tego, ¿e w trybie debug potrafi wychwytywaæ b³êdy w w¹tku
      * i je raportowaæ... U¿ywanie wysoko zalecane!
      *
-     * @warn Funkcja zwraca uchwyt w¹tku! Nale¿y go zamkn¹æ przy pomocy CloseHandle()!!!
+     * @warning Funkcja zwraca uchwyt w¹tku! Nale¿y go zamkn¹æ przy pomocy CloseHandle()!!!
      */
     virtual HANDLE __stdcall BeginThreadOld(void *security,
       unsigned stack_size,
@@ -213,16 +213,16 @@ namespace Konnekt {
     int BeginThreadAndWait(const char * name, void *security, unsigned stack_size, fBeginThread start_address, void *arglist = 0, unsigned initflag = 0, unsigned *thrdaddr = 0);
 
     /** 
+     * Pobiera poziom debugowania dla wtyczki
+     */
+    virtual unsigned int __stdcall DebugLevel(enDebugLevel level = DBG_ALL) = 0;
+
+    /** 
      * Podaje, czy Konnekt jest zamykany w trybie natychmiastowym (np. podczas zamykania systemu).
      * Wtyczki nie powinny w tym czasie wykonywaæ d³ugich operacji, prze³¹czaæ w¹tków (#IMESSAGE_TS),
      * ani przetwarzaæ procedur APC (flaga Alertable w funkcjach oczekuj¹cych WinApi).
      */
     virtual bool __stdcall QuickShutdown() = 0;
-
-    /** 
-     * Pobiera poziom debugowania dla wtyczki
-     */
-    virtual unsigned int __stdcall DebugLevel(enDebugLevel level = DBG_ALL) = 0;
 
     /** 
      * Ustawia poziom debugowania wtyczki.
