@@ -97,9 +97,9 @@ namespace Konnekt {
       }
     };
 
-    class RunTests:public GetTests {
+    class RunTests: public GetTests {
     public:
-      RunTests(const Stamina::oArray<TestInfo>& array):GetTests(array) {
+      RunTests(const Stamina::oArray<TestInfo>& array): GetTests(array) {
         this->id = runTests;
         S_ASSERT(array.isValid());
         this->tests = array;

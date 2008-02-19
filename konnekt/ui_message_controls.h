@@ -80,7 +80,7 @@ namespace Konnekt {
 
 			class _insertStatus: public sUIActionNotify_base {
 			public:
-				int _status; ///< Status
+				int _status;        ///< Status
 				const char * _info; ///< Opis
 
 				_insertStatus(int status, const char * info): sUIActionNotify_base(insertStatus), _status(status), _info(info) {

@@ -255,7 +255,7 @@ namespace Konnekt {
       }
 
       inline tPluginId getStartPlugin() const {
-        return (flag && startType == startPluginId) ? (tPluginId) start : (tPluginId)0;
+        return (flag && startType == startPluginId) ? (tPluginId) start : (tPluginId) 0;
       }
 
       inline enResult getResultType() const {

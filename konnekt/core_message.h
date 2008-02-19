@@ -65,25 +65,25 @@ namespace Konnekt {
     enum enType {
       typeAll             = -1,
       typeNone            = 0,
-      typeMask_NotOnList  = 0x1000,  ///< Oznacza ¿e ta wiadomosc nie zostanie wyœwietlona na liscie, ani nie zostanie sprawdzone czy docelowy kontakt na liœcie siê znajduje
-      typeMask            = 0xFFF, ///< Maskuje bity odpowiedzialne za sam typ wiadomoœci.
+      typeMask_NotOnList  = 0x1000, ///< Oznacza ¿e ta wiadomosc nie zostanie wyœwietlona na liscie, ani nie zostanie sprawdzone czy docelowy kontakt na liœcie siê znajduje
+      typeMask            = 0xFFF,  ///< Maskuje bity odpowiedzialne za sam typ wiadomoœci.
 
-      typeMessage         = 1,    ///< Zwyk³a wiadomoœæ.
-      typeQuickEvent      = 2,    ///< Krótka notka (kasowana automatycznie w kolejce) (np. wiadomoœæ nie dosz³a itp.)
-      typeCntEvent        = 3,    ///< wydarzenie (np. ktoœ mnie doda³ do swojej listy itp.) zwi¹zane z kontaktem na liœcie
+      typeMessage         = 1,      ///< Zwyk³a wiadomoœæ.
+      typeQuickEvent      = 2,      ///< Krótka notka (kasowana automatycznie w kolejce) (np. wiadomoœæ nie dosz³a itp.)
+      typeCntEvent        = 3,      ///< wydarzenie (np. ktoœ mnie doda³ do swojej listy itp.) zwi¹zane z kontaktem na liœcie
       typeEvent           = (typeCntEvent | typeMask_NotOnList),    ///< wydarzenie (np. ktoœ mnie doda³ do swojej listy itp.)
       typeServerEvent     = (4 | typeMask_NotOnList),    ///< Wiadomoœæ od serwera.
-      typeAuthorize       = 5,    ///< Proœba o autoryzacje (ICQ).
-      typeConference      = 6,    ///< Wiadomoœæ konferencyjna.
-      typeFile            = 7, ///< Przes³anie pliku.
-      typeMail            = 8, ///< Email.
-      typeSMS             = 9, ///< Np. potwierdzenie dotarcia sms'ów.
-      typeSound           = 10, ///< Rozmowa g³osowa.
-      typeUrl             = (11 | typeMask_NotOnList),    ///< URL. Jako dodatkowe parametry w ext przyjmuje Width i Heigth
+      typeAuthorize       = 5,      ///< Proœba o autoryzacje (ICQ).
+      typeConference      = 6,      ///< Wiadomoœæ konferencyjna.
+      typeFile            = 7,      ///< Przes³anie pliku.
+      typeMail            = 8,      ///< Email.
+      typeSMS             = 9,      ///< Np. potwierdzenie dotarcia sms'ów.
+      typeSound           = 10,     ///< Rozmowa g³osowa.
+      typeUrl             = (11 | typeMask_NotOnList),   ///< URL. Jako dodatkowe parametry w ext przyjmuje Width i Heigth
 
-      typeSpecial         = 12, ///< Nieokreslona wiadomosc.
-      typeSpecial_NOL     = (13 | typeMask_NotOnList), ///< Nieokreslona wiadomosc spoza listy.
-      typeImage           = 15, ///< Obraz, sciezka do pliku w cMessage::ext - #MEX_FILE_PATH
+      typeSpecial         = 12,     ///< Nieokreslona wiadomosc.
+      typeSpecial_NOL     = (13 | typeMask_NotOnList),   ///< Nieokreslona wiadomosc spoza listy.
+      typeImage           = 15,     ///< Obraz, sciezka do pliku w cMessage::ext - #MEX_FILE_PATH
       typeBoard           = 16
     };
 
@@ -92,16 +92,16 @@ namespace Konnekt {
      */
     enum enFlags {
       flagNone              = 0,
-      flagSend              = 2, ///< Wiadomoœæ przeznaczona do wys³ania
-      flagNoEvents          = 4, ///< #mtQuickEvent maj¹ nie byæ wysy³ane
-      flagNoSave            = 8, ///< Wiadomoœæ nie zostanie zapisana na dysk ...
-      flagRequestOpen       = 0x10, ///< #IM_MSG_OPEN / #IM_MSG_SEND zostanie wys³ane z #IMC_MESSSAGEQUEUE tylko gdy zostanie ono wywo³ane dla tego typu i sieci wiadomoœci.
-      flagProcessing        = 0x20, ///< Flaga wewnêtrzna oznaczaj¹ca ¿e wiadomoœæ jest w trakcie przetwarzania, Nie powinna byæ u¿ywana!
-      flagOpened            = 0x40, ///< Wiadomoœæ ju¿ zosta³a otwarta. Teraz czeka w kolejce na usuniêcie. Flaga ta jest czyszczona podczas zamykania.     
-      flagHandled           = 0x40, ///< Wiadomoœæ zosta³a w pe³ni obs³u¿ona i czeka na usuniêcie (to samo co flagOpened). Tyczy siê równie¿ wiadomoœci wysy³anych...
-      flagHandledByUI       = 0x80, ///< Wiadomoœæ zostanie obs³u¿ona przez UI
-      flagAutomated         = 0x100, ///< Wiadomoœæ zosta³a stworzona przez jakiœ "automatyczny" proces, wiêc, gdy jesteœmy ukryci, nie powinna byæ wysy³ana.
-      flagHTML              = 0x200, ///< Treœæ wiadomoœci zawiera znaczniki HTML, a znaki specjalne s¹ kodowane (przynajmniej > = &gt; < = &lt; i " = &quot; Html powinien byæ sformatowany jak XHTML (<img/>, wszystkie atrybuty w "" itd..)
+      flagSend              = 2,      ///< Wiadomoœæ przeznaczona do wys³ania
+      flagNoEvents          = 4,      ///< #mtQuickEvent maj¹ nie byæ wysy³ane
+      flagNoSave            = 8,      ///< Wiadomoœæ nie zostanie zapisana na dysk ...
+      flagRequestOpen       = 0x10,   ///< #IM_MSG_OPEN / #IM_MSG_SEND zostanie wys³ane z #IMC_MESSSAGEQUEUE tylko gdy zostanie ono wywo³ane dla tego typu i sieci wiadomoœci.
+      flagProcessing        = 0x20,   ///< Flaga wewnêtrzna oznaczaj¹ca ¿e wiadomoœæ jest w trakcie przetwarzania, Nie powinna byæ u¿ywana!
+      flagOpened            = 0x40,   ///< Wiadomoœæ ju¿ zosta³a otwarta. Teraz czeka w kolejce na usuniêcie. Flaga ta jest czyszczona podczas zamykania.     
+      flagHandled           = 0x40,   ///< Wiadomoœæ zosta³a w pe³ni obs³u¿ona i czeka na usuniêcie (to samo co flagOpened). Tyczy siê równie¿ wiadomoœci wysy³anych...
+      flagHandledByUI       = 0x80,   ///< Wiadomoœæ zostanie obs³u¿ona przez UI
+      flagAutomated         = 0x100,  ///< Wiadomoœæ zosta³a stworzona przez jakiœ "automatyczny" proces, wiêc, gdy jesteœmy ukryci, nie powinna byæ wysy³ana.
+      flagHTML              = 0x200,  ///< Treœæ wiadomoœci zawiera znaczniki HTML, a znaki specjalne s¹ kodowane (przynajmniej > = &gt; < = &lt; i " = &quot; Html powinien byæ sformatowany jak XHTML (<img/>, wszystkie atrybuty w "" itd..)
 
       /**
        * Interfejs obs³u¿y wyœwietlanie wiadomoœci w menu.
@@ -112,15 +112,15 @@ namespace Konnekt {
        * Wtyczka musi w #IM_MSG_RCV zadeklarowaæ obs³ugê wiadomoœci.
        */
       flagMenuByUI          = 0x400, 
-      flagLeaveAsIs         = 0x800, /**< Zabrania wtyczkom zmiany treœci, w tym wyœwietlania emotikon */
-      flagHide              = 0x1000, /**< Nie wyœwietla wiadomoœci w interfejsie (w tej chwili w oknie rozmowy) */
-      flagDontAddToHistory  = 0x2000, /**< Nie zapisuje w historii */
-      flagRemoved           = 0x4000, /**< Wiadomoœæ zosta³a usuniêta, ale jest jeszcze przetwarzana (i wtedy zostanie usuniêta definitywnie)*/
+      flagLeaveAsIs         = 0x800,    ///< Zabrania wtyczkom zmiany treœci, w tym wyœwietlania emotikon
+      flagHide              = 0x1000,   ///< Nie wyœwietla wiadomoœci w interfejsie (w tej chwili w oknie rozmowy)
+      flagDontAddToHistory  = 0x2000,   ///< Nie zapisuje w historii
+      flagRemoved           = 0x4000,   ///< Wiadomoœæ zosta³a usuniêta, ale jest jeszcze przetwarzana (i wtedy zostanie usuniêta definitywnie)
 
-      flagLoaded            = 0x8000, /**< Wiadomoœæ zosta³a za³adowana z pliku (po ponownym uruchomieniu aplikacji)*/
+      flagLoaded            = 0x8000,   ///< Wiadomoœæ zosta³a za³adowana z pliku (po ponownym uruchomieniu aplikacji)
 
-      flag_QE_Normal        = 0x10000, ///< MT_QUICKEVENT narysuje zwyk³¹ czcionk¹...
-      flag_QE_ShowTime      = 0x20000, ///< MT_QUICKEVENT poka¿e czas nadejœcia...
+      flag_QE_Normal        = 0x10000,  ///< MT_QUICKEVENT narysuje zwyk³¹ czcionk¹...
+      flag_QE_ShowTime      = 0x20000,  ///< MT_QUICKEVENT poka¿e czas nadejœcia...
     };
 
   public:
@@ -140,7 +140,8 @@ namespace Konnekt {
     }
 
     /** 
-     * Identyfikator wiadomoœci. \attention ustawiany przez "rdzeñ". 
+     * Identyfikator wiadomoœci. 
+     * @attention ustawiany przez "rdzeñ". 
      */
     unsigned int getId() const {
       return _id;              
@@ -216,10 +217,10 @@ namespace Konnekt {
     /** 
      * Informacje rozszerzone.
      * Zapisane jako 
-     * \code 
+     * @code 
      * #EXT_PARAM nazwa=wartoœæ #EXT_PARAM nazwa2=wartoœæ2
      * ...
-     * \endcode
+     * @endcode
      * patrz: getExtParam() / setExtParam() .
      */
     Stamina::String getExt(bool refresh = false) const {
@@ -394,7 +395,7 @@ namespace Konnekt {
        * Wtyczki odpytywane s¹ "od koñca". Ostatnia, która zwróci
        * IM_MSG_RCV_ok bêdzie otrzymywaæ równie¿ IM_MSG_OPEN.
        *
-       * @return (int) Po³¹czone flagi \ref im_msg_, lub 0 jeœli nie obs³uguje takich wiadomoœci.
+       * @return (int) Po³¹czone flagi @ref im_msg_, lub 0 jeœli nie obs³uguje takich wiadomoœci.
        */
       static const tIMid imReceiveMessage = IM_BASE + 100;
 
@@ -482,16 +483,16 @@ namespace Konnekt {
       return structSize() >= sizeof(*this);
     }
 
-    Message::enType type; ///< Typ wiadomoœci. Ustaw na -1 ¿eby u¿yæ wszystkich.
-    Message::enFlags wflag; ///< Tylko wiadomoœci posiadaj¹ce te flagi. 0 ¿eby u¿yæ wszystkich.
-    Message::enFlags woflag; ///< Tylko wiadomoœci nie posiadaj¹ce tych flag. 0 ¿eby u¿yæ wszystkich.
-    int id; ///< ID wiadomoœci, -1 ¿eby u¿yæ wszystkich.
-    unsigned int position; ///< Które z kolei przyj¹æ dopasowanie?
+    Message::enType type;     ///< Typ wiadomoœci. Ustaw na -1 ¿eby u¿yæ wszystkich.
+    Message::enFlags wflag;   ///< Tylko wiadomoœci posiadaj¹ce te flagi. 0 ¿eby u¿yæ wszystkich.
+    Message::enFlags woflag;  ///< Tylko wiadomoœci nie posiadaj¹ce tych flag. 0 ¿eby u¿yæ wszystkich.
+    int id;                   ///< ID wiadomoœci, -1 ¿eby u¿yæ wszystkich.
+    unsigned int position;    ///< Które z kolei przyj¹æ dopasowanie?
 
     MessageSelect(Net::tNet net = Net::broadcast, const char * uid = 0, Message::enType type = Message::typeAll, Message::enFlags wflag = Message::flagNone, Message::enFlags woflag = Message::flagNone) {
-      _s_size = sizeof(*this);
+      this->_s_size = sizeof(*this);
       this->net = net;
-      this->_chUid = uid;
+      this->_chUid = (char*) uid;
       this->_uid = uid;
       this->type = type;
       this->wflag = wflag;
@@ -553,10 +554,10 @@ namespace Konnekt {
    * Struktura do przekazywania informacji o stanie przesy³anych wiadomoœci.
    * Mo¿na ni¹ podawaæ jakie wyst¹pi³y problemy, lub co sta³o siê z wiadomoœci¹
    * po wys³aniu (np. czeka na serwerze, lub dosz³a do odbiorcy...)
-   * \attention \a id \b musi byæ ustawiony na numer potwierdzanej i \b istniej¹cej wiadomoœci.
+   * @attention @a id @b musi byæ ustawiony na numer potwierdzanej i @b istniej¹cej wiadomoœci.
    * W miêdzyczasie wiadomoœæ ta nie mo¿e byæ usuniêta przez inny w¹tek.
    *
-   * \sa \ref msg
+   * @sa @ref msg
    */
   class MessageAck {
   public:
@@ -587,7 +588,7 @@ namespace Konnekt {
     char * _chMsg; 
     char * _chExt; 
   public:
-    enFlags flag; ///< Flagi \ref mack_.
+    enFlags flag; ///< Flagi @ref mack_.
 
     unsigned int structSize() const {
       return _s_size;
@@ -731,7 +732,7 @@ namespace Konnekt {
       MessageNotify* notify;
       int param2;
 
-      IM(tIMid IMid, MessageNotify* notify, int param2 = 0):sIMessage_base(IMid, Net::core, imtCore), notify(notify), param2(param2) {
+      IM(tIMid IMid, MessageNotify* notify, int param2 = 0): sIMessage_base(IMid, Net::core, imtCore), notify(notify), param2(param2) {
         this->s_size = sizeof(*this);
       }
 
@@ -768,7 +769,7 @@ namespace Konnekt {
     virtual void zzPlaceHolder_iMsgHandler5() { }
   };
   
-  class MessageHandler: public Stamina::SharedObject< iMessageHandler > {
+  class MessageHandler: public Stamina::SharedObject<iMessageHandler> {
   public:
     bool registerHandler(enMessageQueue queue, Konnekt::enPluginPriority priority);
     bool unregisterHandler(enMessageQueue queue, Konnekt::enPluginPriority priority);
