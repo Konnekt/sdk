@@ -10,14 +10,16 @@
 
 namespace Konnekt {
 
-  /** @defgroup gr_msg Obs³uga wiadomoœci tekstowych.
-      @{
-      */
+  /** 
+   * @defgroup gr_msg Obs³uga wiadomoœci tekstowych.
+   * @{
+   */
 
   using Stamina::DT::tColId;
 
   /**
    * Struktura zosta³a ZAST¥PIONA przez #Message ! MessageOld jest binarnie zgodne z cMessage, ale nie powinno byæ u¿ywane
+   *
    * @obsolete
    */
   class MessageOld {
@@ -140,7 +142,8 @@ namespace Konnekt {
     }
 
     /** 
-     * Identyfikator wiadomoœci. 
+     * Identyfikator wiadomoœci.
+     *
      * @attention ustawiany przez "rdzeñ". 
      */
     unsigned int getId() const {
@@ -337,10 +340,10 @@ namespace Konnekt {
 
   public:
     /**
-      \defgroup mex_ Nazwy wartoœci w polach Message::getExtParam, MessageAck::getExtParam
-      \brief \no
-      @{
-    */
+     * @defgroup mex_ Nazwy wartoœci w polach Message::getExtParam, MessageAck::getExtParam
+     * @brief \no
+     * @{
+     */
 
     const static char* extAddInfo;
     const static char* extDisplay;
@@ -669,8 +672,10 @@ namespace Konnekt {
   // ------------------------------------------------------------------------------------------------
 
   /** @} */
-  /** @addtogroup imc_ 
-      @{*/
+  /** 
+   * @addtogroup imc_ 
+   * @{
+   */
 
   /** 
    * Szuka powiadomienia o nowej wiadomoœci dla danego UIDa w kolejce wiadomoœci.
@@ -754,25 +759,12 @@ namespace Konnekt {
   class iMessageHandler: public Stamina::iSharedObject {
   public:
     enum enMessageQueue {
-      mqReceive = 1,
-      mqOpen = 2,
-      mqSend = 4
+      mqReceiveSend = 1,
+      mqReceiveOpen = 2,
+      mqReceive = mqReceiveSend | mqReceiveOpen,
+      mqOpen = 4,
+      mqSend = 8
     };
-
-    virtual Message::enMessageResult handleMessage(Message& msg, enMessageQueue queue, Konnekt::enPluginPriority priority) = 0;
-    
-  private:
-    virtual void zzPlaceHolder_iMsgHandler1() { }
-    virtual void zzPlaceHolder_iMsgHandler2() { }
-    virtual void zzPlaceHolder_iMsgHandler3() { }
-    virtual void zzPlaceHolder_iMsgHandler4() { }
-    virtual void zzPlaceHolder_iMsgHandler5() { }
-  };
-  
-  class MessageHandler: public Stamina::SharedObject<iMessageHandler> {
-  public:
-    bool registerHandler(enMessageQueue queue, Konnekt::enPluginPriority priority);
-    bool unregisterHandler(enMessageQueue queue, Konnekt::enPluginPriority priority);
 
   public:
     /** 
@@ -781,10 +773,9 @@ namespace Konnekt {
     class IM: public sIMessage_base {
     public:
       iMessageHandler* handler;
-      enMessageQueue queue;
-      Konnekt::enPluginPriority priority;
+      enPluginPriority priority;
 
-      IM(tIMid IMid, iMessageHandler* handler, enMessageQueue queue, Konnekt::enPluginPriority priority): sIMessage_base(IMid, Net::core, imtCore), queue(queue), priority(priority) {
+      IM(tIMid IMid, iMessageHandler* handler, enPluginPriority priority): sIMessage_base(IMid, Net::core, imtCore), priority(priority) {
         this->s_size = sizeof(*this);
       }
 
@@ -792,9 +783,39 @@ namespace Konnekt {
       static const tIMCid imcRegisterMessageHandler = 109;
       static const tIMCid imcUnregisterMessageHandler = 110;
     };
+
+  public:
+    virtual tMsgResult handleMessage(Message* msg, enMessageQueue queue, enPluginPriority priority) = 0;
+    virtual bool handlingMessage(enMessageQueue queue, Message* msg) = 0;
+
+  private:
+    virtual void zzPlaceHolder_iMsgHandler1() { }
+    virtual void zzPlaceHolder_iMsgHandler2() { }
+    virtual void zzPlaceHolder_iMsgHandler3() { }
+    virtual void zzPlaceHolder_iMsgHandler4() { }
+    virtual void zzPlaceHolder_iMsgHandler5() { }
   };
 
+  class MessageHandler: public Stamina::SharedObject<iMessageHandler> {
+  public:
+    MessageHandler(enMessageQueue queue, tNet net = Net::all): _queue(queue), _net(net) { }
+
+  public:
+    bool registerHandler(enPluginPriority priority);
+    bool unregisterHandler(enPluginPriority priority);
+
+  public:
+    virtual bool handlingMessage(enMessageQueue queue, Message* msg);
+
+  protected:
+    enMessageQueue _queue;
+    tNet _net;
+  };
+
+  typedef Stamina::SharedPtr<iMessageHandler> oMessageHandler;
+
+  // STAMINA_REGISTER_CLASS_VERSION(MessageHandler);
   // STAMINA_REGISTER_CLASS_VERSION(Message);
 };
 
-/**@}*/
+/** @} */

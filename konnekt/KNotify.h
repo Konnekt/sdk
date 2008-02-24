@@ -12,13 +12,14 @@
  * // Poka¿e komunikat b³êdu...
  * Ctrl->IMessage(&KNotify::sIMessage_notify("B³¹d!", 0, KNotify::sIMessage_notify::tError));
  * // Poka¿e komunikat z ikonk¹ - Logo sieci GG...
- * Ctrl->IMessage(&KNotify::sIMessage_notify("Hello!", UIIcon(IT_LOGO, NET_GG, 0, 0)));
+ * Ctrl->IMessage(&KNotify::sIMessage_notify("Hello!", UIIcon(IT_LOGO, Net::gg, 0, 0)));
  * // Aby w³¹czyæ mo¿liwoœæ klikania, trzeba to uruchomiæ poza konstruktorem
- * KNotify::sIMessage_notify notify("Hello!", UIIcon(IT_LOGO, NET_GG, 0, 0));
- * notify._action = sUIAction(  ); // Oczywiœcie trzeba podaæ identyfikatory akcji
+ * KNotify::sIMessage_notify notify("Hello!", UIIcon(IT_LOGO, Net::gg, 0, 0));
+ * notify._action = sUIAction( ); // Oczywiœcie trzeba podaæ identyfikatory akcji
  * notify._actionParam = 1; // Akcja otrzyma sUIActionNotify_2params::notify1 == 1
  * Ctrl->IMessage(&notify);
  * @endcode
+ *
  * @{
  */
 
@@ -66,7 +67,9 @@ namespace KNotify {
     const int showdescrconn = 774133;
   }
 
-  // API zewnêtrzne
+  /**
+   * --- API zewnêtrzne ---
+   */
 
   /**
    * Komunikaty przyjmowane przez wtyczkê 
@@ -135,7 +138,7 @@ namespace KNotify {
      * Przesy³a wiadomoœæ z identyfikatorem ikonki 
      */
     sIMessage_notify(const char * text, unsigned int icoID, const unsigned char msgType = tInform, unsigned char timeToLive = 1)
-      : sIMessage_base(IM::show, (tNet) KNotify::net, (enIMessageType) -1) 
+      : sIMessage_base(IM::show, (tNet) KNotify::net, imtAll) 
       , _text(text), _icoType(itIcoID), _icoID(icoID), _msgType(msgType), _timeToLive(timeToLive), _actionParam(0), _clickable(0) 
     {
       s_size = sizeof(sIMessage_notify);
@@ -145,7 +148,7 @@ namespace KNotify {
      * Przesy³a wiadomoœæ z uchwytem do ikonki 
      */
     sIMessage_notify(const char * text, HICON ico, const unsigned char msgType = tInform, unsigned char timeToLive = 1)
-      : sIMessage_base(IM::show, (tNet) KNotify::net, (enIMessageType) -1) 
+      : sIMessage_base(IM::show, (tNet) KNotify::net, imtAll) 
       , _text(text), _icoType(itHICON), _msgType(msgType), _timeToLive(timeToLive), _actionParam(0), _clickable(0) 
     {
       s_size = sizeof(sIMessage_notify);
@@ -156,7 +159,7 @@ namespace KNotify {
      * Przesy³a wiadomoœæ jako tInform 
      */
     sIMessage_notify(const char * text)
-      : sIMessage_base(IM::show, (tNet) KNotify::net, (enIMessageType) -1) 
+      : sIMessage_base(IM::show, (tNet) KNotify::net, imtAll) 
       , _text(text), _icoType(0), _icoID(0), _msgType(tInform), _timeToLive(1), _actionParam(0), _clickable(0)
     {
       s_size = sizeof(sIMessage_notify);

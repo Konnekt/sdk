@@ -189,7 +189,7 @@ namespace Konnekt {
   }
 
   bool MessageSelect::getMessage(Message& msg) {
-    MessageSelect::IM im (MessageSelect::IM::imcMessageGet, this, (int)&msg);
+    MessageSelect::IM im (MessageSelect::IM::imcMessageGet, this, (int) &msg);
     return Ctrl->IMessage(&im) != 0;
   }
 
@@ -212,12 +212,16 @@ namespace Konnekt {
 
   // -- MessageHandler
 
-  bool MessageHandler::registerHandler(enMessageQueue queue, Konnekt::enPluginPriority priority) {
-    MessageHandler::IM im (MessageHandler::IM::imcRegisterMessageHandler, this, queue, priority);
+  bool MessageHandler::registerHandler(enPluginPriority priority) {
+    MessageHandler::IM im (MessageHandler::IM::imcRegisterMessageHandler, this, priority);
     return Ctrl->IMessage(&im) != 0;
   }
-  bool MessageHandler::unregisterHandler(enMessageQueue queue, Konnekt::enPluginPriority priority) {
-    MessageHandler::IM im (MessageHandler::IM::imcUnregisterMessageHandler, this, queue, priority);
+  bool MessageHandler::unregisterHandler(enPluginPriority priority) {
+    MessageHandler::IM im (MessageHandler::IM::imcUnregisterMessageHandler, this, priority);
     return Ctrl->IMessage(&im) != 0;
+  }
+
+  bool MessageHandler::handlingMessage(enMessageQueue queue, Message* msg) {
+    return (_queue & queue) && (_net == Net::all || _net == msg->getNet());
   }
 }

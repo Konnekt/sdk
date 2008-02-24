@@ -7,31 +7,27 @@
  * bezpoœrednio do wtyczki komunikatem #IM_MSG_SEND wiadomoœæ:
  *
  * @code
- * cMessage m;
- * m.net = Sms::net;
- * m.type = MT_SMS;
- * m.fromUid = "";
- * m.body = "TREŒÆ WIADOMOŒCI";
- * m.toUid = "DOCELOWY NUMER";
- * m.flag = MF_SEND;
- * m.time = _time64(0);
- * std::string ext;
+ * Message msg;
+ * msg.setNet(Net::sms);
+ * msg.setType(Message::typeSMS);
+ * msg.setBody("TREŒÆ WIADOMOŒCI");
+ * msg.setToUid("DOCELOWY NUMER");
+ * msg.setOneFlag(Message::flagSend, true);
+ * msg.setTime(_time64(0));
  * // W EXT ustawiamy parametry wysy³ania:
- * ext = SetExtParam(ext, Sms::extFrom, "PODPIS WYSY£AJ¥CEGO");  // nie zawsze wymagany
- * ext = SetExtParam(ext, Sms::extGate, "IDENTYFIKATOR BRAMKI"); // wymagany!
+ * msg.setExtParam(Sms::extFrom, "PODPIS WYSY£AJ¥CEGO");  // nie zawsze wymagany
+ * msg.setExtParam(Sms::extGate, "IDENTYFIKATOR BRAMKI"); // wymagany!
  * // Je¿eli NIE chcemy, ¿eby wtyczka SMS dzieli³a wiadomoœæ, ustawiamy parametr extPart...
- * // ext = SetExtParam(ext, Sms::extPart, "0");
- * 
- * m.ext = (char*) ext.c_str();
+ * // msg.setExtParam(Sms::extPart, "0");
  * @endcode
  */
 
 namespace Sms {
   const int net = NET_SMS;
-  const char * extFrom = "SMSfrom";
-  const char * extGate = "SMSgate";
-  const char * extWindowID = "SMSwinID";
-  const char * extPart = "SMSpart";
+  const char extFrom[] = "SMSfrom";
+  const char extGate[] = "SMSgate";
+  const char extWindowID[] = "SMSwinID";
+  const char extPart[] = "SMSpart";
 
   namespace IM {
     /** 
