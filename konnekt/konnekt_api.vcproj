@@ -154,6 +154,10 @@
 			Filter="cpp;c;cxx;def;odl;idl;hpj;bat;asm"
 			>
 			<File
+				RelativePath=".\core_contact.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\core_ctrl.cpp"
 				>
 			</File>
@@ -192,6 +196,10 @@
 			>
 			<File
 				RelativePath=".\core_assert.h"
+				>
+			</File>
+			<File
+				RelativePath=".\core_contact.h"
 				>
 			</File>
 			<File
