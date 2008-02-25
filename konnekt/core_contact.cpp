@@ -34,34 +34,34 @@ namespace Konnekt {
   }
 
   bool Contact::inGroup(const StringRef& name) const {
-    return Ctrl->ICMessage(IMC_CNT_INGROUP, getID(), (int) name.a_str()) == 1;
+    return (bool) Ctrl->ICMessage(IMC_CNT_INGROUP, getID(), (int) name.a_str());
   }
 
   bool Contact::inActiveGroup() const {
-    return Ctrl->ICMessage(IMC_CNT_INGROUP, getID()) == 1;
+    return (bool) Ctrl->ICMessage(IMC_CNT_INGROUP, getID());
   }
 
   bool Contact::remove(bool ask_user) {
-    return Ctrl->ICMessage(IMC_CNT_REMOVE, getID(), ask_user) == 1;
+    return (bool) Ctrl->ICMessage(IMC_CNT_REMOVE, getID(), ask_user);
   }
 
   bool Contact::isIgnored() const {
-    return Ctrl->ICMessage(IMC_CNT_IGNORED, getNet(), (int) getUid().a_str()) == 1;
+    return (bool) Ctrl->ICMessage(IMC_CNT_IGNORED, getNet(), (int) getUid().a_str());
   }
 
   bool Contact::exists() const {
     if (getID() == cntNotExist) {
       return false;
     }
-    return Ctrl->ICMessage(IMC_CNT_IDEXISTS, getID()) == 1;
+    return (bool) Ctrl->ICMessage(IMC_CNT_IDEXISTS, getID());
   }
 
   void Contact::changed() {
     Ctrl->ICMessage(IMC_CNT_CHANGED, getID());
   }
 
-  void Contact::ignore() {
-    Ctrl->ICMessage(IMC_IGN_ADD, getNet(), (int) getUid().a_str());
+  bool Contact::ignore() {
+    return (bool) Ctrl->ICMessage(IMC_IGN_ADD, getNet(), (int) getUid().a_str());
   }
 
   void Contact::unignore() {

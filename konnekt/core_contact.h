@@ -159,7 +159,7 @@ namespace Konnekt {
     bool exists() const;
 
     bool isIgnored() const;
-    void ignore();
+    bool ignore();
     void unignore();
 
     bool remove(bool ask_user);
