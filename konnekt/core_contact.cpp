@@ -9,11 +9,11 @@
 namespace Konnekt {
   Contact Contact::create(tNet net, const StringRef& uid) {
     tCntId id = (tCntId) Ctrl->ICMessage(IMC_CNT_ADD, net, (int) uid.a_str());
-    /*
-    if (id == cntNotExist) {
-      throw ExceptionString("Contact already exist");
+
+    if (id == -1) {
+      throw ExceptionString("Contact already exists");
     }
-    */
+
     Contact cnt(id);
     cnt.changed();
 
@@ -22,16 +22,15 @@ namespace Konnekt {
 
   Contact Contact::find(tNet net, const StringRef& uid) {
     tCntId id = (tCntId) Ctrl->ICMessage(IMC_FINDCONTACT, net, (int) uid.a_str());
-    /*
+
     if (id == cntNotExist) {
       throw ExceptionString("Contact does not exist");
     }
-    */
     return id;
   }
 
   bool Contact::exists(tNet net, const StringRef& uid) {
-    return Ctrl->ICMessage(IMC_FINDCONTACT, net, (int) uid.a_str()) > 0;
+    return Ctrl->ICMessage(IMC_FINDCONTACT, net, (int) uid.a_str()) != cntNotExist;
   }
 
   bool Contact::inGroup(const StringRef& name) const {

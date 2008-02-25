@@ -19,9 +19,6 @@ namespace Konnekt {
     };
 
   public:
-    Contact(tNet net, const StringRef& uid) : _cntId(cntNotExist) {
-      *this = find(net, uid);
-    }
     Contact(tCntId cntId) : _cntId(cntId) { }
 
   public:
@@ -135,25 +132,25 @@ namespace Konnekt {
     }
 
   public:
-    inline String getString(tColId colId) const {
-      return Tables::oTable(Tables::tableContacts)->getString(_cntId, colId);
+    inline String getString(tColId col) const {
+      return Tables::oTable(Tables::tableContacts)->getString(getID(), col);
     }
-    inline void setString(tColId colId, const StringRef& value) {
-      Tables::oTable(Tables::tableContacts)->setString(_cntId, colId, value);
-    }
-
-    inline int getInt(tColId colId) const {
-      return Tables::oTable(Tables::tableContacts)->getInt(_cntId, colId);
-    }
-    inline void setInt(tColId colId, int value) {
-      Tables::oTable(Tables::tableContacts)->setInt(_cntId, colId, value);
+    inline void setString(tColId col, const StringRef& value) {
+      Tables::oTable(Tables::tableContacts)->setString(getID(), col, value);
     }
 
-    inline __int64 getInt64(tColId colId) const {
-      return Tables::oTable(Tables::tableContacts)->getInt64(_cntId, colId);
+    inline int getInt(tColId col) const {
+      return Tables::oTable(Tables::tableContacts)->getInt(getID(), col);
     }
-    inline void setInt64(tColId colId, __int64 value) {
-      Tables::oTable(Tables::tableContacts)->setInt64(_cntId, colId, value);
+    inline void setInt(tColId col, int value) {
+      Tables::oTable(Tables::tableContacts)->setInt(getID(), col, value);
+    }
+
+    inline __int64 getInt64(tColId col) const {
+      return Tables::oTable(Tables::tableContacts)->getInt64(getID(), col);
+    }
+    inline void setInt64(tColId col, __int64 value) {
+      Tables::oTable(Tables::tableContacts)->setInt64(getID(), col, value);
     }
 
   public:
