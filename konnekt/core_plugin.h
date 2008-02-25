@@ -163,7 +163,7 @@ namespace Konnekt {
      * @param unload Typ wypiêcia - enPlugOutUnload
      *
      * @return Zwraca true je¿eli operacja siê powiod³a... W przypadku poUnloadNowAndOnNextStart zwraca false, 
-     * je¿li wtyczka nie mog³a byæ wypiêta natychmiast, ale nie zostanie ona za³adowana przy nastêpnym uruchomieniu.
+     * je¿eli wtyczka nie mog³a byæ wypiêta natychmiast, ale nie zostanie ona za³adowana przy nastêpnym uruchomieniu.
      * @sa enPlugOutUnload, HotPlug
      */
     virtual bool plugOut(Controler* sender, const Stamina::StringRef& reason, bool quiet, enPlugOutUnload unload) = 0;
@@ -208,7 +208,7 @@ namespace Konnekt {
      * Przyk³ad 2 (wersja z obiektem)
      * @code
      *   class Subclass {
-     *     public:
+     *   public:
      *     Subclass(const oPlugin& plugin) {
      *       _proc = newProc;
      *       _object = this;
@@ -216,7 +216,7 @@ namespace Konnekt {
      *       S_ASSERT(ret);
      *     }
      * 
-     *     private:
+     *   private:
      *     void* _proc;
      *     void* _object;
      * 
@@ -226,7 +226,8 @@ namespace Konnekt {
      *         ....
      *       }
      *       return iPlugin::callIMessageProc(msg, _proc, _object);
-     *   }
+     *     }
+     *   };
      * 
      *   void subclassUI() {
      *     new Subclass(Ctrl->getPlugin(pluginUI));
@@ -266,7 +267,7 @@ namespace Konnekt {
       if (object == 0) {
         return ((fIMessageProc) imessageProc)(im);
       } else {
-        typedef int (__stdcall*fIMessageProcObject)(void*, sIMessage_base * msg);
+        typedef int (__stdcall *fIMessageProcObject)(void*, sIMessage_base * msg);
         return ((fIMessageProcObject) imessageProc)(object, im);
       }
     }
