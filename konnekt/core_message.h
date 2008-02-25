@@ -775,7 +775,7 @@ namespace Konnekt {
       iMessageHandler* handler;
       enPluginPriority priority;
 
-      IM(tIMid IMid, iMessageHandler* handler, enPluginPriority priority): sIMessage_base(IMid, Net::core, imtCore), priority(priority) {
+      IM(tIMid IMid, iMessageHandler* handler, enPluginPriority priority): sIMessage_base(IMid, Net::core, imtCore), handler(handler), priority(priority) {
         this->s_size = sizeof(*this);
       }
 
