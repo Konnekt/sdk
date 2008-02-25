@@ -46,15 +46,11 @@ namespace plugsNET {
   const int gadacz = 78;
   const int irc = 80;
   const int checky = 82;
-  const int linkerold = 109; ///< stara wersja
   const int sprzataczk = 115;
   const int metak = 116;
   const int temacik = 123;
   const int ktransfer = 130;
   const int emnotifier = 135;
-  const int olewkold = 136; ///< stara wersja
-  const int knotesold = 137; ///< stara wersja
-  const int kpaletaold = 138; ///< stara wersja
   const int kbirth = 139;
   const int kjabber1 = 171;
   const int kjabber2 = 172;
@@ -85,7 +81,6 @@ namespace plugsNET {
   const int kplus = 728;
   const int kbot = 771;
   const int kboard = 772;
-  const int kstatus = 773; ///< wczesniejsza edycja K.Notify
   const int knotify = 774;
   const int mejlik = 775;
   const int ggcrypt = 777;
@@ -97,5 +92,4 @@ namespace plugsNET {
   const int ggimage = 1331;
   const int knotes = 1337;
   const int kpaleta = 1338;
-  const int kpilotold = 15000; ///< stara wersja
 }

@@ -23,7 +23,7 @@
  */
 
 namespace Sms {
-  const int net = NET_SMS;
+  const int net = Net::sms;
   const char extFrom[] = "SMSfrom";
   const char extGate[] = "SMSgate";
   const char extWindowID[] = "SMSwinID";

@@ -85,7 +85,7 @@ namespace Konnekt {
 
       typeSpecial         = 12,     ///< Nieokreslona wiadomosc.
       typeSpecial_NOL     = (13 | typeMask_NotOnList),   ///< Nieokreslona wiadomosc spoza listy.
-      typeImage           = 15,     ///< Obraz, sciezka do pliku w cMessage::ext - #MEX_FILE_PATH
+      typeImage           = 15,     ///< Obraz, sciezka do pliku w Message::ext - #Message::extFile_Path
       typeBoard           = 16
     };
 
@@ -402,23 +402,22 @@ namespace Konnekt {
        */
       static const tIMid imReceiveMessage = IM_BASE + 100;
 
-       /** 
-        * Wiadomoœæ powinna zostaæ wys³ana (MessageIM*).
-        *
-        * @return Jeœli siê uda³o powinno zróciæ enMessageResult.
-        */
-       static const tIMid imSendMessage = IM_SHARE + 100;
-       
-       /** 
-        * Wiadomoœæ powinna zostaæ otwarta (MessageIM*).
-        *
-        * @return Jeœli siê uda³o powinno zróciæ enMessageResult.
-        */
-       static const tIMid imOpenMessage = IM_SHARE + 101;
+      /** 
+       * Wiadomoœæ powinna zostaæ wys³ana (MessageIM*).
+       *
+       * @return Jeœli siê uda³o powinno zróciæ enMessageResult.
+       */
+      static const tIMid imSendMessage = IM_SHARE + 100;
+
+      /** 
+       * Wiadomoœæ powinna zostaæ otwarta (MessageIM*).
+       *
+       * @return Jeœli siê uda³o powinno zróciæ enMessageResult.
+       */
+      static const tIMid imOpenMessage = IM_SHARE + 101;
     };
 
   public:
-    // Msg
     const static tColId colId            = (unsigned int) 0; ///< #DT_CT_INT ID.
     const static tColId colNet           = 1;   ///< #DT_CT_INT Sieæ.
     const static tColId colType          = 2;   ///< #DT_CT_INT Typ.
