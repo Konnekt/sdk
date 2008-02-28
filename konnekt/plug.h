@@ -1413,7 +1413,7 @@ Obs³uguje komunikaty WM_KEYDOWN i WM_SYSKEYDOWN
 
 // ------------------------------------------------------------------------------------------------
   /**
-    \defgroup imig_ idnetyfikatory Grup i Akcji
+    \defgroup imig_ Identyfikatory Grup i Akcji
     \brief \no
     \{
   */

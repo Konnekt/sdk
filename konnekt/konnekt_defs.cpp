@@ -23,11 +23,7 @@ using Stamina::DT::OldValue;
 
 using namespace Konnekt;
 
-/**
- * ___________________________________________________
- * plug_export.h
- * ---------------------------------------------------
- */
+
 extern "C" __declspec(dllexport) void __stdcall KonnektApiVersions(fApiVersionCompare cmp) {
   using namespace Stamina;
 
@@ -368,6 +364,7 @@ void UIActionCfgAddInfoBox(unsigned int parent, const char * title, const char *
   }
   UIActionAdd(parent, 0, ACTT_GROUPEND);
 }
+
 void UIActionCfgAddInfoBox(unsigned int parent, const char * title, const char * info, unsigned int ico, int height, int icoSize) {
   char buff[32] = {0};
   sprintf_s<32>(buff, "reg://IML%i/%i.ico", icoSize, ico);
@@ -402,6 +399,7 @@ void UIActionCfgAddPluginInfoBox(unsigned int parent, const char * info, const c
   } 
   UIActionAdd(parent, 0, ACTT_GROUPEND);
 }
+
 void UIActionCfgAddPluginInfoBox2(unsigned int parent, const char * info, const char * about_info, const char * ico, int height, const char * name, bool frame) {
   if (frame) {
     UIActionAdd(parent, 0, ACTT_GROUP,  "");

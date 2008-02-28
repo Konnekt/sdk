@@ -60,7 +60,7 @@ namespace Konnekt {
     /**  
      * Typy wiadomoœci tekstowych
      *
-     * Do typu wiadomoœci mo¿na dodaæ bit #MT_MASK_NOTONLIST oznaczaj¹c tym samym, 
+     * Do typu wiadomoœci mo¿na dodaæ bit #typeMask_NotOnList oznaczaj¹c tym samym, 
      * ¿e wiadomoœæ nie jest zwi¹zana z list¹ kontaktów.
      * Czêœæ typów ma ten bit ustawiony domyœlnie...
      */
@@ -568,7 +568,7 @@ namespace Konnekt {
       flagProcessing = 0x2, ///< W trakcie przetwarzania
 
       /**
-       * Ack nie zostanie rozes³ane do wtyczek #IMT_MESSAGEACK.
+       * Ack nie zostanie rozes³ane do wtyczek #imtMessageAck.
        * Przydatne, jeœli chcemy tylko zmieniæ informacjê pokazywan¹ w oknie kolejki.
        */
       flagNoBroadcast = 0x100, 

@@ -173,8 +173,8 @@ namespace Konnekt {
      * Subclassowanie pozwala na przechwytywanie komunikatów zanim dotr¹ do docelowej wtyczki. 
      * Technika mo¿e byæ przydatna przy obchodzeniu pewnych ograniczeñ w API, ale @b nie powinna byæ nadu¿ywana!
      * 
-     * @param proc WskaŸnik do nowej f-cji obs³uguj¹cej. Przekazanie 0 spowoduje tylko zwrócenie aktualnych wskaŸników
-     * @param proc WskaŸnik do obiektu dla którego ta f-cja ma byæ wywo³ywana, lub 0
+     * @param proc   WskaŸnik do nowej f-cji obs³uguj¹cej. Przekazanie 0 spowoduje tylko zwrócenie aktualnych wskaŸników
+     * @param object WskaŸnik do obiektu dla którego ta f-cja ma byæ wywo³ywana, lub 0
      * 
      * @return Zwraca true je¿eli operacja siê powiod³a. W zmiennych proc i object znajduj¹ siê poprzednio ustawione dla wtyczki wartoœci.
      * 

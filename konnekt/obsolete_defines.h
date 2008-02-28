@@ -123,7 +123,7 @@ typedef unsigned int tIMtype;
  */
 #define IMT_NETUID      Konnekt::imtNetUID
 /**
- * Otrzyma w IM_MSG_RCV wszystkie wiadomoùci, niezale¨nie od @ref net_ "NET".
+ * Otrzyma w IM_MSG_RCV wszystkie wiadomoúci, niezaleønie od @ref net_ "NET".
  */
 #define IMT_ALLMESSAGES Konnekt::imtAllMessages
 /**
