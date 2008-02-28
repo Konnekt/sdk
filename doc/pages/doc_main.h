@@ -16,8 +16,8 @@
 
         <h3>Co? gdzie? jak?</h3>
          - Zacznij przegl¹danie dokumentacji od \ref develop. Przeczytaj to uwa¿nie i w @b ca³oœci!
-		 - <a href=pages.html>"Dodatkowe strony"</a> to dodatkowe dokumenty, które mog¹ okazaæ siê pomocne...
-         - Nastêpnie przejrzyj <a href=modules.html>"Modu³y"</a>. To w nich pogrupowane
+		     - <a href="pages.html">"Dodatkowe strony"</a> to dodatkowe dokumenty, które mog¹ okazaæ siê pomocne...
+         - Nastêpnie przejrzyj <a href="modules.html">"Modu³y"</a>. To w nich pogrupowane
            s¹ referencje plików nag³ówkowych... Ka¿dy modu³ opatrzony jest krótkim
            komentarzem, który powinien pomóc rozeznaæ siê o co chodzi...
          - \ref gr_examples powinny pomóc w rozszyfrowaniu zawartoœci dokumentacji...
@@ -56,11 +56,10 @@
 
         \section licencja Licencja
 
-        (c)2003 Stamina<br><Br>
+        &copy; 2002-2008 Stamina\n\n
         SDK s³u¿y do przygotowywania oprogramowania wspó³pracuj¹cego
         z programem Konnekt. Grupa Stamina nie ponosi odpowiedzialnoœci
-        za wykorzystanie tego kodu. <br>
-
+        za wykorzystanie tego kodu.
         </p>
 */
 
@@ -70,9 +69,9 @@
 /**\page team Autor
 
 		Dok³adne informacje o tym, kto przyczyni³ siê do projektu znajdziesz tutaj:
-		http://www.konnekt.info/kweb/open.php?inc=site/projekt
+		http://www.konnekt.info/projekt.html
 
-        &copy; 2003 Rafa³ "HAO" Lindemann  ,  <b><a href=http://www.stamina.eu.org/>Stamina</a></b><br>
+        &copy; 2002-2008 Rafa³ "HAO" Lindemann, <b><a href="http://www.stamina.pl/">Stamina</a></b>\n
         kontakt : hao@konnekt.info
         <br><br>
         Dziêkujê wszystkim beta-testerom za wsparcie!
@@ -88,7 +87,7 @@
 // --------------------------------------------------------------------------------------------
 /**\page beta Beta testing
   W tej chwili ca³y projekt jest w wersji BETA. Najœwie¿sze informacje znajdziesz na stronie domowej
-  projektu - http://www.konnekt.info
+  projektu - http://www.konnekt.info/
 */
 
 // --------------------------------------------------------------------------------------------
@@ -156,7 +155,7 @@
   
   <h3>Obs³uga podstawowych komunikatów</h3>
    - #IM_PLUG_TYPE  
-	   zwracaj¹c po³¹czenie co najmniej: #IMT_MESSAGE | #IMT_PROTOCOL | #IMT_CONTACT | # IMT_NET | #IMT_MESSAGEACK | #IMT_NETUID
+	   zwracaj¹c po³¹czenie co najmniej: #IMT_MESSAGE | #IMT_PROTOCOL | #IMT_CONTACT | #IMT_NET | #IMT_MESSAGEACK | #IMT_NETUID
 	   Je¿eli wtyczka ma obs³ugiwaæ wyszukiwanie kontaktów trzeba te¿ dodaæ: #IMT_NETSEARCH
    - #IM_PLUG_NETNAME zwracaj¹c nazwê sieci
    - #IM_PLUG_PRIORITY wszystkie istniej¹ce wtyczki sieciowe zwracaj¹ PLUGP_LOW, nie nale¿y siê wiêc wy³amywaæ...
