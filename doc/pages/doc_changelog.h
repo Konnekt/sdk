@@ -165,7 +165,7 @@
  * @section chg_021004 2002-10-30 - v0.6.15.x
  *   @attention Wtyczki które maj¹ wspó³pracowaæ z wersj¹ 0.6.15 i wy¿ej MUSZ¥ byæ skompilowane z tym SDK!
  * 
- *   <h3>Co zmieniæ w kodzie?</h3>
+ *   @subsection what_to_change Co zmieniæ w kodzie?
  *   Przede wszystkim kompilowaæ wtyczki z do³¹czonymi Ÿród³ami z plug_defs.cpp.
  * 
  *   @change_from
@@ -229,7 +229,7 @@
  * 
  *   Ca³oœæ skompilowaæ z nowymi nag³ówkami i gotowe!
  * 
- *   <h3>Zmiany:</h3>
+ *   @subsection changes Zmiany:
  * 
  *   - cia³a wszystkich f-cji u¿ywanych w nag³ówkach zosta³y przeniesione do osobnego .cpp
  *     którego trzeba skompilowaæ razem z wtyczk¹ (lub skompilowaæ sobie osobno jako .lib).

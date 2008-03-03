@@ -10,6 +10,5 @@ namespace Konnekt {
       return obsolete;
     }
   }
-
   void setObsoleteString(const Stamina::StringRef& value, Stamina::String& modern, char*& obsolete, bool useModern);
 }

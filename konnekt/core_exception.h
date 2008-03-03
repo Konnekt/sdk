@@ -1,13 +1,23 @@
 #pragma once
 
-class cKException {
+#include <Stamina/Exception.h>
+#include "core_imessage.h"
+
+class KException : public Stamina::ExceptionString {
 public:
-  const char * info;
-  cKException(const char * info): info(info) { }
+  KException(const Stamina::StringRef& reason = ""): ExceptionString(reason) { }
 };
 
-class cKException_Msg: public cKException {
+class KException_IM: public KException {
 public:
-  const struct sIMessage_base * msg;
-  cKException_Msg(const char * info, const sIMessage_base * msg): cKException(info), msg(msg) { }
+  KException_IM(const Stamina::StringRef& reason, const sIMessage_base * im): KException(reason), _im(im) { }
+  KException_IM(const sIMessage_base * im): _im(im) { }
+
+public:
+  const sIMessage_base * getIM() const {
+    return _im;
+  }
+
+private:
+  const sIMessage_base * _im;
 };

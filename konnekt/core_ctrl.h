@@ -35,7 +35,7 @@ namespace Konnekt {
     virtual bool __stdcall isRunning() = 0;
     /**
      * Wysy³a wiadomoœæ do wtyczek.
-     * Aby przes³aæ wiadomoœæ do rdzenia lub ui jako @i net i @i type trzeba podaæ 0
+     * Aby przes³aæ wiadomoœæ do rdzenia lub ui jako @e net i @e type trzeba podaæ 0
      *
      * @param msg Wiadomoœæ do przes³ania
      * @sa im_ net_ imt_
@@ -60,8 +60,9 @@ namespace Konnekt {
     virtual int __stdcall DTgetOld(tTable db, unsigned int row, unsigned int col) = 0;
     virtual int __stdcall DTsetOld(tTable db, unsigned int row, unsigned int col, int val, int mask = 0) = 0;
     /** 
-     * Pobieta typ kolumny @a id.
+     * Pobiera typ kolumny @a id.
      *
+     * @param db Tablica w której siedzi kolumna
      * @param id Identyfikator kolumny
      *
      * @return typ kolumny
@@ -69,17 +70,17 @@ namespace Konnekt {
      */
     virtual int __stdcall DTgetType(tTable db, unsigned int id) = 0;
     /** 
-     * Pobieta iloœæ wierszy w tablicy.
+     * Pobiera iloœæ wierszy w tablicy.
      *
-     * @param db Identyfikator tablicy
+     * @param db Tablica której wiersze ma policzyæ
      * @sa @ref cfg dt_ct_
      */
     virtual int __stdcall DTgetCount(tTable db) = 0;
     /** 
-     * Pobieta identyfikator kolumny o podanej nazwie.
+     * Pobiera identyfikator kolumny o podanej nazwie.
      *
-     * @param db Identyfikator tablicy
-     * @param name nazwa kolumny
+     * @param db Tablica w której siedzi kolumna
+     * @param name Nazwa kolumny
      * @sa @ref cfg dt_ct_
      */
     virtual int __stdcall DTgetNameID(tTable db, const char * name) = 0;
@@ -267,14 +268,14 @@ namespace Konnekt {
      * kontrolowanych w¹tków (które zostan¹ np. zatrzymane w chwili wyst¹pienia b³êdu krytycznego).
      *
      * @warning Musi byæ wywo³ane Z poziomu w¹tku!
-     * @notice Funkcja ta wywo³ywana jest automatycznie zaraz po utworzeniu w¹tku.
+     * @note Funkcja ta wywo³ywana jest automatycznie zaraz po utworzeniu w¹tku.
      */
     virtual void __stdcall onThreadStart(const char* name = 0) = 0;
     /** 
      * Zwalnia bufory tymczasowe i usuwa z listy kontrolowanych w¹tków.
      *
      * @warning Musi byæ wywo³ane Z poziomu w¹tku!
-     * @notice Funkcja ta wywo³ywana jest automatycznie zaraz przed zakoñczeniem w¹tku.
+     * @note Funkcja ta wywo³ywana jest automatycznie zaraz przed zakoñczeniem w¹tku.
      */
     virtual void __stdcall onThreadEnd() = 0;
 
@@ -323,7 +324,7 @@ namespace Konnekt {
 
 
     /** 
-     * Zapisuje sfromatowan¹ informacjê do pliku konnekt.log (i ew. wyœwietla j¹ w oknie @Dev)
+     * Zapisuje sfromatowan¹ informacjê do pliku konnekt.log (i ew. wyœwietla j¹ w oknie \@Dev)
      */
     void IMLOG(const char *format, ...);
     /** 

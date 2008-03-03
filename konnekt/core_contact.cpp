@@ -13,11 +13,12 @@ namespace Konnekt {
     if (id == -1) {
       throw ExceptionString("Contact already exists");
     }
-
-    Contact cnt(id);
-    cnt.changed();
-
-    return cnt;
+    // mark as changed
+    {
+      Contact cnt(id);
+      cnt.changed();
+    }
+    return id;
   }
 
   Contact Contact::find(tNet net, const StringRef& uid) {

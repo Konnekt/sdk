@@ -12,10 +12,12 @@ namespace Konnekt {
       modern = value;
       obsolete = (char*) modern.a_str();
     } else {
+      // pobiera rozmiar
+      int size = value.getDataSize<char>();
       // alokuje miejsce
-      obsolete = (char*) Ctrl->GetTempBuffer(value.getDataSize<char>() + 1);
+      obsolete = (char*) Ctrl->GetTempBuffer(size + 1);
       // kopiuje dane
-      strcpy(obsolete, value.a_str());
+      strcpy_s(obsolete, size + 1, value.a_str());
     }
   }
 }

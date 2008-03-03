@@ -1,6 +1,8 @@
 /**
- * @file Nag³ówek wtyczki K.Notify wyœwietlaj¹cej komunikaty nad zegarkiem systemowym.
- * @defgroup KNotify_shared_h Wtyczka K.Notify
+ * @file
+ * Nag³ówek wtyczki K.Notify wyœwietlaj¹cej komunikaty nad zegarkiem systemowym.
+ *
+ * @defgroup knotify_shared_h Wtyczka K.Notify
  *
  * Wtyczka s³u¿y do wyœwietlania informacji w ma³ym, skinowanym okienku
  * nad zasobnikiem systemowym.
@@ -92,6 +94,7 @@ namespace KNotify {
 
   /** 
    * Pozostawiany tylko dla kompatybilnoœci z wczeœniejsz¹ wersj¹. Proszê nie u¿ywaæ! 
+   * @deprecated
    */
   struct sIMessage_notify_v1: public sIMessage_base {
     char *txt; UINT mask; UINT status; UINT cntnet; HICON ico; 

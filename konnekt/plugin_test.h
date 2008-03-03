@@ -1,7 +1,8 @@
 #pragma once
 
 /** 
- * @file Deklaracje do obs³ugi testów
+ * @file
+ * Deklaracje do obs³ugi testów
  */
 
 #include <Stamina/String.h>

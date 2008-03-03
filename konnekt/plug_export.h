@@ -35,7 +35,7 @@ extern Controler * Ctrl;
 #endif
 
 
-/**
+/*
  * Wszystkie nastepne funkcje sa funkcjami TYLKO pomocniczymi ... Mozna je usunac, ale
  * najwygodniej jest z nich po prostu korzystac :)
  */
@@ -47,9 +47,9 @@ extern Controler * Ctrl;
  * @brief Je¿eli program dzia³a w trybie Debug loguje treœæ wiadomoœci do pliku konnekt.log (i do okna).
  *
  * @param format Format dok³adnie taki sam jak przy funkcjach printf
- * @param parametry Parametry potrzebne do utworzenia wiadomoœci
+ * @param ... Parametry potrzebne do utworzenia wiadomoœci
  * 
- * @attention W trybie @i Debug dostêpne jest okno debugowania (IMLOG) w którym pokazywana jest treœæ IMLOG!
+ * @attention W trybie @e Debug dostêpne jest okno debugowania (IMLOG) w którym pokazywana jest treœæ IMLOG!
  */
 void IMLOG(const char *format, ...);
 
@@ -68,7 +68,7 @@ void IMERROR();
  * @param p1, p2 Parametry
  * @sa gr_im net_ imt_
 */
-int IMessage(unsigned int  id, tNet net = Net::none, enIMessageType type = imtAll, int p1 = 0, int p2 = 0);
+int IMessage(unsigned int id, tNet net = Net::none, enIMessageType type = imtAll, int p1 = 0, int p2 = 0);
 
 /** 
  * Wysy³a wiadomoœæ. Wywo³uje bezpoœrednio Controler::IMessage.
@@ -83,28 +83,30 @@ int IMessage(sIMessage_base * msg);
  * @param p1, p2 Parametry
  * @sa im_
  */
-int ICMessage(unsigned int  id, int p1 = 0, int p2 = 0);
+int ICMessage(unsigned int id, int p1 = 0, int p2 = 0);
 
 /** 
  * Wysy³a wiadomoœæ bezpoœrednio do wtyczki.
  *
  * @param id Identyfikator wiadomoœci
+ * @param plug ID wtyczki
  * @param p1, p2 Parametry
  * @sa im_ imc_plug_
  */
-int IMessageDirect(unsigned int  id, tPluginId plug, int p1 = 0, int p2 = 0);
+int IMessageDirect(unsigned int id, tPluginId plug, int p1 = 0, int p2 = 0);
 
 /** 
  * Wysy³a wiadomoœæ bezpoœrednio do wtyczki.
  *
  * @param plug ID wtyczki
+ * @param msg WskaŸnik do struktury IMessage
  */
 int IMessageDirect(tPluginId plug, sIMessage_base * msg);
 
 
 void WMProcess(void);
 
-/**
+/*
  * --- THREAD SAFE ---
  */
 
@@ -117,11 +119,11 @@ void WMProcess(void);
  * Prze³¹czanie wiadomoœci do prawid³owych w¹tków.
  * Je¿eli wiadomoœæ zawiera kod, który @b MUSI byæ wykonany
  * w g³ównym w¹tku (np. tworzenie okien) mo¿na na pocz¹tku
- * kodu akcji wstawiæ #THREADSAFE.
+ * kodu akcji wstawiæ #IMESSAGE_TS().
  * Sposób dzia³ania (w¹tek "prawid³owy" to w¹tek w którym powinna dzia³aæ wiadomoœæ) :
  *   - Makro sprawdza ID aktualnego w¹tku
- *     - Je¿eli jest równe ID @i prawid³owego w¹tku wykonuje dalej...
- *     - Je¿eli jest ró¿ne, kolejkuje procedurê APC w @i prawid³owym
+ *     - Je¿eli jest równe ID @e prawid³owego w¹tku wykonuje dalej...
+ *     - Je¿eli jest ró¿ne, kolejkuje procedurê APC w @e prawid³owym
  *       w¹tku i oczekuje na zwrócenie wartoœci.
  * 
  * Przyk³ad:
@@ -150,7 +152,7 @@ void WMProcess(void);
  * (Sleep, Wait itp.) musz¹ byæ wykonywane w trybie Alertable
  * (SleepEx, Wait...Ex itp.), tak ¿eby procedura APC mog³a byæ wykonana ...
  * @attention Je¿eli zdaje ci siê ¿e wieszasz kolejki APC g³ównego w¹tku
- * w³¹cz Test w oknie @Dev...
+ * w³¹cz Test w oknie \@Dev...
  */
 #define IMESSAGE_TS() \
   if (Ctrl->Is_TUS(0)) return Ctrl->RecallTS()
@@ -322,7 +324,7 @@ bool SETSTR(int id, const char * val);
 
 /** @} */
 
-/**
+/*
  * --------------------------------------------------------------------
  */
  
@@ -338,7 +340,7 @@ int Plug_Init(int p1, int p2);
  */
 void Plug_Deinit(int p1, int p2);
 
-/**
+/*
  * --------------------------------------------------------------------
  */
  

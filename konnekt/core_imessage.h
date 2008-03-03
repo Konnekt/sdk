@@ -3,10 +3,16 @@
 
 namespace Konnekt {
   /** 
+   * @defgroup imt_ Definicje typÛw IMessage...
+   * @{
+   */
+
+  /**
    * Kaøda wtyczka powinna zdefiniowaÊ jakiego typu #IMessage potrafi
-   * przyjπÊ (konkretniej - za co ma odpowiadaÊ).<br/><br/>
-   * Typy moøna ≥πczyÊ poprzez '|' (OR). <br/><br/>
-   * IMessage() wywo≥any z @a typem innym od #IMT_ALL zostanie
+   * przyjπÊ (konkretniej - za co ma odpowiadaÊ).
+   *
+   * Typy moøna ≥πczyÊ poprzez '|' (OR). 
+   * IMessage() wywo≥any z @a typem innym od #imtAll zostanie
    * wys≥any tylko do wtyczek z zadeklarowanπ obs≥ugπ wybranego @a typu.
    *
    * @sa #IM_PLUG_NET IMessage()
@@ -32,16 +38,18 @@ namespace Konnekt {
     imtUI = 0x10,
     /** 
      * Wtyczka obs≥uguje kontakty ca≥ej swojej sieci.
+     *
      * @attention Ustawienie tego typu spowoduje dodanie nazwy sieci (#IM_PLUG_NETNAME)
-     * do list sieci w opcjach kontaktu (np. dodawanie, ignorowanie itp.)<br/>
+     * do list sieci w opcjach kontaktu (np. dodawanie, ignorowanie itp.)\n
      * Tylko @b jedna wtyczka z ca≥ej sieci moøe mieÊ ten typ ustawiony!!!
      * @sa #IM_PLUG_NETNAME @ref cnt
      */
     imtNet = 0x20,  // Rozpoznaje kontakty danej sieci (podczas dodawania, edycji)
     /** 
      * Wtyczka obs≥uguje wyszukiwanie kontaktÛw w swojej sieci.
+     *
      * @attention Podobnie jak w #IMT_UI Ustawienie tego typu spowoduje dodanie nazwy sieci (#IM_PLUG_NETNAME)
-     * do list sieci w wyszukiwarce kontaktÛw<br/>
+     * do list sieci w wyszukiwarce kontaktÛw\n
      * Tylko @b jedna wtyczka z ca≥ej sieci moøe mieÊ ten typ ustawiony!!!
      * @sa #IM_PLUG_NETNAME @ref cnt
      */
@@ -50,7 +58,7 @@ namespace Konnekt {
     imtMsgUI = 0x80,
     /// Kontakty w sieci posiadajπ UID (UserID)
     imtNetUID = 0x100,
-    /// Otrzyma w IM_MSG_RCV wszystkie wiadomoùci, niezale¨nie od @ref net_ "NET".
+    /// Otrzyma w IM_MSG_RCV wszystkie wiadomoùci, niezaleønie od @ref net_ "NET".
     imtAllMessages = 0x200,
     /// BÍdzie otrzymywaÊ IM_MSG_ACK.
     imtMessageAck = 0x400
@@ -70,30 +78,36 @@ namespace Konnekt {
     return (enIMessageFlag) ((int) a | (int) b);
   }
 
+  /**
+   * @defgroup imerror_ Kody b≥edÛw IMessage
+   * @{
+   */
   enum enIMessageError {
     errorNone = 0,
-    errorNoResult = 1, ///< Wtyczka nie obs≥uøy≥a wiadomoúci.
+    errorNoResult = 1,        ///< Wtyczka nie obs≥uøy≥a wiadomoúci.
     errorUnsupportedMsg = 1,
-    errorBadSender = 2, ///< WiadomoúÊ wstrzymana, pojawi≥ siÍ b≥πd...
-    errorBadPlugin = 3, ///< Podana wtyczka nie istnieje.
-    errorThreadSafe = 4, ///< WiadomoúÊ zosta≥a wywo≥ana w trybie bezpiecznym (bez oczekiwania na powrÛt).
-    errorShutdown = 5, ///< WiadomoúÊ zosta≥a anulowana z powodu zamykania programu.
-    errorBadParam = 6, ///< Nieprawid≥owe parametry.
-    errorBadStruct = 7, ///< Niepoprawna struktura.
+    errorBadSender = 2,       ///< WiadomoúÊ wstrzymana, pojawi≥ siÍ b≥πd...
+    errorBadPlugin = 3,       ///< Podana wtyczka nie istnieje.
+    errorThreadSafe = 4,      ///< WiadomoúÊ zosta≥a wywo≥ana w trybie bezpiecznym (bez oczekiwania na powrÛt).
+    errorShutdown = 5,        ///< WiadomoúÊ zosta≥a anulowana z powodu zamykania programu.
+    errorBadParam = 6,        ///< Nieprawid≥owe parametry.
+    errorBadStruct = 7,       ///< Niepoprawna struktura.
     errorBadBroadcast = 8
   };
+
+  /** @} */
 
   /** 
    * Struktura uøywana podczas przesy≥ania wiadomoúci.
    * Jest uøywana jako bazowa dla wiÍkszych struktur...
    */
   struct sIMessage_base {
-    unsigned short s_size; ///< Rozmiar struktury w bajtach (zazwyczaj ustawiane przez kontruktor)
-    unsigned int id;   ///< Identyfikator wiadomoúci
-    enIMessageFlag flag; ///< Flaga wiadomoúci (na razie powinno byÊ zawsze rÛwne 0)
-    tNet net;  ///< Docelowa sieÊ. 0 - rdzeÒ lub UI
-    enIMessageType type; ///< Docelowy typ wtyczek
-    tPluginId sender; ///< Identyfikator wtyczki wysy≥ajπcej
+    unsigned short s_size;  ///< Rozmiar struktury w bajtach (zazwyczaj ustawiane przez kontruktor)
+    unsigned int id;        ///< Identyfikator wiadomoúci
+    enIMessageFlag flag;    ///< Flaga wiadomoúci (na razie powinno byÊ zawsze rÛwne 0)
+    tNet net;               ///< Docelowa sieÊ. 0 - rdzeÒ lub UI
+    enIMessageType type;    ///< Docelowy typ wtyczek
+    tPluginId sender;       ///< Identyfikator wtyczki wysy≥ajπcej
 
     sIMessage_base(unsigned int _id, tNet _net, enIMessageType _type)
       : s_size(sizeof(sIMessage_base)), id(_id), net(_net), type(_type), sender(pluginNotFound), flag(imfNone) { }
@@ -133,6 +147,8 @@ namespace Konnekt {
   typedef sIMessage sIMESSAGE;
 
   #define sIMessage_V1 30 ///< Rozmiar tej struktury w wersji 1 SDK
+
+  /** @} */
 };
 
 #pragma pack(pop)

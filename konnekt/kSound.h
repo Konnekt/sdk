@@ -1,6 +1,8 @@
 /** 
- * @file Nag³ówek wtyczki kSound
- * @defgroup SOUND_shared_h Wtyczka kSound.dll.
+ * @file 
+ * Nag³ówek wtyczki kSound
+ *
+ * @defgroup ksound_shared_h Wtyczka kSound.dll.
  * 
  * kSound odpowiada za odtwarzanie dŸwiêków. 
  * Przy pomocy kSound::SoundRegister() mo¿na dodaæ

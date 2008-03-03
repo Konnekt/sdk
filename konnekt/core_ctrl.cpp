@@ -83,14 +83,14 @@ char * Controler::DTgetStr(tTable db, unsigned int row, unsigned int col, char *
   return v.vChar;
 }
 bool Controler::DTsetStr(tTable db, unsigned int row, unsigned int col, const char * val) {
-    OldValue v(Tables::ctypeString); 
-    v.vCChar = val;
-    return DTset(db, row, col, &v); 
+  OldValue v(Tables::ctypeString); 
+  v.vCChar = val;
+  return DTset(db, row, col, &v); 
 }
 __int64 Controler::DTgetInt64(tTable db, unsigned int row, unsigned int col) {
-    OldValue v(Tables::ctypeInt64); 
-    DTget(db, row, col, &v); 
-    return v.vInt64;
+  OldValue v(Tables::ctypeInt64); 
+  DTget(db, row, col, &v); 
+  return v.vInt64;
 }
 bool Controler::DTsetInt64(tTable db, unsigned int row, unsigned int col, __int64 val, __int64 mask) {
   OldValue v(Tables::ctypeInt64); 
@@ -107,14 +107,16 @@ bool Controler::DTsetInt64(tTable db, unsigned int row, unsigned int col, __int6
 
 void Controler::IMLOG(const char *format, ...) {
   if (!this) return;
+
   va_list ap;
   va_start(ap, format);
   this->logV(DBG_LOG, 0, 0, format, ap);
   va_end(ap);
 }
 void Controler::IMDEBUG(enDebugLevel level, const char *format, ...) {
-  if (!this) return;
-  if (!this->DebugLevel(level)) return;
+  if (!this || this->DebugLevel(level)) {
+    return;
+  }
   va_list ap;
   va_start(ap, format);
   this->logV(level, 0, 0, format, ap);
@@ -123,22 +125,23 @@ void Controler::IMDEBUG(enDebugLevel level, const char *format, ...) {
 
 
 void Controler::log(enDebugLevel level, const char* module, const char* where, const char *format, ...) {
-  if (!this) return;
-  if (!this->DebugLevel(level)) return;
+  if (!this || this->DebugLevel(level)) {
+    return;
+  }
   va_list ap;
   va_start(ap, format);
   this->logV(level, module, where, format, ap);
   va_end(ap);
 }
 void Controler::logV(enDebugLevel level, const char* module, const char* where, const char *format, va_list p) {
-  if (!this) return;
-  if (!this->DebugLevel(level)) 
+  if (!this || this->DebugLevel(level)) {
     return;
-
+  }
   int size = _vscprintf(format, p);
   char * buff = new char [size + 2];
   buff[size + 1] = 0;
-  size = _vsnprintf(buff, size+1, format, p);
+  /// @todo 'size + 2' argument here is ok ?
+  size = _vsnprintf_s(buff, size + 2, size + 1, format, p);
   buff[size] = 0;
   this->logMsg(level, module, where, buff);
   delete [] buff;
@@ -165,10 +168,7 @@ int Controler::BeginThreadAndWait(const char * name, void *security, unsigned st
   return ret;
 }
 
-
-// ___________________________________________________
-// plug_func.h
-// ---------------------------------------------------
+// -- plug_func.h
 
 int Controler::SetColumn(tTable table, int id, int type, int def, const char * name) {
   return this->IMessage(&sIMessage_setColumn(table, id, type, def, name));

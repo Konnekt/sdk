@@ -1,69 +1,57 @@
+/**
+ * @file
+ * @deprecated
+ */
 #pragma once
 
-/*
 #ifndef KONNEKT_SDK_SUPPRES_OBSOLETE_NOTICE
   #pragma message("Prosze przerobic kod tak, zeby NIE uzywac obsolete_defines.h !!!")
 #endif
-*/
 
 /** 
- * @addgroup gr_shared 
+ * @addtogroup gr_shared 
  * @{ 
  */
 
 /** 
- * @addgroup net_
+ * @addtogroup net_
  * @{ 
  */
 
-#define NET_FIRST Net::first          ///< Wiadomoœæ dotrze do pierwszej wtyczki (dowolnej sieci), która potrafi j¹ obs³u¿yæ.
-#define NET_BROADCAST Net::broadcast  ///< Wiadomoœæ dotrze do wtyczek wszystkich sieci.
-#define NET_BC NET_BROADCAST          ///< Odpowiednik #NET_BROADCAST.
-#define NET_NONE Net::none            ///< Wiadomosci do rdzenia.
+#define NET_FIRST         Net::first         ///< Wiadomoœæ dotrze do pierwszej wtyczki (dowolnej sieci), która potrafi j¹ obs³u¿yæ.
+#define NET_BROADCAST     Net::broadcast     ///< Wiadomoœæ dotrze do wtyczek wszystkich sieci.
+#define NET_BC            NET_BROADCAST      ///< Odpowiednik #NET_BROADCAST.
+#define NET_NONE          Net::none          ///< Wiadomosci do rdzenia.
 
-#define NET_SOUND Net::sound          ///< DŸwiêk
-#define NET_UPDATE Net::update        ///< Update
-#define NET_OTHER Net::other          ///< Wtyczki nie posiadaj¹ce akcji, nie obs³uguj¹ce wiadomoœci itp.
+#define NET_SOUND         Net::sound         ///< DŸwiêk
+#define NET_UPDATE        Net::update        ///< Update
+#define NET_OTHER         Net::other         ///< Wtyczki nie posiadaj¹ce akcji, nie obs³uguj¹ce wiadomoœci itp.
 
-#define NET_GG  Net::gg               ///< Wtyczki obs³uguj¹ce protokó³ GG
-#define NET_ICQ Net::icq              ///< Wtyczki obs³uguj¹ce protokó³ ICQ
-#define NET_JABBER Net::jabber        ///< Wtyczki obs³uguj¹ce protokó³ JABBER
-#define NET_EMAIL Net::email          ///< Wtyczki obs³uguj¹ce EMaile
-#define NET_SMS Net::sms              ///< Wtyczki obs³uguj¹ce SMSy
-#define NET_KLAN Net::klan 
-#define NET_KSTYLE Net::kstyle
-#define NET_EXPIMP Net::expimp
-#define NET_KONNFERENCJA Net::konnferencja
+#define NET_GG            Net::gg            ///< Wtyczki obs³uguj¹ce protokó³ GG
+#define NET_ICQ           Net::icq           ///< Wtyczki obs³uguj¹ce protokó³ ICQ
+#define NET_JABBER        Net::jabber        ///< Wtyczki obs³uguj¹ce protokó³ JABBER
+#define NET_EMAIL         Net::email         ///< Wtyczki obs³uguj¹ce EMaile
+#define NET_SMS           Net::sms           ///< Wtyczki obs³uguj¹ce SMSy
+#define NET_KLAN          Net::klan 
+#define NET_KSTYLE        Net::kstyle
+#define NET_EXPIMP        Net::expimp
+#define NET_KONNFERENCJA  Net::konnferencja
 
-#define NET_AIM    Net::aim           ///< Wtyczki obs³uguj¹ce protokó³ AIM
-#define NET_YAHOO  Net::yahoo         ///< Wtyczki obs³uguj¹ce protokó³ YAHOO
-#define NET_MSN    Net::msn           ///< Wtyczki obs³uguj¹ce protokó³ MSN
-#define NET_TLEN   Net::tlen          ///< Wtyczki obs³uguj¹ce protokó³ TLEN
+#define NET_AIM           Net::aim           ///< Wtyczki obs³uguj¹ce protokó³ AIM
+#define NET_YAHOO         Net::yahoo         ///< Wtyczki obs³uguj¹ce protokó³ YAHOO
+#define NET_MSN           Net::msn           ///< Wtyczki obs³uguj¹ce protokó³ MSN
+#define NET_TLEN          Net::tlen          ///< Wtyczki obs³uguj¹ce protokó³ TLEN
 
-
-/*
- * sieci tylko do 19 . ich komunikaty to IM_USER + NET * 1000
- * nastêpne od net 60, tak ¿eby komunikaty zaczê³y siê jako NET * 1000
- */
-
-#define NET_KTRANSFER  130            ///< kTransfer 
+#define NET_KTRANSFER     130                ///< kTransfer 
 
 /** @} */
 
-/**
+/*
  * -----------------------------------------------------------------------------------------------
  */
 
 /** 
- * @defgroup imt_ Definicje typów IMessage...
- * 
- * Ka¿da wtyczka powinna zdefiniowaæ jakiego typu #IMessage potrafi
- * przyj¹æ (konkretniej - za co ma odpowiadaæ).
- * Typy mo¿na ³¹czyæ poprzez '|' (OR). 
- * IMessage() wywo³any z @a typem innym od #IMT_ALL zostanie
- * wys³any tylko do wtyczek z zadeklarowan¹ obs³ug¹ wybranego @a typu.
- * 
- * @sa #IM_PLUG_NET IMessage()
+ * @addtogroup imt_
  * @{
  */
 typedef unsigned int tIMtype;
@@ -147,9 +135,7 @@ const PLUGP_enum PLUGP_NONE = Konnekt::priorityNone;
 
 
 /**
- * @defgroup imerror_ Kody b³edu
- * @brief \no
- * 
+ * @addtogroup imerror_
  * @{
  */
 #define IMERROR_NORESULT Konnekt::errorNoResult     ///< Wtyczka nie obs³u¿y³a wiadomoœci.
@@ -194,8 +180,6 @@ const PLUGP_enum PLUGP_NONE = Konnekt::priorityNone;
 #ifdef KONNEKT_OBSOLETE_ALL
   /**
    * @defgroup mf_ flagi wiadomoœci tekstowych
-   * @brief \no
-   *
    * @{
   */
   #define MF_SEND         2           ///< Wiadomoœæ przeznaczona do wys³ania
@@ -296,7 +280,7 @@ const PLUGP_enum PLUGP_NONE = Konnekt::priorityNone;
    * IM_MSG_RCV_ok bêdzie otrzymywaæ równie¿ IM_MSG_OPEN.
    *
    * @param p1 (cMessage *) wiadomoœæ.
-   * @param p2 (bool) @i true - wiadomoœæ w³aœnie przysz³a, @i false - wiadomoœæ zosta³a za³adowana z pliku.
+   * @param p2 (bool) @e true - wiadomoœæ w³aœnie przysz³a, @e false - wiadomoœæ zosta³a za³adowana z pliku.
    * @return (int) Po³¹czone flagi @ref im_msg_, lub 0 jeœli nie obs³uguje takich wiadomoœci.
    */
   #define IM_MSG_RCV            IM_BASE + 100

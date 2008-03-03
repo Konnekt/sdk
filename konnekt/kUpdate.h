@@ -28,7 +28,7 @@ namespace kUpdate {
   };
 
   namespace IM {
-    const int startInterface = 4000; ///< wewn.
-    const int destroyInterface = 4001; ///< wewn.
+    const int startInterface = 4000; ///< @internal
+    const int destroyInterface = 4001; ///< @internal
   };
 };

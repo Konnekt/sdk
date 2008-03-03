@@ -158,6 +158,7 @@ namespace Konnekt {
     /** 
      * Wypina wtyczkê
      *
+     * @param sender WskaŸnik do obiektu #Controler @b wypinaj¹cej wtyczki
      * @param reason Przyczyna wypiêcia wtyczki
      * @param quiet Czy wyœwietliæ przyczynê u¿ytkownikowi?
      * @param unload Typ wypiêcia - enPlugOutUnload
@@ -173,6 +174,7 @@ namespace Konnekt {
      * Subclassowanie pozwala na przechwytywanie komunikatów zanim dotr¹ do docelowej wtyczki. 
      * Technika mo¿e byæ przydatna przy obchodzeniu pewnych ograniczeñ w API, ale @b nie powinna byæ nadu¿ywana!
      * 
+     * @param sender WskaŸnik do obiektu #Controler @b wypinaj¹cej wtyczki
      * @param proc   WskaŸnik do nowej f-cji obs³uguj¹cej. Przekazanie 0 spowoduje tylko zwrócenie aktualnych wskaŸników
      * @param object WskaŸnik do obiektu dla którego ta f-cja ma byæ wywo³ywana, lub 0
      * 
@@ -273,15 +275,15 @@ namespace Konnekt {
     }
 
   private:
-    virtual void zz_ipl1() { }
-    virtual void zz_ipl2() { }
-    virtual void zz_ipl3() { }
-    virtual void zz_ipl4() { }
-    virtual void zz_ipl5() { }
-    virtual void zz_ipl6() { }
-    virtual void zz_ipl7() { }
-    virtual void zz_ipl8() { }
-    virtual void zz_ipl9() { }
+    virtual void zz_ipl1() { } ///< @internal
+    virtual void zz_ipl2() { } ///< @internal
+    virtual void zz_ipl3() { } ///< @internal
+    virtual void zz_ipl4() { } ///< @internal
+    virtual void zz_ipl5() { } ///< @internal
+    virtual void zz_ipl6() { } ///< @internal
+    virtual void zz_ipl7() { } ///< @internal
+    virtual void zz_ipl8() { } ///< @internal
+    virtual void zz_ipl9() { } ///< @internal
   };
 
   class oPlugin: public Stamina::StaticPtr<iPlugin> {

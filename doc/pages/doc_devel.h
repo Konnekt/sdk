@@ -45,11 +45,11 @@
  * Ewentualne pytanie proszê zadawaæ na naszym forum. Czemu inni nie mieliby
  * skorzystaæ, nieprawda¿?
  *
- * <p>API Konnekta mo¿e wydawaæ siê skomplikowane, ale stara³em siê aby na d³u¿sz¹ metê
+ * API Konnekta mo¿e wydawaæ siê skomplikowane, ale stara³em siê aby na d³u¿sz¹ metê
  * by³o jak najwygodniejsze w u¿yciu. Podczas pisania, nie ukrywam, mocno wzorowa³em
  * siê na systemie przesy³ania komunikatów w systemie Windows, wiêc osoby obeznane
  * z WinAPI znajd¹ sporo podobieñstw. Podstawow¹ zalet¹ tego rozwi¹zania jest prostota
- * z jak¹ implementuje siê obs³ugê kolejnych komunikatów i du¿a rozszerzalnoœæ...</p>
+ * z jak¹ implementuje siê obs³ugê kolejnych komunikatów i du¿a rozszerzalnoœæ...
  * 
  * Zanim napiszesz pierwsz¹ wtyczkê najlepiej przejœæ krok po kroku przez t¹ listê:
  * - @ref dev_basics
@@ -60,13 +60,13 @@
  * 
  * Bardzo pomocne mo¿e siê okazaæ równie¿ @ref dev_dev .
  *
- * <p>Z chêci¹ zamieszczê gotowe (lub przynajmniej funkcjonalne :) ) wtyczki na naszej stronie
+ * Z chêci¹ zamieszczê gotowe (lub przynajmniej funkcjonalne :) ) wtyczki na naszej stronie
  * domowej. W tej chwili nie ma autoryzowania wtyczek, ale nie wykluczone, ¿e kiedyœ siê 
- * pojawi...</p>
+ * pojawi...
  *
  * @section dev_basics Podstawy
  * 
- * <p>Do dzia³ania wtyczka potrzebuje nag³ówków SDK (*.h), jednej wyexportowanej funkcji,
+ * Do dzia³ania wtyczka potrzebuje nag³ówków SDK (*.h), jednej wyexportowanej funkcji,
  * jednego Ÿród³a do skompilowania i do³¹czenia (plug_defs.cpp), 
  * jednego pliku .lib zawieraj¹cego odwo³ania do funkcji exportowanych z konnekt.exe
  * i jednej, bardzo wa¿nej liczby. Liczba o której mowa to identyfikator sieci
@@ -94,9 +94,8 @@
  * bêdzie to ju¿ zrobione za Ciebie...
  *
  * @sa net_
- * </p>
  *
- * <p>Ca³a komunikacja opiera siê na przesy³aniu komunikatów (sIMessage_base). Na treœæ komunikatu
+ * Ca³a komunikacja opiera siê na przesy³aniu komunikatów (sIMessage_base). Na treœæ komunikatu
  * sk³ada siê struktura stworzona na podstawie sIMessage_base. Zazwyczaj bêdzie to sIMessage_2params
  * sk³adaj¹ca siê z dwóch 4 bajtowych (long, void* co kto woli) parametrów. 
  * W strukturze bazowej zawarty jest adresat i identyfikator
@@ -110,20 +109,19 @@
  * otrzymaæ komunikat.
  *
  * @sa gr_im, @sa imt_
- * </p>
  * 
- * <p>Oprócz tego, rdzeñ dostarcza te¿ mo¿liwoœæ do przechowywania ustawieñ w plikach profilu
+ * Oprócz tego, rdzeñ dostarcza te¿ mo¿liwoœæ do przechowywania ustawieñ w plikach profilu
  * u¿ytkownika. S³u¿¹ do tego tablice *.dtb. Aby móc z nich korzystaæ, trzeba zarejestrowaæ
  * identyfikatory kolumn pod którymi bêdziemy przechowywaæ informacje. Odczyt i zapis
  * odbywa siê poprzez np. #SETINT, #GETINT dla konfiguracji, lub bezpoœrednio np. w cCtrl::DTsetStr().
  * Raz zarejestrowana kolumna pozostaje w pliku profilu niemal¿e na zawsze, 
  * niezale¿nie od tego czy nasza wtyczka dzia³a czy nie i bez wzglêdu
- * na wersjê dzia³aj¹cego programu (kompatybilne w dó³ i czêœciowo w górê)...</p>
+ * na wersjê dzia³aj¹cego programu (kompatybilne w dó³ i czêœciowo w górê)...
  * 
- * <p>Interfejs u¿ytkownika UI mo¿e zostaæ rozbudowany poprzez akcje (@ref gr_act). Dziêki nim, 
- * dowolna wtyczka mo¿e dodaæ now¹ belkê, przycisk, pozycjê w menu czy w konfiguracji.</p>
+ * Interfejs u¿ytkownika UI mo¿e zostaæ rozbudowany poprzez akcje (@ref gr_act). Dziêki nim, 
+ * dowolna wtyczka mo¿e dodaæ now¹ belkê, przycisk, pozycjê w menu czy w konfiguracji.
  * 
- * <p>Dodatkowo API rozszerzane jest o mo¿liwoœci do³¹czonych do nich wtyczek
+ * Dodatkowo API rozszerzane jest o mo¿liwoœci do³¹czonych do nich wtyczek
  * (tak na prawdê UI te¿ jest najzwyklejsz¹ wtyczk¹, to powinno pokazaæ mo¿liwoœci)...
  * Preferowane s¹ nag³ówki uniwersalne, je¿eli istnieje ju¿ jeden do wtyczki
  * okreœlonego rodzaju, osoba pisz¹ca inn¹ odmianê tej samej wtyczki powinna
@@ -134,14 +132,14 @@
  * sygna³ ma zostaæ odtworzony. Niezale¿nie teraz czy za³adowana jest wtyczka
  * A, czy B - dŸwiêk zostanie puszczony. Je¿eli nie jest za³adowana ¿adna, 
  * po prostu nic siê nie stanie, ale wtyczka C nie musi (choæ oczywiœcie mo¿e)
- * siê tym przejmowaæ. Na tym polega g³ówna zasada API Konnekta.</p>
+ * siê tym przejmowaæ. Na tym polega g³ówna zasada API Konnekta.
  *
  * @section dev_guidelines Podstawowe zasady
  *
  * Podczas pisania wtyczek, wszystkie identyfikatory najlepiej trzymaæ w osobnym pliku nag³ówkowym, 
  * tak ¿eby mo¿na go by³o szybko do³¹czyæ do SDK. Jeœli ktoœ chcia³by do³¹czyæ opis swojej
  * wtyczki do tej dokumentacji, zapraszam do poczytania o generatorze dokumentacji doxygen na 
- * http://www.doxygen.org/ .\n\n
+ * http://www.doxygen.org/ .
  *
  * Kilka zasad dotycz¹cych SDK (niektóre mog¹ byæ na razie niezrozumia³e ale warto je zapamiêtaæ):
  *  - Raz poprawnie przydzielonego identyfikatora NIE zmieniamy!
@@ -203,14 +201,14 @@
  *
  * W katalogu z przyk³adami mo¿na znaleŸæ @b template.cpp. Jest to "pusty" projekt
  * wtyczki z podstawowymi funkcjami. Najlepiej zaczynaæ pisanie ka¿dej wtyczki od
- * skopiowania i @b modyfikacji tego pliku...\n\n
+ * skopiowania i @b modyfikacji tego pliku...
  *
  * @sa xmpl_template
  * 
  * @section dev_examples Przyk³ady
  *
  * Do SDK do³¹czony jest katalog z pryk³adowymi wtyczkami. Wszystkie korzystaj¹ z 
- * identyfikatora sieci #NET_EXAMPLE.\n\n
+ * identyfikatora sieci #NET_EXAMPLE.
  * 
  * Ich kody Ÿród³owe i krótkie opisy znajdziesz @ref gr_examples "tutaj".
  */

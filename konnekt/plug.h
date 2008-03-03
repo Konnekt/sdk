@@ -326,7 +326,7 @@ Komunikat przesy³any jest przy pomocy @b sIMessage_plugArgs .*/
 
                 sIMessage_StatusChange(int msgID , int cntID , unsigned int status, const char * info):sIMessage_base(msgID),cntID(cntID),status(status),info(info){s_size=sizeof(*this);}
                 sIMessage_StatusChange(const sIMessage_base * base) {
-                    if (base->s_size < sizeof(*this)) throw cKException_Msg(0 , base);
+                    if (base->s_size < sizeof(*this)) throw KException_IM(base);
                     *this = *(sIMessage_StatusChange*)base;
                     s_size=sizeof(*this);
                 }

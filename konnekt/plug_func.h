@@ -23,7 +23,7 @@ using ::Stamina::String;
  */
 
 /** 
- * Do wstawienia w switch'u akcji. Jeœli akcja nie zosta³a wywo³ana z kodem ACTN_ACTION - wychodzi.
+ * Do wstawienia w switch'u akcji. Jeœli akcja nie zosta³a wywo³ana z kodem #ACTN_ACTION - wychodzi.
  */
 #define ACTIONONLY(notify) if (notify->code != ACTN_ACTION) return 0;
 
@@ -163,12 +163,14 @@ void UIActionCfgAddPluginInfoBox(unsigned int parent, const char * info, const c
 
 /** 
  * Dodaje standardowy zestaw akcji z boxem opisuj¹cym wtyczkê i przyciskiem z logiem i tipem z dodatkowymi informacjami.
+ *
  * @param parent Identyfikator akcji-rodzica
  * @param info Tekst (html) z informacj¹ o funkcjonalnoœci
  * @param about_info Tekst (html) z dodatkowymi informacjami o wtyczce
  * @param ico URL do ikonki
  * @param height Wysokoœæ tekstu. Najlepiej podaæ ujemn¹ liczbê wierszy przy minimalnej szerokoœci...
  * @param name Nazwa wtyczki do wyœwietlenia. Je¿eli pominiesz ten parametr, zarówno nazwa jak i wersja zostan¹ pobrane automatycznie.
+ * @param frame @a true jeœli ma rysowaæ ramkê wokó³
  */
 void UIActionCfgAddPluginInfoBox2(unsigned int parent, const char * info, const char * about_info, const char * ico = 0, int height = 0, const char * name = 0, bool frame = true);
 
@@ -225,6 +227,9 @@ int PlugStatusChange(unsigned int status, const char * info = 0);
  * Przydatne przy #IM_CNT_DOWNLOAD...
  *
  * @param toWindow (bool) czy ma zapisywaæ do okna
+ * @param cntID ID kontaktu
+ * @param colID ID kolumny
+ * @param value Wartoœæ tekstowa
  */
 void CntSetInfoValue(bool toWindow, int cntID, int colID, const char * value);
 /** 
@@ -232,15 +237,17 @@ void CntSetInfoValue(bool toWindow, int cntID, int colID, const char * value);
  * Przydatne przy #IM_CNT_UPLOAD...
  *
  * @param fromWindow (bool) czy ma pobieraæ z okna
+ * @param cntID ID kontaktu
+ * @param colID ID kolumny
  */
 const char * CntGetInfoValue(bool fromWindow, int cntID, int colID);
 
 /** 
- * Tworzy kolumnê w konfiguracji (@ref #IMC_SETCOL)
+ * Tworzy kolumnê w konfiguracji (@ref #IM_SETCOLS)
  */
 int SetColumn(tTable table, int id, int type, int def, const char * name = 0);
 /** 
- * Tworzy kolumnê w konfiguracji (@ref #IMC_SETCOL)
+ * Tworzy kolumnê w konfiguracji (@ref #IM_SETCOLS)
  */
 inline int SetColumn(tTable table, int id, int type, const char * def , const char * name = 0) {
   return SetColumn(table, id, type, (int) def, name);

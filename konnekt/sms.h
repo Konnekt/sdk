@@ -4,7 +4,7 @@
  * @file 
  * Nag³ówek wtyczki SMS.
  * ¯eby wys³aæ wiadomoœæ sms nale¿y wstawiæ do kolejki wiadomoœci, lub wys³aæ
- * bezpoœrednio do wtyczki komunikatem #IM_MSG_SEND wiadomoœæ:
+ * bezpoœrednio do wtyczki komunikatem #Message::IM::imSendMessage wiadomoœæ:
  *
  * @code
  * Message msg;

@@ -2,8 +2,10 @@
 #pragma pack(push, 1)
 
 /** 
- * @file Nag³ówek wtyczki GG.DLL 
- * @defgroup GG_shared_h Wtyczka GG.dll.
+ * @file
+ * Nag³ówek wtyczki GG.DLL 
+ *
+ * @defgroup gg_shared_h Wtyczka GG.dll.
  * 
  * W API od wersji 1.1 znajduje siê obs³uga zdarzeñ w libgadu. 
  * Potrzebne bêd¹ równie¿ przynajmniej nag³ówki libgadu, które dostêpne jest do pobrania

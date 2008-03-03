@@ -18,9 +18,10 @@ namespace Konnekt {
   using Stamina::DT::tColId;
 
   /**
-   * Struktura zosta³a ZAST¥PIONA przez #Message ! MessageOld jest binarnie zgodne z cMessage, ale nie powinno byæ u¿ywane
+   * Struktura zosta³a ZAST¥PIONA przez Message !.
+   * MessageOld jest binarnie zgodne z cMessage, ale nie powinno byæ u¿ywane
    *
-   * @obsolete
+   * @deprecated
    */
   class MessageOld {
   public:
@@ -85,7 +86,7 @@ namespace Konnekt {
 
       typeSpecial         = 12,     ///< Nieokreslona wiadomosc.
       typeSpecial_NOL     = (13 | typeMask_NotOnList),   ///< Nieokreslona wiadomosc spoza listy.
-      typeImage           = 15,     ///< Obraz, sciezka do pliku w Message::ext - #Message::extFile_Path
+      typeImage           = 15,     ///< Obraz, sciezka do pliku w Message::ext - Message::extFile_Path
       typeBoard           = 16
     };
 
@@ -224,7 +225,7 @@ namespace Konnekt {
      * #EXT_PARAM nazwa=wartoœæ #EXT_PARAM nazwa2=wartoœæ2
      * ...
      * @endcode
-     * patrz: getExtParam() / setExtParam() .
+     * @sa getExtParam() / setExtParam() .
      */
     Stamina::String getExt(bool refresh = false) const {
       return getObsoleteString(this->_ext, this->_chExt, this->isStructV2());
@@ -341,7 +342,6 @@ namespace Konnekt {
   public:
     /**
      * @defgroup mex_ Nazwy wartoœci w polach Message::getExtParam, MessageAck::getExtParam
-     * @brief \no
      * @{
      */
 
@@ -418,19 +418,19 @@ namespace Konnekt {
     };
 
   public:
-    const static tColId colId            = (unsigned int) 0; ///< #DT_CT_INT ID.
-    const static tColId colNet           = 1;   ///< #DT_CT_INT Sieæ.
-    const static tColId colType          = 2;   ///< #DT_CT_INT Typ.
-    const static tColId colFromUid       = 3;   ///< #DT_CT_PCHAR Od UIDa (odebrana).
-    const static tColId colToUid         = 4;   ///< #DT_CT_PCHAR Do UIDa (wysy³ana).
-    const static tColId colBody          = 5;   ///< #DT_CT_PCHAR Treœæ.
-    const static tColId colExt           = 6;   ///< #DT_CT_PCHAR Dodatkowe informacje.
-    const static tColId colFlag          = 7;   ///< #DT_CT_INT Flaga.
-    const static tColId colActionP       = 8;   ///< #DT_CT_INT | #DT_CF_NOSAVE  Grupa akcji.
-    const static tColId colActionI       = 12;  ///< #DT_CT_INT | #DT_CF_NOSAVE Akcja.
-    const static tColId colNotify        = 9;   ///< #DT_CT_INT | #DT_CF_NOSAVE  Ikonka powiadomienia.
-    const static tColId colHandler       = 10;  ///< #DT_CT_INT | #DT_CF_NOSAVE Wtyczka obs³uguj¹ca.
-    const static tColId colTime          = 11;  ///< #DT_CT_64 Czas jako cTime64 Czas odebrania/wys³ania.
+    const static tColId colId            = (unsigned int) 0; ///< (#ctypeInt) ID.
+    const static tColId colNet           = 1;   ///< (#ctypeInt) Sieæ.
+    const static tColId colType          = 2;   ///< (#ctypeInt) Typ.
+    const static tColId colFromUid       = 3;   ///< (#ctypeString) Od UIDa (odebrana).
+    const static tColId colToUid         = 4;   ///< (#ctypeString) Do UIDa (wysy³ana).
+    const static tColId colBody          = 5;   ///< (#ctypeString) Treœæ.
+    const static tColId colExt           = 6;   ///< (#ctypeString) Dodatkowe informacje.
+    const static tColId colFlag          = 7;   ///< (#ctypeInt) Flaga.
+    const static tColId colActionP       = 8;   ///< (#ctypeInt | #cflagNoSave) Grupa akcji.
+    const static tColId colActionI       = 12;  ///< (#ctypeInt | #cflagNoSave) Akcja.
+    const static tColId colNotify        = 9;   ///< (#ctypeInt | #cflagNoSave) Ikonka powiadomienia.
+    const static tColId colHandler       = 10;  ///< (#ctypeInt | #cflagNoSave) Wtyczka obs³uguj¹ca.
+    const static tColId colTime          = 11;  ///< (#ctypeInt64) Czas odebrania/wys³ania jako cTime64
     const static tColId colProcessing    = 13;
 
     // #define C_MSG_COLCOUNT                 14 // ostatni
@@ -462,7 +462,7 @@ namespace Konnekt {
   private:
     unsigned short _s_size;
   public:
-    int net; ///< Sieæ kontaktu. Ustaw na #NET_BC aby u¿yæ wszystkich sieci.
+    int net; ///< Sieæ kontaktu. Ustaw na #Net::broadcast aby u¿yæ wszystkich sieci.
   private:
     char * _chUid; ///< UID kontaktu. Ustaw 0 aby u¿yæ wszystkich.
 
@@ -668,8 +668,6 @@ namespace Konnekt {
     return (MessageAck::enFlags) ((int) a | (int) b);
   }
 
-  // ------------------------------------------------------------------------------------------------
-
   /** @} */
   /** 
    * @addtogroup imc_ 
@@ -788,11 +786,11 @@ namespace Konnekt {
     virtual bool handlingMessage(enMessageQueue queue, Message* msg) = 0;
 
   private:
-    virtual void zzPlaceHolder_iMsgHandler1() { }
-    virtual void zzPlaceHolder_iMsgHandler2() { }
-    virtual void zzPlaceHolder_iMsgHandler3() { }
-    virtual void zzPlaceHolder_iMsgHandler4() { }
-    virtual void zzPlaceHolder_iMsgHandler5() { }
+    virtual void zzPlaceHolder_iMsgHandler1() { } ///< @internal
+    virtual void zzPlaceHolder_iMsgHandler2() { } ///< @internal
+    virtual void zzPlaceHolder_iMsgHandler3() { } ///< @internal
+    virtual void zzPlaceHolder_iMsgHandler4() { } ///< @internal
+    virtual void zzPlaceHolder_iMsgHandler5() { } ///< @internal
   };
 
   class MessageHandler: public Stamina::SharedObject<iMessageHandler> {

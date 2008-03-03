@@ -222,7 +222,7 @@ const char * SAFECHAR(const char * ch) {
   #endif
 #endif // NO_PLUG_EXPORT
 
-/**
+/*
  * ___________________________________________________
  * konnekt/plug.h
  * ---------------------------------------------------
@@ -664,12 +664,12 @@ int PlugStatusChange(unsigned int status, const char * info) {
 void CntSetInfoValue(bool toWindow, int cntID, int colID, const char * value) {
   if (!toWindow) {
     Ctrl->DTsetStr(DTCNT, cntID, colID, value);
-  } else {
-    UIActionCfgSetValue(sUIAction(
-      ICMessage(IMI_ACTION_FINDPARENT, (int) &sUIAction(IMIG_NFO, colID | IMIB_CNT), 0),
-      colID | IMIB_CNT, cntID), value, true
-    );
+    return;
   }
+  UIActionCfgSetValue(sUIAction(
+    ICMessage(IMI_ACTION_FINDPARENT, (int) &sUIAction(IMIG_NFO, colID | IMIB_CNT), 0),
+    colID | IMIB_CNT, cntID), value, true
+  );
 }
 const char * CntGetInfoValue(bool fromWindow, int cntID, int colID) {
   if (!fromWindow) {
@@ -690,8 +690,10 @@ cMessage * messageDuplicate(cMessage * m) {
   mc->ext = _strdup(m->ext);
   mc->fromUid = _strdup(m->fromUid);
   mc->toUid = _strdup(m->toUid);
+
   return mc;
 }
+
 void messageFree(cMessage * m, bool deleteObject) {
   free(m->body);
   free(m->ext);
@@ -728,7 +730,7 @@ unsigned int ShowBits::getAllBits() {
 }
 
 
-/**
+/*
  * ---------------------------------------------------------
  */
 

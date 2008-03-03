@@ -77,7 +77,7 @@ namespace Tables {
      */
     optAutoLoad = 0x80,
     /** 
-     * Automatycznie roz³adowuje dane gdy zostanie zamkniêta ostatnia referencja do oibiektu bazy.
+     * Automatycznie roz³adowuje dane gdy zostanie zamkniêta ostatnia referencja do obiektu bazy.
      * ¯aby dzia³a³o to prawid³owo:
      * - nie mo¿na przechowywaæ globalnego obiektu w tablicy
      * - deklarowaæ obiekt bazy danych tylko na czas jej u¿ywania:
@@ -211,14 +211,14 @@ namespace Tables {
      *
      * @return Iloœæ pozosta³ych blokad.
      * @attention Po wykonaniu tej funkcji, wszystkie zwrócone wskaŸniki bezpoœrednie mog¹ byæ ju¿ nieaktualne!
-     * */
+     */
     virtual void unlockData(tRowId rowId, int reserved = 0) = 0;
 
     /** 
      * Rejestruje kolumnê w tablicy.
      * Kolumny mo¿na dodawaæ dopóki tablica jest pusta, lub nie zosta³a za³adowana z pliku. 
      *
-     * @param obiekt wtyczki rejestruj¹cej - Controler::getPlugin()
+     * @param plugin obiekt wtyczki rejestruj¹cej - Controler::getPlugin()
      * @param colId Identyfikator rejestrowanej kolumny, lub colByName je¿eli chcemy odnosiæ siê do niej tylko po nazwie
      * @param type Typ wartoœci kolumny z flagami (enColumnType | enColumnFlag)
      * @param name Nazwa kolumny. Idnetyfikator kolumny zarejestrowanej tylko po nazwie mo¿na zdobyæ przy pomocy getColId().
@@ -270,8 +270,8 @@ namespace Tables {
     /** 
      * Rozsy³a komunikat IM::dataChanged dla tablicy, lub wiersza.
      *
-     * @param ctrl - Controler wtyczki
-     * @param rowId - identyfikator zmienionego wiersza, lub allRows
+     * @param ctrl Controler wtyczki
+     * @param rowId Identyfikator zmienionego wiersza, lub allRows
      */
     virtual void dataChanged(Controler * ctrl, tRowId rowId,tNet net = Net::broadcast, enIMessageType plugType = imtAll) = 0;
 
@@ -376,7 +376,7 @@ namespace Tables {
       if (!row.isValid()) {
         return 0;
       }
-      return this->getColumn(id)->getInt( row, flags);
+      return this->getColumn(id)->getInt(row, flags);
     }
     inline bool setInt(tRowId rowId, tColId id, int val, GetSet flags = gsNone) {
       oRow row = this->getRow(rowId);
@@ -482,16 +482,16 @@ namespace Tables {
     }
 
     private:
-      virtual void zz_it1() { }
-      virtual void zz_it2() { }
-      virtual void zz_it3() { }
-      virtual void zz_it4() { }
-      virtual void zz_it5() { }
-      virtual void zz_it6() { }
-      virtual void zz_it7() { }
-      virtual void zz_it8() { }
-      virtual void zz_it9() { }
-      // virtual void zz_it10() { }
+      virtual void zz_it1() { } ///< @internal
+      virtual void zz_it2() { } ///< @internal
+      virtual void zz_it3() { } ///< @internal
+      virtual void zz_it4() { } ///< @internal
+      virtual void zz_it5() { } ///< @internal
+      virtual void zz_it6() { } ///< @internal
+      virtual void zz_it7() { } ///< @internal
+      virtual void zz_it8() { } ///< @internal
+      virtual void zz_it9() { } ///< @internal
+      // virtual void zz_it10() { } ///< @internal
   };
 
   STAMINA_REGISTER_CLASS_VERSION(iTable);
@@ -576,7 +576,7 @@ namespace Tables {
      * }
      * @endcode
      */
-    const tIMid setColumns  = IM_BASE + 1100;
+    const tIMid setColumns = IM_BASE + 1100;
 
     /** 
      * Dane w tablicy uleg³y zmianie
@@ -587,7 +587,7 @@ namespace Tables {
      * Tablica zostanie za chwilê zapisana
      * Komunikat przesy³any w postaci TableIM 
      */
-    const tIMid beforeSave  = IM_BASE + 1101;
+    const tIMid beforeSave = IM_BASE + 1101;
     /** 
      * Tablica zosta³a prze³adowana z pliku
      * Komunikat przesy³any w postaci TableIM 
@@ -597,12 +597,12 @@ namespace Tables {
      * Nowy wiersz _tableRowIM::rowId w tablicy...
      * Komunikat przesy³any w postaci TableRow 
      */
-    const tIMid rowAdded  = IM_BASE + 1103;
+    const tIMid rowAdded = IM_BASE + 1103;
     /** 
      * Wiersz _tableRowIM::rowId zosta³ usuniêty
      * Komunikat przesy³any w postaci TableRow 
      */
-    const tIMid rowRemoved  = IM_BASE + 1104;
+    const tIMid rowRemoved = IM_BASE + 1104;
     /** 
      * Komunikat przesy³any w postaci TableIM 
      */

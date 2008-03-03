@@ -1,7 +1,7 @@
 #pragma once
 
 namespace kTransfer {
-  const int net = NET_KTRANSFER;
+  const int net = Net::ktransfer;
 
   namespace Cfg {
     const int localIP = 130002;
@@ -21,9 +21,9 @@ namespace kTransfer {
     const int showOnConnection = 130032; // Pokazuje ju¿ po nawi¹zaniu po³¹czenia
     const int notifyOnCompletion = 130033; // Informuje przez kNotify o zakoñczeniu pobierania
 
-    const int closeWindowUp = 130035; 
-    const int closeWindowDown = 130036; 
-    const int saveToHistory = 130037; 
+    const int closeWindowUp = 130035;
+    const int closeWindowDown = 130036;
+    const int saveToHistory = 130037;
     const int slotsMax = 130038;
     const int dirSend = 130039;
     const int dirReceive = 130040;

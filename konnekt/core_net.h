@@ -2,15 +2,21 @@
 
 namespace Konnekt {
   /**
+   * @defgroup net_ Sieci wtyczek
+   * @{
+   */
+
+   /**
    * "Sieæ" (Net) wtyczki oznacza przynale¿noœæ do pewnej grupy.
    * Na przyk³ad jeden protokó³ mo¿e byæ obs³ugiwany przez kilka niezale¿nych
-   * od siebie wtyczek o tej samej wartoœci @a Net. <br/><br/>
+   * od siebie wtyczek o tej samej wartoœci @a Net.
+   *
    * Wartoœæ sieci u¿ywana jest przede wszystkim podczas komunikacji
    * pomiêdzy wtyczkami. W momencie wys³ania #IMessage, rdzeñ
    * szuka wtyczki o podanej wartoœci @a Net obs³uguj¹cej typ wysy³anej
    * wiadomoœci. W ten sposób, mo¿na rozsy³aæ w systemie wiadomoœci
-   * do @i wtyczek nawet nie wiedz¹c o ich istnieniu (a przede wszystkim
-   * o ich identyfikatorach) ...<br/><br/>
+   * do @e wtyczek nawet nie wiedz¹c o ich istnieniu (a przede wszystkim
+   * o ich identyfikatorach) ...\n\n
    * Numery sieci gotowych wtyczek bêd¹ do³¹czane do SDK...
    *
    * @attention @a Net jest typu <b>unsigned int</b>, przy czym
@@ -67,7 +73,7 @@ namespace Konnekt {
      * Rozsy³anie mo¿na ograniczaæ przez (nie mo¿na ³¹czyæ!):
      * - pozycjê startu tPluginId - okreœlaj¹c¹ wtyczkê od której nale¿y zacz¹æ wyszukiwanie
      * - pozycjê startu int - okreœlaj¹c¹ po znalezieniu ilu @b pasuj¹cych wtyczek ma zacz¹æ wysy³aæ komunikaty 
-     * (w ten sposób mo¿na zrobiæ pêtlê wysy³ania broadcastów typu @i first, zwiêkszaj¹c pozycjê o 1 dopóki 
+     * (w ten sposób mo¿na zrobiæ pêtlê wysy³ania broadcastów typu @e first, zwiêkszaj¹c pozycjê o 1 dopóki 
      * nie pojawi siê b³¹d nie obs³u¿enia komunikatu ( Ctrl::getError() )
      * - wartoœæ tNet - ogranicza wtyczki do jednej wartoœci net
      *
@@ -145,7 +151,8 @@ namespace Konnekt {
       }
 
       /** 
-       * Ustawia typ wartoœci sieci na broadcast (@sa isBroadcast()).
+       * Ustawia typ wartoœci sieci na broadcast
+       * @sa isBroadcast().
        */
       inline Broadcast& setBroadcast() {
         this->flag = 1;
@@ -154,7 +161,8 @@ namespace Konnekt {
       }
 
       /** 
-       * Ustawia typ wartoœci sieci na first (@sa isFirstOnly()).
+       * Ustawia typ wartoœci sieci na first
+       * @sa isFirstOnly().
        */
       inline Broadcast& setFirst() {
         this->flag = 1;
@@ -290,4 +298,6 @@ namespace Konnekt {
   };
 
   using Net::tNet;
+
+  /** @} */
 };

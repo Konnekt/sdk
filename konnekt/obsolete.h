@@ -1,3 +1,7 @@
+/**
+ * @file
+ * @deprecated
+ */
 #pragma once
 
 #ifndef KONNEKT_SDK_SUPPRES_OBSOLETE_NOTICE
@@ -25,9 +29,9 @@
  * Struktura u¿ywana w #IMC_CFG_SETCOL i #IMC_CNT_SETCOL
  */
 struct sSETCOL {
-  int id; /// ID kolumny.
-  int type; /// Typ kolumny (patrz \ref dt_ct_)
-  int def; /// Domyœlna wartoœæ.
+  int id; ///< ID kolumny.
+  int type; ///< Typ kolumny (patrz @ref dt_ct_)
+  int def; ///< Domyœlna wartoœæ.
 
   unsigned short s_size;
   const char * name; ///< Nazwa kolumny, konieczna, jeœli tworzymy kolumnê typu Unique (z id == -1).
