@@ -539,25 +539,49 @@ Je¿eli @a net bêdzie ustawiony na NET_NONE w UID mo¿na przekazaæ (tekstem) ID ko
 								        ///  \param p2 (char *) WskaŸnik do ci¹gu znaków do zapisania wersji tekstowo, lub NULL.
                                         ///  \return (int) #VERSION_TO_NUM
 
-		/** Od³¹cza wtyczkê o podanym identyfikatorze podaj¹c opowiednie uzasadnienie.
-		    
-		*/
-		struct sIMessage_plugOut:public sIMessage_base {
-			const static int __msgID = 250;
-			int _plugID;
-			const char * _reason;
-			enum enRestart {
-				erNo = 0 , erAsk = 1 , erYes = 2 , erAskShut = 3 , erShut = 4
+  struct sIMessage_plugVirtualAdd : public sIMessage_base {
+    const static int __msgId = 253;
 
-			} _restart; ///< Czy restartowaæ program?
-			enum enUnload{
-				  euNow=1 /// Nie powinno byæ ustawiane póŸniej ni¿ w #IMI_ALLPLUGSINITIALIZED
-				, euNextStart=2
-				, euNowAndOnNextStart=3
-			} _unload; ///< Kiedy j¹ od³¹czyæ?
-            sIMessage_plugOut(int plugID , const char * reason , enRestart restart = erAsk , enUnload unload = euNextStart):sIMessage_base(__msgID)
-				,_plugID(plugID),_reason(reason),_restart(restart),_unload(unload){s_size=sizeof(*this);}
-        };
+    void* _object;
+    void* _proc;
+    tPluginId _plugId;
+
+    sIMessage_plugVirtualAdd(void* object, void* proc, tPluginId plugId = pluginNotFound) : 
+      sIMessage_base(__msgId), _object(object), _proc(proc), _plugId(plugId) {
+        s_size = sizeof(*this);
+    }
+  };
+
+/** Od³¹cza wtyczkê o podanym identyfikatorze podaj¹c opowiednie uzasadnienie.
+    
+*/
+
+  struct sIMessage_plugOut : public sIMessage_base {
+    const static int __msgId = 250;
+
+    tPluginId _plugId;
+    const char * _reason;
+
+    enum enRestart {
+      erNo,
+      erAsk,
+      erYes,
+      erAskShut,
+      erShut
+    } _restart; ///< Czy restartowaæ program?
+
+    enum enUnload{
+      euNow = 1, /// Nie powinno byæ ustawiane póŸniej ni¿ w #IMI_ALLPLUGSINITIALIZED
+      euNextStart,
+      euNowAndOnNextStart,
+    } _unload; ///< Kiedy j¹ od³¹czyæ?
+
+    sIMessage_plugOut(tPluginId plugId , const char* reason, enRestart restart = erAsk , enUnload unload = euNextStart) : 
+      sIMessage_base(__msgId), _plugId(plugId), _reason(reason), _restart(restart), _unload(unload){
+        s_size = sizeof(*this);
+    }
+  };
+
 
 
         #define IMC_STATUSCHANGE   246 ///< Informuje rdzeñ, ¿e za chwilê nast¹pi zmiana statusu wtyczki.
@@ -1373,8 +1397,8 @@ Nie ma ju¿ potrzeby wysy³ania #IMI_REFRESH_CNT
            #define IMI_MSG_INFO_undelivered 0
            #define IMI_MSG_INFO_delivered 1
         */
-        #define IMI_MSG_OPEN    IMI_BASE+3001  // (cMessage*)    internal usage
-        #define IMI_MSG_NOTINLIST IMI_BASE+3002 // (cMessage *)  internal usage
+        #define IMI_MSG_OPEN    IMI_BASE+3001  // (Message*)    internal usage
+        #define IMI_MSG_NOTINLIST IMI_BASE+3002 // (Message *)  internal usage
         #define IMI_MSG_WINDOWSTATE IMI_BASE+3003 ///< Zwraca stan okna wiadomoœci dla kontaktu.
                                                     ///  \p1 Numer kontaktu.
                                                     ///  \return 0 - okno zamkniête.
@@ -1393,7 +1417,7 @@ Obs³uguje komunikaty WM_KEYDOWN i WM_SYSKEYDOWN
 		/** Struktura u¿ywana przez #IMI_HISTORY_ADD. */
         struct sHISTORYADD {
             unsigned short s_size;
-            struct cMessage * m; ///< Wiadomoœæ do dodania
+            class Message * m; ///< Wiadomoœæ do dodania
             const char * dir; ///< podkatalog w "history/"
             unsigned int cnt; ///< Identyfikator kontaktu jeœli ma byæ automatycznie utworzona nazwa
             const char * name; ///< Nazwa pliku (jeœli cnt==0)
