@@ -7,6 +7,8 @@ namespace Konnekt {
    * @{
    */
 
+  typedef int IMPARAM;
+
   /**
    * Ka¿da wtyczka powinna zdefiniowaæ jakiego typu #IMessage potrafi
    * przyj¹æ (konkretniej - za co ma odpowiadaæ).

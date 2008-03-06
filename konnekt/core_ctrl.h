@@ -9,12 +9,15 @@ namespace Konnekt {
    * Klasa s³u¿¹ca do komunikowania siê z "rdzeniem" systemu wtyczek.
    *
    * Adres tej struktury (zaalokowanej w rdzeniu) przekazywany jest
-   * jako parametr w pierwszej wiadomosci do wtyczki - #IM_INIT ...<br/>
+   * jako parametr w pierwszej wiadomosci do wtyczki - #IM_INIT ...
    * Ka¿da wtyczka posiada w³asn¹ kopiê Controler.
    *
    * @sa IMessageProc()
    */
   class Controler {
+  public:
+    typedef unsigned int ( __stdcall * fBeginThread)( void * );
+
   public:
     virtual int __stdcall getLevel() = 0;     ///< Zwraca "poziom" dostepu do rdzenia. W 99% przypadków zwróci 1 ...
     virtual tPluginId __stdcall ID() = 0;     ///< Zwraca identyfikator wtyczki.
@@ -191,27 +194,28 @@ namespace Konnekt {
      */
     virtual int __stdcall Sleep(unsigned int time) = 0;
 
-    typedef unsigned int ( __stdcall * fBeginThread)( void * );
-
     /**
-     * BeginThread dzia³a identycznie jak _beginthreadex z wyj¹tkiem
-     * tego, ¿e w trybie debug potrafi wychwytywaæ b³êdy w w¹tku
-     * i je raportowaæ... U¿ywanie wysoko zalecane!
-     *
-     * @warning Funkcja zwraca uchwyt w¹tku! Nale¿y go zamkn¹æ przy pomocy CloseHandle()!!!
+     * @sa BeginThread
      */
-    virtual HANDLE __stdcall BeginThreadOld(void *security,
+    virtual HANDLE __stdcall BeginThreadOld(void * security,
       unsigned stack_size,
       fBeginThread start_address,
-      void *arglist = 0,
+      void * arglist = 0,
       unsigned initflag = 0,
-      unsigned *thrdaddr = 0
+      unsigned * thrdaddr = 0
     ) = 0;
     /** 
      * Tworzy w¹tek i czeka a¿ siê skoñczy.
      * Parametry te same co w Controler::BeginThread()
      */
-    int BeginThreadAndWait(const char * name, void *security, unsigned stack_size, fBeginThread start_address, void *arglist = 0, unsigned initflag = 0, unsigned *thrdaddr = 0);
+    int BeginThreadAndWait(const char * name, 
+      void * security, 
+      unsigned stack_size, 
+      fBeginThread start_address, 
+      void * arglist = 0, 
+      unsigned initflag = 0, 
+      unsigned *thrdaddr = 0
+    );
 
     /** 
      * Pobiera poziom debugowania dla wtyczki
@@ -255,12 +259,20 @@ namespace Konnekt {
      */
     virtual Konnekt::oPlugin __stdcall getPlugin(Konnekt::tPluginId pluginId = pluginNotFound) = 0;
 
-    virtual HANDLE __stdcall BeginThread(const char* name, void *security,
+
+    /**
+     * BeginThread dzia³a identycznie jak _beginthreadex z wyj¹tkiem
+     * tego, ¿e w trybie debug potrafi wychwytywaæ b³êdy w w¹tku
+     * i je raportowaæ... U¿ywanie wysoko zalecane!
+     *
+     * @warning Funkcja zwraca uchwyt w¹tku! Nale¿y go zamkn¹æ przy pomocy CloseHandle() !!!
+     */
+    virtual HANDLE __stdcall BeginThread(const char* name, void * security,
       unsigned stack_size,
       fBeginThread start_address,
-      void *arglist = 0,
+      void * arglist = 0,
       unsigned initflag = 0,
-      unsigned *thrdaddr = 0
+      unsigned * thrdaddr = 0
     ) = 0;
 
     /** 

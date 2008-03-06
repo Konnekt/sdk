@@ -114,7 +114,7 @@ void Controler::IMLOG(const char *format, ...) {
   va_end(ap);
 }
 void Controler::IMDEBUG(enDebugLevel level, const char *format, ...) {
-  if (!this || this->DebugLevel(level)) {
+  if (!this || !this->DebugLevel(level)) {
     return;
   }
   va_list ap;
@@ -125,7 +125,7 @@ void Controler::IMDEBUG(enDebugLevel level, const char *format, ...) {
 
 
 void Controler::log(enDebugLevel level, const char* module, const char* where, const char *format, ...) {
-  if (!this || this->DebugLevel(level)) {
+  if (!this || !this->DebugLevel(level)) {
     return;
   }
   va_list ap;
@@ -134,7 +134,7 @@ void Controler::log(enDebugLevel level, const char* module, const char* where, c
   va_end(ap);
 }
 void Controler::logV(enDebugLevel level, const char* module, const char* where, const char *format, va_list p) {
-  if (!this || this->DebugLevel(level)) {
+  if (!this || !this->DebugLevel(level)) {
     return;
   }
   int size = _vscprintf(format, p);

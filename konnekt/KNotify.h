@@ -1,3 +1,7 @@
+#pragma once
+
+#include "core_message.h"
+
 /**
  * @file
  * Nag³ówek wtyczki K.Notify wyœwietlaj¹cej komunikaty nad zegarkiem systemowym.
@@ -176,7 +180,13 @@ namespace KNotify {
         sIMessage_notify_v1 * msg1 = (sIMessage_notify_v1*) msg;
         this->_text = msg1->txt;
         this->_icoType = msg1->mask ? itIcoID : itHICON;
-        this->_icoID = msg1->mask == 0 ? (int) msg1->ico : msg1->mask == 1 ? UIIcon(IT_STATUS, msg1->cntnet, msg1->status, 0) : msg1->mask == 2 ? UIIcon(IT_MESSAGE, 0, Message::typeMessage, 0) : 0;
+        this->_icoID = msg1->mask == 0 
+          ? (int) msg1->ico 
+          : msg1->mask == 1 
+            ? UIIcon(IT_STATUS, msg1->cntnet, msg1->status, 0) 
+            : msg1->mask == 2 
+              ? UIIcon(IT_MESSAGE, 0, Message::typeMessage, 0) 
+              : 0;
         this->_msgType = tInform;
         this->_timeToLive = 1;
         this->_actionParam = 0;
@@ -202,7 +212,7 @@ namespace KNotify {
     const static unsigned int tiURL = 5;      ///< _type - typ komunikatu K.Info
 
   public:
-    char *_infoArgs; ///< K.Info - Informacje do przes³ania @sa SetExtParam
+    char *_infoArgs;        ///< K.Info - Informacje do przes³ania @sa SetExtParam
     unsigned int _infoType; ///< K.Info - Typ wiadomoœci @sa tiStatus tiMessage tiFile tiMail tiURL
 
   public:

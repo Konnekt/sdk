@@ -1,5 +1,7 @@
 #pragma once
 
+#include "core_message.h"
+
 /**
  * @file
  * Nag³ówek do obs³ugi kontrolek w oknach wiadomoœci i historii.
@@ -69,11 +71,11 @@ namespace Konnekt {
 
 			class _insertMsg: public sUIActionNotify_base {
 			public:
-				cMessage * _message;    ///< Wiadomoœæ do wyœwietlenia
+				Message * _message;    ///< Wiadomoœæ do wyœwietlenia
 				const char * _display;  ///< Nazwa kontaktu jako autora (je¿eli "" - to na podstawie wiadomoœci)
 				bool _scroll;           ///< Czy przewin¹æ ekran do dodanej wiadomoœci
 
-				_insertMsg(cMessage * message, const char * display, bool scroll): sUIActionNotify_base(insertMsg), _message(message), _display(display), _scroll(scroll) {
+				_insertMsg(Message * message, const char * display, bool scroll): sUIActionNotify_base(insertMsg), _message(message), _display(display), _scroll(scroll) {
 				  s_size = sizeof(*this);
 				}
 			};
@@ -90,10 +92,10 @@ namespace Konnekt {
 
 			class _getMessage: public sUIActionNotify_base {
 			public:
-				cMessage * _message; ///< Wiadomoœæ do wyœwietlenia. cMessage::body trzyma wskaŸnik do bufora, którego rozmiar zosta³ ustawiony w getMessageSize
+				Message * _message; ///< Wiadomoœæ do wyœwietlenia. Message::body trzyma wskaŸnik do bufora, którego rozmiar zosta³ ustawiony w getMessageSize
 				int _size;
 
-				_getMessage(cMessage * message, int size): sUIActionNotify_base(getMessage), _message(message), _size(size) {
+				_getMessage(Message * message, int size): sUIActionNotify_base(getMessage), _message(message), _size(size) {
 				  s_size = sizeof(*this);
 				}
 			};

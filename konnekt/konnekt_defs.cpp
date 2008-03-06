@@ -195,13 +195,16 @@ const char * SAFECHAR(const char * ch) {
 
   void IMLOG(const char *format, ...) {
     if (!Ctrl) return;
+
     va_list ap;
     va_start(ap, format);
     Ctrl->logV(DBG_LOG, 0, 0, format, ap);
     va_end(ap);
   }
   void IMDEBUG(enDebugLevel level, const char *format, ...) {
-    if (!Ctrl || !Ctrl->DebugLevel(level)) return;
+    if (!Ctrl || !Ctrl->DebugLevel(level)) {
+      return;
+    }
     va_list ap;
     va_start(ap, format);
     Ctrl->logV(level, 0, 0, format, ap);
@@ -680,31 +683,6 @@ const char * CntGetInfoValue(bool fromWindow, int cntID, int colID) {
     colID | IMIB_CNT, cntID), 0, 0, true
   );
 }
-
-
-/*
-cMessage * messageDuplicate(cMessage * m) {
-  cMessage * mc = new cMessage;
-  *mc = *m;
-  mc->body = _strdup(m->body);
-  mc->ext = _strdup(m->ext);
-  mc->fromUid = _strdup(m->fromUid);
-  mc->toUid = _strdup(m->toUid);
-
-  return mc;
-}
-
-void messageFree(cMessage * m, bool deleteObject) {
-  free(m->body);
-  free(m->ext);
-  free(m->fromUid);
-  free(m->toUid);
-
-  if (deleteObject) {
-    delete m;
-  }
-}
-*/
 
 
 bool ShowBits::checkBits(ShowBits::enShowBits show) {

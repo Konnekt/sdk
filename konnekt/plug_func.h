@@ -45,7 +45,7 @@ int UIActionAdd(int _parent, int _id, int _status = 0, const char * _txt = 0, in
 /**
  * Wstawia akcjê.
  */
-inline int UIActionInsert(int _parent, int _id, int _pos, int _status = 0, const char * _txt = 0, int _p1 = 0, short _w = 0, short _h = 0, int _p2 = 0, int _param = 0);
+int UIActionInsert(int _parent, int _id, int _pos, int _status = 0, const char * _txt = 0, int _p1 = 0, short _w = 0, short _h = 0, int _p2 = 0, int _param = 0);
 
 /**
  * Dodaje akcjê do konfiguracji.
@@ -252,18 +252,6 @@ int SetColumn(tTable table, int id, int type, int def, const char * name = 0);
 inline int SetColumn(tTable table, int id, int type, const char * def , const char * name = 0) {
   return SetColumn(table, id, type, (int) def, name);
 }
-
-/** 
- * Tworzy kopie cMessage. 
- * Wykorzystywane, gdy po odebraniu np. #IM_MSG_SEND wysy³amy wiadomoœæ
- * w osobnym w¹tku. Tworzymy kopiê w IMessageProcess, a zwalniamy
- * na koñcu w¹tku. F-cja alokuje ca³¹ strukturê!
- */
-// cMessage * messageDuplicate(cMessage * m);
-/** 
- * Zwalnia cMessage (to co zaalokowa³ messageDuplicate.
- */
-// void messageFree(cMessage * m, bool deleteObject = true);
 
 void testResult(const StringRef& title, int should, int got, bool swap = false);
 void testResult(const StringRef& title, const StringRef& should, const StringRef& got, bool swap = false);

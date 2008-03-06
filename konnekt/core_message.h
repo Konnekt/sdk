@@ -98,10 +98,10 @@ namespace Konnekt {
       flagSend              = 2,      ///< Wiadomoœæ przeznaczona do wys³ania
       flagNoEvents          = 4,      ///< #mtQuickEvent maj¹ nie byæ wysy³ane
       flagNoSave            = 8,      ///< Wiadomoœæ nie zostanie zapisana na dysk ...
-      flagRequestOpen       = 0x10,   ///< #IM_MSG_OPEN / #IM_MSG_SEND zostanie wys³ane z #IMC_MESSSAGEQUEUE tylko gdy zostanie ono wywo³ane dla tego typu i sieci wiadomoœci.
+      flagRequestOpen       = 0x10,   ///< #Message::IM::imOpenMessage / #Message::IM::imSendMessage zostanie wys³ane z #MessageSelect::IM::imcMessageQueue tylko gdy zostanie ono wywo³ane dla tego typu i sieci wiadomoœci.
       flagProcessing        = 0x20,   ///< Flaga wewnêtrzna oznaczaj¹ca ¿e wiadomoœæ jest w trakcie przetwarzania, Nie powinna byæ u¿ywana!
       flagOpened            = 0x40,   ///< Wiadomoœæ ju¿ zosta³a otwarta. Teraz czeka w kolejce na usuniêcie. Flaga ta jest czyszczona podczas zamykania.     
-      flagHandled           = 0x40,   ///< Wiadomoœæ zosta³a w pe³ni obs³u¿ona i czeka na usuniêcie (to samo co flagOpened). Tyczy siê równie¿ wiadomoœci wysy³anych...
+      flagHandled           = 0x40,   ///< Wiadomoœæ zosta³a w pe³ni obs³u¿ona i czeka na usuniêcie (to samo co #flagOpened). Tyczy siê równie¿ wiadomoœci wysy³anych...
       flagHandledByUI       = 0x80,   ///< Wiadomoœæ zostanie obs³u¿ona przez UI
       flagAutomated         = 0x100,  ///< Wiadomoœæ zosta³a stworzona przez jakiœ "automatyczny" proces, wiêc, gdy jesteœmy ukryci, nie powinna byæ wysy³ana.
       flagHTML              = 0x200,  ///< Treœæ wiadomoœci zawiera znaczniki HTML, a znaki specjalne s¹ kodowane (przynajmniej > = &gt; < = &lt; i " = &quot; Html powinien byæ sformatowany jak XHTML (<img/>, wszystkie atrybuty w "" itd..)
@@ -341,7 +341,7 @@ namespace Konnekt {
 
   public:
     /**
-     * @defgroup mex_ Nazwy wartoœci w polach Message::getExtParam, MessageAck::getExtParam
+     * @defgroup mex_ Nazwy wartoœci w polach Message::ext, MessageAck::ext.
      * @{
      */
 
@@ -360,17 +360,19 @@ namespace Konnekt {
   public:
     /** 
      * Zwroty z IM_MSG_* 
-     * #IM_MSG_RCV, #IM_MSG_SEND i #IM_MSG_OPEN mog¹ zwróciæ po³¹czone takie flagi.  
+     * #Message::IM::imReceiveMessage, #Message::IM::imSendMessage i #Message::IM::imOpenMessage mog¹ zwróciæ po³¹czone takie flagi.  
      */
     enum enMessageResult {
-       resultOk     = 1, ///< Flaga zwrotna #resultRCV - Musi byæ ustawiona jesli wtyczka zamierza obs³u¿yæ wiadomoœæ.
-       resultDelete = 2, ///< Wiadomoœæ powinna zostaæ niezw³ocznie usuniêta...
-       resultUpdate = 4, ///< Zawartoœæ wiadomoœci zosta³a zmieniona i powinna zostaæ zaktualizowana jej kopia w kolejce.
-       /** 
-        * Flaga zwrotna #resultOPEN i #resultSEND - Wiadomoœæ jest dalej przetwarzana (np w osobnym w¹tku) i zostanie usuniêta z kolejki poprzez #IMC_MESSAGEREMOVE,
-        * lub zakoñczy przetwarzanie poprzez #IMC_MESSAGEPROCESSED.
-        */
-       resultProcessing = 8
+      resultNone   = 0,
+      resultOk     = 1, ///< Flaga zwrotna #resultRCV - Musi byæ ustawiona jesli wtyczka zamierza obs³u¿yæ wiadomoœæ.
+      resultDelete = 2, ///< Wiadomoœæ powinna zostaæ niezw³ocznie usuniêta...
+      resultUpdate = 4, ///< Zawartoœæ wiadomoœci zosta³a zmieniona i powinna zostaæ zaktualizowana jej kopia w kolejce.
+      /** 
+       * Flaga zwrotna #resultOPEN i #resultSEND - Wiadomoœæ jest dalej przetwarzana (np w osobnym w¹tku) 
+       * i zostanie usuniêta z kolejki poprzez #MessageSelect::IM::imcMessageRemove,
+       * lub zakoñczy przetwarzanie poprzez #Message::IM::imcSetProcessed.
+       */
+      resultProcessing = 8
     };
 
     /** 
