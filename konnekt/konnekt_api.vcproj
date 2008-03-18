@@ -205,6 +205,22 @@
 					</FileConfiguration>
 				</File>
 			</Filter>
+			<Filter
+				Name="contrib"
+				>
+				<Filter
+					Name="events"
+					>
+					<File
+						RelativePath=".\contrib\events\ActionDispatcher.cpp"
+						>
+					</File>
+					<File
+						RelativePath=".\contrib\events\IMessageDispatcher.cpp"
+						>
+					</File>
+				</Filter>
+			</Filter>
 		</Filter>
 		<Filter
 			Name="Header Files"
@@ -353,6 +369,50 @@
 					RelativePath=".\test_cppunit.h"
 					>
 				</File>
+			</Filter>
+			<Filter
+				Name="contrib"
+				>
+				<File
+					RelativePath=".\contrib\Config.h"
+					>
+				</File>
+				<File
+					RelativePath=".\contrib\Context.h"
+					>
+				</File>
+				<File
+					RelativePath=".\contrib\iController.h"
+					>
+				</File>
+				<Filter
+					Name="events"
+					>
+					<File
+						RelativePath=".\contrib\events\ActionDispatcher.h"
+						>
+					</File>
+					<File
+						RelativePath=".\contrib\events\ActionEvent.h"
+						>
+					</File>
+					<File
+						RelativePath=".\contrib\events\Event.h"
+						>
+					</File>
+					<File
+						RelativePath=".\contrib\events\EventDispatcher.h"
+						>
+					</File>
+					<File
+						RelativePath=".\contrib\events\IMessageDispatcher.h"
+						>
+					</File>
+					<File
+						RelativePath=".\contrib\events\IMEvent.h"
+						>
+					</File>
+				</Filter>
 			</Filter>
 		</Filter>
 		<Filter
