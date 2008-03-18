@@ -1,16 +1,12 @@
 /**
+  *  @file
   *  Generic Event Dispatcher class
   *
   *  Licensed under The GNU Lesser General Public License
   *  Redistributions of files must retain the above copyright notice.
   *
-  *  @file
-  *  @link          svn://konnekt.info/kaway2/ "SVN Repository"
   *  @author        Sijawusz Pur Rahnama <sija@gibbon.pl>
   *  @license       http://creativecommons.org/licenses/LGPL/2.1/
-  *  @version       $Revision$
-  *  @date          $Date$
-  *  @modifiedby    $LastChangedBy: sija $
   */
 
 #pragma once
@@ -26,7 +22,6 @@
 #include <boost/bind.hpp>
 
 #include <Stamina/Exception.h>
-#include <Stamina/ObjectImpl.h>
 
 using namespace Stamina;
 using namespace boost;
@@ -44,31 +39,19 @@ namespace Konnekt {
   };
 
   template <class E>
-  class EventDispatcher : public SharedObject<iSharedObject> {
+  class EventDispatcher : public iObject {
   public:
     /**
      * Class version macro
      */
-    STAMINA_OBJECT_CLASS_VERSION(EventDispatcher<E>, iSharedObject, Version(0,1,0,0));
-
-  public:
-    typedef deque<signals::connection> tConnections;
+    STAMINA_OBJECT_CLASS_VERSION(EventDispatcher<E>, iObject, Version(0,1,0,0));
 
   public:
     typedef function<void(E&)> fListener;
     typedef signal<void(E&)> sigListener;
 
   public:
-    /**
-     * Structure holding listener and it's connections
-     */
-    struct sListener {
-      tConnections connections;
-      sigListener signal;
-    };
-
-  public:
-    typedef hash_map<int, sListener*> tListeners;
+    typedef hash_map<int, sigListener*> tListeners;
 
   public:
     inline ~EventDispatcher() {
@@ -92,34 +75,14 @@ namespace Konnekt {
       if (f.empty()) {
         throw ExceptionString("Empty functor was given.");
       }
-
       if (_listeners.find(id) == _listeners.end()) {
-        _listeners[id] = new sListener;
+        _listeners[id] = new sigListener;
       }
-
-      signals::connection c = _listeners[id]->signal.connect(priority, f, pos);
+      signals::connection c = _listeners[id]->connect(priority, f, pos);
       if (!c.connected()) {
         throw ExceptionString("Listener was not connected.");
       }
-
-      _listeners[id]->connections.push_back(c);
       return c;
-    }
-
-    /**
-     * Disconnects a listener for a given event id.
-     * TODO: jak to obsluzyc ?
-     *
-     * @param id   An event id
-     * @param f    Listener callback
-     *
-     * @return  true if listener was successfuly diconnected
-     */
-    inline bool disconnect(int id, const fListener& f) {
-      if (!hasListeners(id)) {
-        return false;
-      }
-      return true;
     }
 
     /**
@@ -133,7 +96,7 @@ namespace Konnekt {
 
       if (hasListeners(id)) {
         try {
-          _listeners[id]->signal(ev);
+          (*_listeners[id])(ev);
         } catch (StopEventNotifyException&) { }
       }
       return ev;
@@ -147,7 +110,7 @@ namespace Konnekt {
       if (_listeners.find(id) == _listeners.end()) {
         return false;
       }
-      return !_listeners[id]->signal.empty();
+      return !_listeners[id]->empty();
     }
 
   protected:

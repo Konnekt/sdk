@@ -1,16 +1,12 @@
 /**
+  *  @file
   *  IMessage Dispatcher class
   *
   *  Licensed under The GNU Lesser General Public License
   *  Redistributions of files must retain the above copyright notice.
   *
-  *  @file
-  *  @link          svn://konnekt.info/kaway2/ "SVN Repository"
   *  @author        Sijawusz Pur Rahnama <sija@gibbon.pl>
   *  @license       http://creativecommons.org/licenses/LGPL/2.1/
-  *  @version       $Revision$
-  *  @date          $Date$
-  *  @modifiedby    $LastChangedBy: sija $
   */
 
 #pragma once

@@ -1,16 +1,12 @@
 /**
+  *  @file
   *  Generic Event class
   *
   *  Licensed under The GNU Lesser General Public License
   *  Redistributions of files must retain the above copyright notice.
   *
-  *  @file
-  *  @link          svn://konnekt.info/kaway2/ "SVN Repository"
   *  @author        Sijawusz Pur Rahnama <sija@gibbon.pl>
   *  @license       http://creativecommons.org/licenses/LGPL/2.1/
-  *  @version       $Revision$
-  *  @date          $Date$
-  *  @modifiedby    $LastChangedBy: sija $
   */
 
 #pragma once
@@ -19,6 +15,8 @@
 #define __EVENT_H__
 
 #include <Stamina/Helpers.h>
+
+using namespace Stamina;
 
 namespace Konnekt {
   class Event : public SharedObject<iSharedObject> {
@@ -38,7 +36,7 @@ namespace Konnekt {
     Event(int id, void * subject = 0): _value(0), _processed(false), _id(id), _subject(subject) { }
 
     /**
-     * Constructs a empty Event object.
+     * Constructs an empty Event object.
      */
     Event(): _value(0), _processed(false), _id(0), _subject(0) { }
 
