@@ -35,7 +35,7 @@ using ::Stamina::String;
 /**
  * Sprawdza czy Controler::isRunning() zwraca true, jeœli nie, wychodzi.
  */
-#define ISRUNNING() if (!Ctrl->isRunning()) { Ctrl->setError(IMERROR_SHUTDOWN); return 0; }
+#define ISRUNNING() if (!Ctrl->isRunning()) { Ctrl->setError(Konnekt::errorShutdown); return 0; }
 
 /**
  * Dodaje akcjê.
