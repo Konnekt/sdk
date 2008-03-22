@@ -96,7 +96,7 @@ namespace Konnekt {
     enum enFlags {
       flagNone              = 0,
       flagSend              = 2,      ///< Wiadomoœæ przeznaczona do wys³ania
-      flagNoEvents          = 4,      ///< #mtQuickEvent maj¹ nie byæ wysy³ane
+      flagNoEvents          = 4,      ///< #typeQuickEvent maj¹ nie byæ wysy³ane
       flagNoSave            = 8,      ///< Wiadomoœæ nie zostanie zapisana na dysk ...
       flagRequestOpen       = 0x10,   ///< #Message::IM::imOpenMessage / #Message::IM::imSendMessage zostanie wys³ane z #MessageSelect::IM::imcMessageQueue tylko gdy zostanie ono wywo³ane dla tego typu i sieci wiadomoœci.
       flagProcessing        = 0x20,   ///< Flaga wewnêtrzna oznaczaj¹ca ¿e wiadomoœæ jest w trakcie przetwarzania, Nie powinna byæ u¿ywana!
@@ -108,11 +108,11 @@ namespace Konnekt {
 
       /**
        * Interfejs obs³u¿y wyœwietlanie wiadomoœci w menu.
-       * Za ikonkê pos³u¿y cMessage::notify, nazwê pozycji w menu ustawiamy
-       * w Ext jako parametr "ActionTitle". Je¿eli ustawiona jest cMessage::action
+       * Za ikonkê pos³u¿y Message::notify, nazwê pozycji w menu ustawiamy
+       * w Ext jako parametr "ActionTitle". Je¿eli ustawiona jest Message::action
        * zostanie ona wys³ana po otwarciu wiadomoœci. W przeciwnym razie zostanie
-       * wywo³ane IM_MSG_OPEN.
-       * Wtyczka musi w #IM_MSG_RCV zadeklarowaæ obs³ugê wiadomoœci.
+       * wywo³ane #Message::IM::imOpenMessage.
+       * Wtyczka musi w #Message::IM::imReceiveMessage zadeklarowaæ obs³ugê wiadomoœci.
        */
       flagMenuByUI          = 0x400, 
       flagLeaveAsIs         = 0x800,    ///< Zabrania wtyczkom zmiany treœci, w tym wyœwietlania emotikon
@@ -122,8 +122,8 @@ namespace Konnekt {
 
       flagLoaded            = 0x8000,   ///< Wiadomoœæ zosta³a za³adowana z pliku (po ponownym uruchomieniu aplikacji)
 
-      flag_QE_Normal        = 0x10000,  ///< MT_QUICKEVENT narysuje zwyk³¹ czcionk¹...
-      flag_QE_ShowTime      = 0x20000,  ///< MT_QUICKEVENT poka¿e czas nadejœcia...
+      flag_QE_Normal        = 0x10000,  ///< #typeQuickEvent narysuje zwyk³¹ czcionk¹...
+      flag_QE_ShowTime      = 0x20000,  ///< #typeQuickEvent poka¿e czas nadejœcia...
     };
 
   public:
@@ -334,8 +334,8 @@ namespace Konnekt {
     /** 
      * Oznacza wiadomoœæ jako przetworzon¹.
      *
-     * Po skoñczeniu przetwarzania wiadomoœci, na któr¹ odpowiedzieliœmy flag¹ IM_MSG_processing wysy³amy ten komunikat, by rdzeñ "odznaczy³" nasz¹ wiadomoœæ. 
-     * #IMC_MESSAGEPROCESSED wysy³a siê tylko, gdy wiadomoœæ nie zosta³a od razu usuniêta.
+     * Po skoñczeniu przetwarzania wiadomoœci, na któr¹ odpowiedzieliœmy flag¹ #resultProcessing wysy³amy ten komunikat, by rdzeñ "odznaczy³" nasz¹ wiadomoœæ. 
+     * #Message::IM::imcSetProcessed wysy³a siê tylko, gdy wiadomoœæ nie zosta³a od razu usuniêta.
      */
     void setAsProcessed(bool setAsRemoved);
 
@@ -359,7 +359,7 @@ namespace Konnekt {
 
   public:
     /** 
-     * Zwroty z IM_MSG_* 
+     * Zwroty z Message::IM::im* 
      * #Message::IM::imReceiveMessage, #Message::IM::imSendMessage i #Message::IM::imOpenMessage mog¹ zwróciæ po³¹czone takie flagi.  
      */
     enum enMessageResult {
@@ -398,9 +398,9 @@ namespace Konnekt {
       /** 
        * Komunikat przy którym wtyczka powinna sprawdziæ czy obs³uguje dany typ wiadomoœci (MessageIM*).
        * Wtyczki odpytywane s¹ "od koñca". Ostatnia, która zwróci
-       * IM_MSG_RCV_ok bêdzie otrzymywaæ równie¿ IM_MSG_OPEN.
+       * #Message::resultOk bêdzie otrzymywaæ równie¿ #Message::IM::imOpenMessage.
        *
-       * @return (int) Po³¹czone flagi @ref im_msg_, lub 0 jeœli nie obs³uguje takich wiadomoœci.
+       * @return (int) Po³¹czone flagi @ref im_msg_, lub #Message::resultNone jeœli nie obs³uguje takich wiadomoœci.
        */
       static const tIMid imReceiveMessage = IM_BASE + 100;
 
@@ -435,8 +435,6 @@ namespace Konnekt {
     const static tColId colTime          = 11;  ///< (#ctypeInt64) Czas odebrania/wys³ania jako cTime64
     const static tColId colProcessing    = 13;
 
-    // #define C_MSG_COLCOUNT                 14 // ostatni
-
   private:
     Stamina::String _fromUid;
     Stamina::String _toUid;
@@ -464,9 +462,9 @@ namespace Konnekt {
   private:
     unsigned short _s_size;
   public:
-    int net; ///< Sieæ kontaktu. Ustaw na #Net::broadcast aby u¿yæ wszystkich sieci.
+    int net;        ///< Sieæ kontaktu. Ustaw na #Net::broadcast aby u¿yæ wszystkich sieci.
   private:
-    char * _chUid; ///< UID kontaktu. Ustaw 0 aby u¿yæ wszystkich.
+    char * _chUid;  ///< UID kontaktu. Ustaw 0 aby u¿yæ wszystkich.
 
   public:
     Stamina::String getUid() const {
@@ -501,7 +499,7 @@ namespace Konnekt {
       this->type = type;
       this->wflag = wflag;
       this->woflag = woflag;
-      this->id = -1;
+      this->id = Net::broadcast;
       this->position = 0;
     }
 
@@ -558,6 +556,7 @@ namespace Konnekt {
    * Struktura do przekazywania informacji o stanie przesy³anych wiadomoœci.
    * Mo¿na ni¹ podawaæ jakie wyst¹pi³y problemy, lub co sta³o siê z wiadomoœci¹
    * po wys³aniu (np. czeka na serwerze, lub dosz³a do odbiorcy...)
+   *
    * @attention @a id @b musi byæ ustawiony na numer potwierdzanej i @b istniej¹cej wiadomoœci.
    * W miêdzyczasie wiadomoœæ ta nie mo¿e byæ usuniêta przez inny w¹tek.
    *
@@ -566,8 +565,8 @@ namespace Konnekt {
   class MessageAck {
   public:
     enum enFlags {
-      flagFailed  = 0x1, ///< Wyst¹pi³ b³¹d
-      flagProcessing = 0x2, ///< W trakcie przetwarzania
+      flagFailed  = 0x1,        ///< Wyst¹pi³ b³¹d
+      flagProcessing = 0x2,     ///< W trakcie przetwarzania
 
       /**
        * Ack nie zostanie rozes³ane do wtyczek #imtMessageAck.
@@ -575,8 +574,8 @@ namespace Konnekt {
        */
       flagNoBroadcast = 0x100, 
 
-      flagImportant = 0x10, ///< Komunikat jest istotny, bêdzie pokazywany d³u¿ej
-      flagVeryImportant = 0x20 ///< Komunikat jest bardzo istotny.
+      flagImportant = 0x10,     ///< Komunikat jest istotny, bêdzie pokazywany d³u¿ej
+      flagVeryImportant = 0x20  ///< Komunikat jest bardzo istotny.
     };
 
   public:
@@ -589,8 +588,8 @@ namespace Konnekt {
   public:
     unsigned int id; ///< Identyfikator wiadomoœci któr¹ potwierdzamy.
   private:
-    char * _chMsg; 
-    char * _chExt; 
+    char * _chMsg;
+    char * _chExt;
   public:
     enFlags flag; ///< Flagi @ref mack_.
 

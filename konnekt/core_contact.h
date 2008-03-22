@@ -1,20 +1,18 @@
 #pragma once
 
 #include <Stamina/Time64.h>
+#include <Stamina/String.h>
 
 namespace Konnekt {
   using namespace Stamina;
 
   typedef unsigned int tCntId;
-
   const static tCntId cntNotExist = (tCntId) -1;
-
 
   class Contact {
   public:
     class IM {
     public:
-
       /** 
        * Klasa informuj¹ca o zmianach dotycz¹cych kontaktu.
        */
@@ -32,15 +30,15 @@ namespace Konnekt {
 
       public:
         CntChanged(tCntId cntID): cntID(cntID), changed(chNone), oldNet(Net::none), oldUID(0) {
-          id = imContactChanged;
-          s_size = sizeof(*this);
+          this->id = imContactChanged;
+          this->s_size = sizeof(*this);
         }
 
       public:
-        tCntId cntID; ///< ID kontaktu
-        enChanged changed; ///< Poprzednia wartoœæ net tego kontaktu
-        unsigned int oldNet; ///< Poprzednia wartoœæ net tego kontaktu
-        const char * oldUID; ///< Poprzednia wartoœæ UID
+        tCntId cntID;         ///< ID kontaktu
+        enChanged changed;    ///< Poprzednia wartoœæ net tego kontaktu
+        unsigned int oldNet;  ///< Poprzednia wartoœæ net tego kontaktu
+        const char * oldUID;  ///< Poprzednia wartoœæ UID
       };
 
       /** 
@@ -51,11 +49,12 @@ namespace Konnekt {
         const static unsigned int sizeV1 = 12;
 
       public:
-        StatusChange(tCntId cntID, unsigned int status, const StringRef& info = StringRef()) : 
-          cntID(cntID), status(status), _info(info) {
+        StatusChange(tCntId cntID, unsigned int status, const StringRef& info = StringRef()) 
+          : cntID(cntID), status(status), _info(info) 
+        {
             this->id = imContactStatusChange;
             _chInfo = (char*) _info.a_str();
-            s_size = sizeof(*this);
+            this->s_size = sizeof(*this);
         }
 
       public:
@@ -75,14 +74,15 @@ namespace Konnekt {
         }
 
       public:
-        tCntId cntID;   ///< ID kontaktu
+        tCntId cntID;         ///< ID kontaktu
         unsigned int status;  ///< Nowy status, który zaraz zostanie ustawiony. -1 oznacza brak zmiany.
 
       private:
-        char * _chInfo;    ///< Nowy opis statusu, który zaraz zostanie ustawiony. 0 oznacza brak zmiany.
+        char * _chInfo;       ///< Nowy opis statusu, który zaraz zostanie ustawiony. 0 oznacza brak zmiany.
         Stamina::String _info;
       };
 
+    public:
       /**
        * Sprawdza czy kontakt jest ignorowany.
        * 
@@ -95,12 +95,13 @@ namespace Konnekt {
 
       /** 
        * Zwraca ID kontaktu.
-       * Je¿eli @a net bêdzie ustawiony na NET_NONE w UID mo¿na przekazaæ (tekstem) ID kontaktu. 
+       * Je¿eli @a net bêdzie ustawiony na Net::none w UID mo¿na przekazaæ (tekstem) ID kontaktu. 
        * Je¿eli kontakt o danym ID istnieje, ID zostanie zwrócone. Funkcjonalnoœæ ta mo¿e s³u¿yæ g³ównie do 
        * "przemycania" bezpoœrednich identyfikatorów kontaktów do f-cji które przyjmuj¹ tylko wartoœci net i uid.
        * 
        * @param p1 (int) net
        * @param p2 (char*) UID
+       *
        * @return (int) ID
        */
       static const tIMCid imcFindContact = 200;
@@ -149,7 +150,7 @@ namespace Konnekt {
 
       /** 
        * Kontakt zosta³ zmieniony.
-       * Komunikat powinien byæ wysy³any @b tylko w sytuacji zmiany #CNT_UID, #CNT_NET, lub zaraz po dodaniu!
+       * Komunikat powinien byæ wysy³any @b tylko w sytuacji zmiany Contact::colUid, Contact::colNet, lub zaraz po dodaniu!
        * Do wszystkich wtyczek z typem #IMT_CONTACT zostanie rozes³ane #imContactChanged, lub #imContactAdd.
        * Nie ma ju¿ potrzeby wysy³ania #IMI_REFRESH_CNT
        * 
@@ -227,6 +228,7 @@ namespace Konnekt {
       /**
        * Kontakt jest w trakcie tworzenia (które mo¿e zostaæ ew. przerwane)
        * Parametry kontaktu nie s¹ jeszcze ustalone.
+       *
        * @param p1 (int) ID kontaktu
        */
       static const tIMCid imContactAdding = IM_BASE + 4004;

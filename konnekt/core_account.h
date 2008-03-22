@@ -4,14 +4,12 @@ namespace Konnekt {
   using namespace Stamina;
 
   typedef unsigned int tAccountId;
-
   const static tCntId accountNotExist = (tAccountId) -1;
 
   class Account {
   public:
     class IM {
     public:
-
       /** 
        * Dodaje konto.
        * 
@@ -31,7 +29,7 @@ namespace Konnekt {
 
       /** 
        * Konto zosta³o zmienione.
-       * Komunikat powinien byæ wysy³any w sytuacji zmiany #ACC_UID.
+       * Komunikat powinien byæ wysy³any w sytuacji zmiany colUid.
        * 
        * @param p1 (tAccountId) ID konta.
        */
@@ -39,11 +37,12 @@ namespace Konnekt {
 
       /** 
        * Zwraca ID kontaktu.
-       * Je¿eli @a net bêdzie ustawiony na NET_ALL w UID mo¿na przekazaæ nazwe konta.
+       * Je¿eli @a net bêdzie ustawiony na Net::all w UID mo¿na przekazaæ nazwe konta.
        * Je¿eli konto o danym ID istnieje, ID zostanie zwrócone.
        * 
        * @param p1 (int) net
        * @param p2 (char*) UID
+       *
        * @return (tAccountId) ID
        */
       static const tIMCid imcFindAccount = 364;

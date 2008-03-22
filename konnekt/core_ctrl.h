@@ -189,7 +189,7 @@ namespace Konnekt {
      * Podczas zamykania (w IM_END) nie powinny byæ wywo³ywane procedury APC ani
      * prze³¹czanie w¹tków...
      * Generalnie, je¿eli musisz czekaæ na coœ w g³ównym w¹tku, u¿ywaj
-     * MsgWaitForMultipleObjectsEx w po³¹czeniu z Ctrl->WMProcess, które
+     * MsgWaitForMultipleObjectsEx w po³¹czeniu z Controler::WMProcess(), które
      * przegl¹da kolejkê oczekuj¹cych wiadomoœci w aktualnym w¹tku.
      */
     virtual int __stdcall Sleep(unsigned int time) = 0;
