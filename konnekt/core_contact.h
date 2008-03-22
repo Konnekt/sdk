@@ -12,6 +12,270 @@ namespace Konnekt {
 
   class Contact {
   public:
+    class IM {
+    public:
+
+      /** 
+       * Klasa informuj¹ca o zmianach dotycz¹cych kontaktu.
+       */
+      class CntChanged: public sIMessage_base {
+      public:
+        /**
+        * Co zosta³o zmienione.
+        */
+        enum enChanged {
+          chNone = 0,
+          chNet = 1,
+          chUid = 2,
+          chGroup = 4
+        };
+
+      public:
+        CntChanged(tCntId cntID): cntID(cntID), changed(chNone), oldNet(Net::none), oldUID(0) {
+          id = imContactChanged;
+          s_size = sizeof(*this);
+        }
+
+      public:
+        tCntId cntID; ///< ID kontaktu
+        enChanged changed; ///< Poprzednia wartoœæ net tego kontaktu
+        unsigned int oldNet; ///< Poprzednia wartoœæ net tego kontaktu
+        const char * oldUID; ///< Poprzednia wartoœæ UID
+      };
+
+      /** 
+       * Klasa s³u¿¹ca do zmiany statusu i opisu kontaktu.
+       */
+      class StatusChange: public sIMessage_base {
+      public:
+        const static unsigned int sizeV1 = 12;
+
+      public:
+        StatusChange(tCntId cntID, unsigned int status, const StringRef& info = StringRef()) : 
+          cntID(cntID), status(status), _info(info) {
+            this->id = imContactStatusChange;
+            _chInfo = (char*) _info.a_str();
+            s_size = sizeof(*this);
+        }
+
+      public:
+        Stamina::String getInfo() const {
+          return getObsoleteString(this->_info, this->_chInfo, this->isStructV2());
+        }
+        void setInfo(const Stamina::StringRef& info) {
+          setObsoleteString(info, this->_info, this->_chInfo, this->isStructV2());
+        }
+
+        unsigned int structSize() const {
+          return s_size;
+        }
+
+        bool isStructV2() const {
+          return structSize() >= sizeof(*this);
+        }
+
+      public:
+        tCntId cntID;   ///< ID kontaktu
+        unsigned int status;  ///< Nowy status, który zaraz zostanie ustawiony. -1 oznacza brak zmiany.
+
+      private:
+        char * _chInfo;    ///< Nowy opis statusu, który zaraz zostanie ustawiony. 0 oznacza brak zmiany.
+        Stamina::String _info;
+      };
+
+      /**
+       * Sprawdza czy kontakt jest ignorowany.
+       * 
+       * @param p1 (int) net
+       * @param p2 (char*) UID
+       * 
+       * @return true jeœli jest.
+       */
+      static const tIMCid imcContactIgnored = 310;
+
+      /** 
+       * Zwraca ID kontaktu.
+       * Je¿eli @a net bêdzie ustawiony na NET_NONE w UID mo¿na przekazaæ (tekstem) ID kontaktu. 
+       * Je¿eli kontakt o danym ID istnieje, ID zostanie zwrócone. Funkcjonalnoœæ ta mo¿e s³u¿yæ g³ównie do 
+       * "przemycania" bezpoœrednich identyfikatorów kontaktów do f-cji które przyjmuj¹ tylko wartoœci net i uid.
+       * 
+       * @param p1 (int) net
+       * @param p2 (char*) UID
+       * @return (int) ID
+       */
+      static const tIMCid imcFindContact = 200;
+
+      /**
+       * Sprawdza czy kontakt o podanym ID istnieje.
+       * @param p1 (int) ID.
+       */
+      static const tIMCid imcContactIdExist = 233;
+
+      /** 
+       * Dodaje kontakt.
+       * Po ustawieniu parametrów kontaktu, lub od razu po #imcContactAdd trzeba wys³aæ #imcContactChanged
+       * 
+       * @param p1 (int) sieæ
+       * @param p2 (int) UID
+       * 
+       * @return (int) ID nowego kontaktu
+       */
+      static const tIMCid imcContactAdd = 230;
+
+      /**
+       * Usuwa kontakt
+       * 
+       * @param p1 (int) ID
+       * @param p2 (bool) true - u¿ytkownik zostanie zapytany o zgodê.
+       */
+      static const tIMCid imcContactRemove = 231;
+
+      /**
+       * Zwraca iloœæ kontaktów.
+       * @return (int) liczba kontaktów.
+       */
+      static const tIMCid imcContactCount = 201;
+
+      /** 
+       * Sprawdza czy podany kontakt znajduje sie w grupie.
+       * 
+       * @param p1 (int) ID kontaktu.
+       * @param p2 (char*) - grupa do sprawdzenia (jeœli == 0 sprawdzi w grupie aktywnej)
+       * 
+       * @return (bool) true jeœli znajduje siê...
+       */
+
+      static const tIMCid imcContactInGroup = 305;
+
+      /** 
+       * Kontakt zosta³ zmieniony.
+       * Komunikat powinien byæ wysy³any @b tylko w sytuacji zmiany #CNT_UID, #CNT_NET, lub zaraz po dodaniu!
+       * Do wszystkich wtyczek z typem #IMT_CONTACT zostanie rozes³ane #imContactChanged, lub #imContactAdd.
+       * Nie ma ju¿ potrzeby wysy³ania #IMI_REFRESH_CNT
+       * 
+       * @param p1 ID kontaktu.
+       */
+      static const tIMCid imcContactChanged = 232;
+
+      /**
+       * Zmienia status kontaktu.
+       * @sa sIMessage_StatusChange
+       */
+      static const tIMCid imcContactSetStatus = 234;
+
+      /**
+       * @sa #imcContactIgnored
+       */
+      static const tIMCid imcContactIgnoredFind = imcContactIgnored;
+
+      /**
+       * Dodaje kontakt do listy ignorowanych.
+       * 
+       * @param p1 (int) sieæ
+       * @param p2 (char*) UID
+       */
+      static const tIMCid imcContactIgnore = 311;
+
+      /**
+       * Usuwa kontakt z listy ignorowanych.
+       * 
+       * @param p1 (int) sieæ
+       * @param p2 (char*) UID
+       */
+      static const tIMCid imcContactUnignore = 312;
+
+      /**
+       * Informacje o kontakcie @a p1 zosta³y zmienione i moga byæ np. zapisane na serwerze.
+       *
+       * @param p1 (int) ID kontaktu do wys³ania
+       * @param p2 (bool) 
+       *   - 0 - info powinno byæ wczytywane bezpoœrednio z tabeli.
+       *   - 1 - info powinno byæ ustawione jako wartoœci odpowiednich akcji w oknie z informacjami o kontakcie (u¿ywaj¹c UIActionCfgSetValue())
+       */
+      static const tIMCid imContactUpload = IM_SHARE + 4000;
+
+      /**
+       * Informacje o kontakcie @a p1 powinny zostaæ zaktualizowane (np. pobrane z serwera).
+       * 
+       * @param p1 (int) ID kontaktu do pobrania
+       * @param p2 (bool) 0 - info powinno zostaæ zapisane bezpoœrednio w tabeli. 
+       */
+      static const tIMCid imContactDownload = IM_SHARE + 4001;
+
+      /**
+       * Kontakt zaraz zostanie usuniêty.
+       *
+       * @param p1 (int) ID kontaktu
+       * @param p2 (bool) true - usuniêcie zosta³o potwierdzone przez uzytkownika.
+       */
+      static const tIMCid imContactRemove = IM_BASE + 4002;
+ 
+      /** 
+       * Kontakt zosta³ usuniety.
+       *
+       * @param p1 (int) ID kontaktu
+       * @param p2 (bool) true - usuniêcie zosta³o potwierdzone przez uzytkownika.
+       */
+      static const tIMCid imContactRemoved = IM_BASE + 4005;
+
+      /**
+       * Kontakt zosta³ dodany
+       * @param p1 (int) ID kontaktu
+       */
+      static const tIMCid imContactAdd = IM_BASE + 4003;
+
+      /**
+       * Kontakt jest w trakcie tworzenia (które mo¿e zostaæ ew. przerwane)
+       * Parametry kontaktu nie s¹ jeszcze ustalone.
+       * @param p1 (int) ID kontaktu
+       */
+      static const tIMCid imContactAdding = IM_BASE + 4004;
+
+      /** 
+       * ¯¹danie szukania kontaktu (np. w katalogu sieci)
+       * @param p1 (sCNTSEARCH *) parametry wyszukiwania
+       */
+      static const tIMCid imContactSearch = IM_BASE + 4010;
+
+      /** 
+       * Któraœ z cech kontaktu (np. UID) zosta³a zmieniona. Przesy³ane przy pomocy CntChanged. 
+       * Je¿eli przecastujesz to na sIMessage_2params to @a p1 jest ID kontaktu.
+       */
+      static const tIMCid imContactChanged = IM_BASE + 4006;
+
+      /**
+       * Status kontaktu zaraz ulegnie zmianie.
+       * @return (sIMessage_StatusChange*)
+       */
+      static const tIMCid imContactStatusChange = IM_BASE + 4011;
+
+      /** 
+       * U¿ytkownik pisze wiadomoœæ do wskazanego kontaktu. Wys³ane do interfejsu spowoduje 
+       * rozes³anie #imContactComposing do wszystkich wtyczek i je¿eli w przeci¹gu kilkunastu 
+       * sekund nie zostanie wys³ane ponownie, rozeœle #imContactComposingStop.
+       * 
+       * @param p1 (int) ID kontaktu
+       */
+      static const tIMCid imContactComposing = IM_SHARE + 4030;
+
+      /** 
+       * U¿ytkownik przesta³ pisaæ do wskazanego kontaktu.
+       * Wys³ane do interfejsu spowoduje rozes³anie do wtyczek #imContactComposingStop je¿eli w przeci¹gu
+       * ostatnich kilkunastu sekund wyst¹pi³o zdarzenie #imContactComposing z tym samym kontaktem.
+       *
+       * @param p1 (int) ID kontaktu
+       */
+      static const tIMCid imContactComposingStop = IM_SHARE + 4031;
+
+      /**
+       * Lista ignorowanych kontaktów uleg³a zmianie.
+       * 
+       * @param p1 (int) sieæ > 0 - kontakt zosta³ dodany, < 0 - usuniêty
+       * @param p2 (char*) 
+       */
+      static const tIMCid imContactIgnoreChanged = IM_BASE + 4021;
+    };
+
     enum enGender {
       genUnknown,
       genFemale,

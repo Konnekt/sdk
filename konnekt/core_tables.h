@@ -11,12 +11,11 @@
 #include "core_unique.h"
 #include "core_plugin.h"
 
-
-#define DTCFG   Konnekt::Tables::tableConfig
-#define DTCNT   Konnekt::Tables::tableContacts
-#define DTMSG   Konnekt::Tables::tableMessages
-#define DTNONE  Konnekt::Tables::tableNotFound
-
+#define DTCFG     Konnekt::Tables::tableConfig
+#define DTCNT     Konnekt::Tables::tableContacts
+#define DTMSG     Konnekt::Tables::tableMessages
+#define DTNONE    Konnekt::Tables::tableNotFound
+#define DTACCOUNT Konnekt::Tables::tableAccounts
 
 namespace Konnekt { 
 /** 
@@ -35,12 +34,13 @@ namespace Tables {
     tableContacts = 1,
     tableMessages = 2,
     tableGlobalCfg = 3,
+    tableAccounts = 4,
     tableByName = -1,
 
     dtCfg = 0,
     dtCnt = 1,
     dtMsg = 2,
-
+    dtAccount = 4,
     tableNotFound = -1
   };
 

@@ -438,6 +438,19 @@ struct sIMessage_StatusChange: public sIMessage_base {
  */
 #define IM_IGN_CHANGED          IM_BASE + 4021
 
+/**
+ * Wtyczka sieciowa musi utworzyæ now¹ instancje obs³ugi protoko³u.
+ * 
+ * @param p1 (tAccountId) Identyfikator konta.
+ */
+#define IM_ACCOUNTINSTANCE_RUN          IM_BASE + 2050
+
+/**
+ * Wtyczka sieciowa musi zamkn¹æ instancjê obs³ugi protoko³u.
+ * 
+ * @param p1 (tAccountId) Identyfikator konta.
+ */
+#define IM_ACCOUNTINSTANCE_STOP         IM_BASE + 2060
 
 /** 
  * Parametry wyszukiwania/wyniki wyszukiwania.

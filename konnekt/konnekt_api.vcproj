@@ -219,6 +219,10 @@
 			Filter="cpp;c;cxx;def;odl;idl;hpj;bat;asm"
 			>
 			<File
+				RelativePath=".\core_account.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\core_contact.cpp"
 				>
 			</File>
@@ -298,6 +302,10 @@
 			Name="Header Files"
 			Filter="h;hpp;hxx;hm;inl;inc"
 			>
+			<File
+				RelativePath=".\core_account.h"
+				>
+			</File>
 			<File
 				RelativePath=".\core_assert.h"
 				>

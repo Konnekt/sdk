@@ -16,6 +16,7 @@ namespace Konnekt {
   typedef unsigned int tIMCid;
   typedef unsigned int tIMIid;
   typedef unsigned int tCntId;
+  typedef unsigned int tAccountId;
 
   typedef char tTable;
 

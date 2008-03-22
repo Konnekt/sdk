@@ -8,7 +8,7 @@
 
 namespace Konnekt {
   Contact Contact::create(tNet net, const StringRef& uid) {
-    tCntId id = (tCntId) Ctrl->ICMessage(IMC_CNT_ADD, net, (int) uid.a_str());
+    tCntId id = (tCntId) Ctrl->ICMessage(IM::imcContactAdd, net, (int) uid.a_str());
 
     if (id == -1) {
       throw ExceptionString("Contact already exists");
@@ -22,7 +22,7 @@ namespace Konnekt {
   }
 
   Contact Contact::find(tNet net, const StringRef& uid) {
-    tCntId id = (tCntId) Ctrl->ICMessage(IMC_FINDCONTACT, net, (int) uid.a_str());
+    tCntId id = (tCntId) Ctrl->ICMessage(IM::imcFindContact, net, (int) uid.a_str());
 
     if (id == cntNotExist) {
       throw ExceptionString("Contact does not exist");
@@ -31,41 +31,41 @@ namespace Konnekt {
   }
 
   bool Contact::exists(tNet net, const StringRef& uid) {
-    return Ctrl->ICMessage(IMC_FINDCONTACT, net, (int) uid.a_str()) != cntNotExist;
+    return Ctrl->ICMessage(IM::imcFindContact, net, (int) uid.a_str()) != cntNotExist;
   }
 
   bool Contact::inGroup(const StringRef& name) const {
-    return (bool) Ctrl->ICMessage(IMC_CNT_INGROUP, getID(), (int) name.a_str());
+    return (bool) Ctrl->ICMessage(IM::imcContactInGroup, getID(), (int) name.a_str());
   }
 
   bool Contact::inActiveGroup() const {
-    return (bool) Ctrl->ICMessage(IMC_CNT_INGROUP, getID());
+    return (bool) Ctrl->ICMessage(IM::imcContactInGroup, getID());
   }
 
   bool Contact::remove(bool ask_user) {
-    return (bool) Ctrl->ICMessage(IMC_CNT_REMOVE, getID(), ask_user);
+    return (bool) Ctrl->ICMessage(IM::imcContactRemove, getID(), ask_user);
   }
 
   bool Contact::isIgnored() const {
-    return (bool) Ctrl->ICMessage(IMC_CNT_IGNORED, getNet(), (int) getUid().a_str());
+    return (bool) Ctrl->ICMessage(IM::imcContactIgnored, getNet(), (int) getUid().a_str());
   }
 
   bool Contact::exists() const {
     if (getID() == cntNotExist) {
       return false;
     }
-    return (bool) Ctrl->ICMessage(IMC_CNT_IDEXISTS, getID());
+    return (bool) Ctrl->ICMessage(IM::imcContactIdExist, getID());
   }
 
   void Contact::changed() {
-    Ctrl->ICMessage(IMC_CNT_CHANGED, getID());
+    Ctrl->ICMessage(IM::imcContactChanged, getID());
   }
 
   bool Contact::ignore() {
-    return (bool) Ctrl->ICMessage(IMC_IGN_ADD, getNet(), (int) getUid().a_str());
+    return (bool) Ctrl->ICMessage(IM::imcContactIgnore, getNet(), (int) getUid().a_str());
   }
 
   void Contact::unignore() {
-    Ctrl->ICMessage(IMC_IGN_DEL, getNet(), (int) getUid().a_str());
+    Ctrl->ICMessage(IM::imcContactUnignore, getNet(), (int) getUid().a_str());
   }
 };
