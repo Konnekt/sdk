@@ -22,14 +22,14 @@ namespace Konnekt {
         * Co zosta³o zmienione.
         */
         enum enChanged {
-          chNone = 0,
-          chNet = 1,
-          chUid = 2,
-          chGroup = 4
+          changedNone = 0,
+          changedNet = 1,
+          changedUid = 2,
+          changedGroup = 4
         };
 
       public:
-        CntChanged(tCntId cntID): cntID(cntID), changed(chNone), oldNet(Net::none), oldUID(0) {
+        CntChanged(tCntId cntID): cntID(cntID), changed(changedNone), oldNet(Net::none), oldUID(0) {
           this->id = imContactChanged;
           this->s_size = sizeof(*this);
         }
@@ -279,9 +279,9 @@ namespace Konnekt {
     };
 
     enum enGender {
-      genUnknown,
-      genFemale,
-      genMale
+      genderUnknown,
+      genderFemale,
+      genderMale
     };
 
   public:

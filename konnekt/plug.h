@@ -345,9 +345,9 @@ struct sIMessage_CntChanged: public sIMessage_base {
   union {
     ///< Oznacza co zosta³o zmienione. 
     struct {
-    unsigned net : 1;
-    unsigned uid : 1;
-    unsigned group : 1;
+      unsigned net : 1;
+      unsigned uid : 1;
+      unsigned group : 1;
     } _changed; 
     unsigned int _changed_bitmap;
   };
@@ -2281,91 +2281,7 @@ typedef unsigned int tStatus;
 // #define C_CFG_COLCOUNT      26        ///< ostatni
 
 /** @} */ // cfg_
-
-/**
- * @defgroup cnt_ Tabela Kontaktów
- * @{
- */
-
-#define CNT_UID             ((unsigned int) 0)  ///< #ctypeString UID.
-#define CNT_NET             1                   ///< #ctypeInt Sieæ.
-#define CNT_STATUS          2                   ///< #ctypeInt Status.
-#define CNT_STATUSINFO      18                  ///< #ctypeString Opis statusu.
-#define CNT_NOTIFY          3                   ///< #ctypeInt | #cflagNoSave Ikonka powiadomienia.
-#define CNT_HOST            4                   ///< #ctypeString | #cflagNoSave IP.
-#define CNT_PORT            5                   ///< #ctypeInt | #cflagNoSave Port.
-#define CNT_NAME            6                   ///< #ctypeString Imiê.
-#define CNT_SURNAME         7                   ///< #ctypeString Nazwisko.
-#define CNT_NICK            17                  ///< #ctypeString Pseudo.
-#define CNT_DISPLAY         8                   ///< #ctypeString Nazwa wyœwietlana.
-#define CNT_CELLPHONE       9                   ///< #ctypeString Komórka.
-#define CNT_PHONE           10                  ///< #ctypeString Stacjonarny.
-#define CNT_EMAIL           11                  ///< #ctypeString Email.
-#define CNT_INFO            12                  ///< #ctypeString Info.
-#define CNT_LOCALITY        13                  ///< #ctypeString Miejscowoœæ.
-#define CNT_CITY            CNT_LOCALITY
-#define CNT_COUNTRY         14                  ///< #ctypeString Kraj
-#define CNT_BORN            19                  ///< #ctypeInt Urodzony YYYYMMDD (w hexie)
-#define CNT_GENDER          20                  ///< #ctypeInt P³eæ @ref gender_
-#define CNT_CLIENT          15                  ///< #ctypeString Nazwa i wersja u¿ywanego softu.
-#define CNT_CLIENTVERSION   28                  ///< #ctypeInt Wersja Softu
-#define CNT_LASTMSG         16                  ///< #ctypeInt | #cflagNoSave ID ostatniej wiadomoœci.
-#define CNT_GROUP           21                  ///< #ctypeString Grupa do której nale¿y.
-#define CNT_ACT_PARENT      22                  ///< #ctypeInt | #cflagNoSave Parent akcji powiadomienia.
-#define CNT_ACT_ID          23                  ///< #ctypeInt | #cflagNoSave ID akcji powiadomienia.
-#define CNT_INTERNAL        24                  ///< @internal
-#define CNT_STREET          25                  ///< #ctypeString - ulica.
-#define CNT_POSTALCODE      26                  ///< #ctypeString - kod pocztowy.
-#define CNT_NOTIFY_MSG      27                  ///< #ctypeInt | #cflagNoSave ID wiadomoœci powiadomienia.
-#define CNT_LASTACTIVITY    29                  ///< #ctypeInt64 Czas ostatniej aktywnoœci.
-#define CNT_STATUS_ICON     30                  ///< #ctypeInt Identyfikator ikonki, która ma zast¹piæ ikonê statusu.
-
-
-#define CNT_MIDDLENAME      31
-#define CNT_EMAIL_MORE      32
-#define CNT_PHONE_MORE      33
-#define CNT_DESCRIPTION     34
-#define CNT_FAX             35
-#define CNT_URL             36
-#define CNT_ADDRESS_MORE    37
-#define CNT_REGION          38
-#define CNT_POBOX           39
-
-#define CNT_WORK_ORGANIZATION 50
-#define CNT_WORK_ORG_UNIT     51
-#define CNT_WORK_TITLE        52
-#define CNT_WORK_ROLE         53
-#define CNT_WORK_EMAIL        54
-#define CNT_WORK_URL          55
-#define CNT_WORK_PHONE        56
-#define CNT_WORK_FAX          57
-#define CNT_WORK_STREET       58
-#define CNT_WORK_ADDRESS_MORE 59
-#define CNT_WORK_POBOX        60
-#define CNT_WORK_POSTALCODE   61
-#define CNT_WORK_LOCALITY     62
-#define CNT_WORK_REGION       63
-#define CNT_WORK_COUNTRY      64
-#define CNT_WORK_MORE         65
-
-// 40 / 66 // ostatni
-
-#define CNTM_STATUS     ST_MASK
-#define CNTM_FLAG       0xFFFFFF00
-
-/** @} */ // cnt_
 /** @} */ // gr_cfg
-
-/** 
- * @defgroup gender_ Oznaczenie p³ci
- * @{
- */
- 
-#define GENDER_UNKNOWN  0 ///< Nieznana
-#define GENDER_FEMALE   1 ///< Kobieta
-#define GENDER_MALE     2 ///< Mê¿czyzna
-
-/** @} */ // gender_
 /** @} */ // gr_shared
 
 

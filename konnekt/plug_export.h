@@ -137,7 +137,7 @@ void WMProcess(void);
  *       // Potencjalnie niebezpieczne operacje...
  *       return 1;
  *   }
- *   if (Ctrl) Ctrl->setError(IMERROR_NORESULT);
+ *   if (Ctrl) Ctrl->setError(Konnekt::errorNoResult);
  *   // Je¿eli wiadomoœæ nie zwraca konkretnego wyniku
  *   // MUSI to zaznaczyæ!
  *   return 0;
@@ -147,10 +147,12 @@ void WMProcess(void);
  * @attention U¿ycie makra jest dozwolone tylko je¿eli nie zosta³
  * jeszcze wykonany @b ¿aden fragment kodu nale¿¹cy do wiadomoœci.
  * (powinien byæ wstawiony @b od @b razu po @b case IM_...: .
+ *
  * @attention "Prze³¹czanie" odbywa siê poprzez procedury APC (patrz: MSDN)
  * Aby nie powiesiæ ca³ego programu wszystkie zdarzenia oczekuj¹ce
  * (Sleep, Wait itp.) musz¹ byæ wykonywane w trybie Alertable
  * (SleepEx, Wait...Ex itp.), tak ¿eby procedura APC mog³a byæ wykonana ...
+ *
  * @attention Je¿eli zdaje ci siê ¿e wieszasz kolejki APC g³ównego w¹tku
  * w³¹cz Test w oknie \@Dev...
  */
@@ -158,6 +160,7 @@ void WMProcess(void);
   if (Ctrl->Is_TUS(0)) return Ctrl->RecallTS()
 /**
  * To samo co #IMESSAGE_TS tyle, ¿e bez oczekiwania na wynik.
+ *
  * @warning Opcja potencjalnie niebezpieczna. Mo¿e byæ u¿ywana tylko przy prostych
  * wiadomoœciach, najlepiej nie przechowuj¹cych w swoich parametrach @b ¿adnych
  * wskaŸników (w momencie gdy wiadomoœæ zostanie przetworzona, wskaŸniki mog¹ ju¿
@@ -172,28 +175,28 @@ void WMProcess(void);
  * @defgroup gr_cfg Korzystanie z tablic ustawieñ.
  * @{
  */
- 
+
 /**
  * Sprawdza czy @a ch nie jest == 0. Jeœli jest - zwraca pusty ci¹g znaków.
  *
- * @param ch (char *)
+ * @param ch
  */
 const char * SAFECHAR(const char * ch);
 
 /**
  * Zwraca wartoœæ tekstow¹ z tablicy kontaktów.
  * 
- * @param row (int) ID kontaktu
- * @param id  (int) ID kolumny
+ * @param row ID kontaktu
+ * @param id  ID kolumny
  * @param buff Bufor do którego ma zostaæ zapisana wartoœæ. 
  * @param size Rozmiar bufora.
  *
- * @return (const char *)
+ * @return
  * Je¿eli jako @a buff i @a size podamy 0, otrzymamy wskaŸnik do kopii wartoœci
- * przechowywanej w buforze tymczasowym (Controler::GetTempBuff). Je¿eli wczeœniej
+ * przechowywanej w buforze tymczasowym (Controler::GetTempBuff()). Je¿eli wczeœniej
  * zablokujemy tablicê, otrzymamy najprawdopodobniej wskaŸnik bezpoœredni.
  * Je¿eli @a buff bêdzie równy 0, a @a size -1, otrzymamy kopiê wartoœci
- * w œwie¿o zaalokowanej strukturze, któr¹ nale¿y zwolniæ przez Controler::free.
+ * w œwie¿o zaalokowanej strukturze, któr¹ nale¿y zwolniæ przez Controler::free().
  *
  * @sa #GETCNTCA
  */
@@ -214,31 +217,32 @@ const char * GETCNTC(int row, int id, char * buff = 0, unsigned int size = 0);
 /**
  * Zwraca wartoœæ liczbow¹ (4 bajty) z tablicy kontaktów.
  *
- * @param row (int) ID kontaktu
- * @param id  (int) ID kolumny
- *
- * @return (int)
+ * @param row ID kontaktu
+ * @param id  ID kolumny
  */
 int GETCNTI(int row, int id);
+/**
+ * @sa GETCNTI
+ */
 __int64 GETCNTI64(int row, int id);
 
 
 /**
  * Ustawia wartoœæ tekstow¹ w tablicy kontaktów.
  *
- * @param row (int) ID kontaktu
- * @param id  (int) ID kolumny
- * @param val (char*) wartoœæ do ustawienia
+ * @param row ID kontaktu
+ * @param id  ID kolumny
+ * @param val wartoœæ do ustawienia
  */
 bool SETCNTC(int row, int id, const char * val);
 
 /**
  * Ustawia wartoœæ liczbow¹ (4 bajty) w tablicy kontaktów.
  *
- * @param row (int) ID kontaktu
- * @param id  (int) ID kolumny
- * @param val (int) wartoœæ do ustawienia
- * @param mask (int) maska ustawianych bitów
+ * @param row ID kontaktu
+ * @param id  ID kolumny
+ * @param val wartoœæ do ustawienia
+ * @param mask maska ustawianych bitów
  */
 bool SETCNTI(int row, int id, int val, int mask = -1);
 bool SETCNTI64(int row, int id, __int64 val, __int64 mask = -1);
@@ -276,19 +280,18 @@ bool SETCNTI64(int row, int id, __int64 val, __int64 mask = -1);
 /**
  * Zwraca wartoœæ liczbow¹ (4 bajty) z tablicy ustawieñ.
  *
- * @param id  (int) ID kolumny
- * @return (int)
+ * @param id ID kolumny
  */
 int GETINT(int id);
 
 /**
  * Zwraca wartoœæ tekstow¹ z tablicy ustawieñ.
  *
- * @param id  (int) ID kolumny
+ * @param id   ID kolumny
  * @param buff Bufor do którego ma zostaæ zapisana wartoœæ. 
  * @param size Rozmiar bufora.
  *
- * @return (const char *)
+ * @return
  * Je¿eli jako @a buff i @a size podamy 0, otrzymamy wskaŸnik do kopii wartoœci
  * przechowywanej w buforze tymczasowym (Controler::GetTempBuff). Je¿eli wczeœniej
  * zablokujemy tablicê, otrzymamy najprawdopodobniej wskaŸnik bezpoœredni.
@@ -303,17 +306,17 @@ const char * GETSTR(int id, char * buff = 0, unsigned int size = 0);
 /**
  * Ustawia wartoœæ liczbow¹ (4 bajty) w tablicy ustawieñ.
  *
- * @param id  (int) ID kolumny
- * @param val (int) wartoœæ
- * @param mask (int) maska ustawianych bitów
+ * @param id   ID kolumny
+ * @param val  wartoœæ
+ * @param mask maska ustawianych bitów
  */
 bool SETINT(int id, int val, int mask = -1);
 
 /**
  * Ustawia wartoœæ tekstow¹ (char*) w tablicy ustawieñ.
  *
- * @param id  (int) ID kolumny
- * @param val (char*) wartoœæ
+ * @param id  ID kolumny
+ * @param val wartoœæ
  */
 bool SETSTR(int id, const char * val);
 
@@ -327,7 +330,7 @@ bool SETSTR(int id, const char * val);
 /*
  * --------------------------------------------------------------------
  */
- 
+
 /** 
  * Ta funkcja powinna byæ u¿yta w #IM_INIT.
  * Parametrami s¹ @a p1 i @a p2 przes³ane razem z #IM_INIT
