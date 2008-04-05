@@ -32,10 +32,10 @@ namespace Konnekt {
     inline IMessageDispatcher() {
       // set default values for common messages, some of them should be overriden
       setStaticValue(IM_PLUG_NETNAME, 0);
-      setStaticValue(IM_PLUG_SDKVERSION, KONNEKT_SDK_V);
+      setStaticValue(IM_PLUG_SDKVERSION, Konnekt::sdkVersion);
       setStaticValue(IM_PLUG_VERSION, 0);
-      setStaticValue(IM_PLUG_CORE_V, (int) "W98");
-      setStaticValue(IM_PLUG_UI_V, 0);
+      setStaticValue(IM_PLUG_CORE_V, Konnekt::coreVersion);
+      setStaticValue(IM_PLUG_UI_V, Konnekt::uiVersion);
     }
 
   public:

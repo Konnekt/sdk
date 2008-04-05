@@ -13,8 +13,6 @@
 #ifndef PLUGSHAREDH
 #define PLUGSHAREDH
 
-#define KONNEKT_SDK_V 2 ///< wydanie SDK
-
 #pragma pack(push, 1)
 
 
@@ -32,6 +30,8 @@ using namespace Konnekt;
   #define HINSTANCE void *
   #define HWND void *
 #endif
+
+#define KONNEKT_SDK_V Konnekt::sdkVersion ///< wydanie SDK
 
 
 #include "core_exception.h"

@@ -14,7 +14,8 @@
 #ifndef __ICONTROLLER_H__
 #define __ICONTROLLER_H__
 
-#include "Context.h"
+// #include "Context.h"
+#include "Config.h"
 
 #include "Events/IMEvent.h"
 #include "Events/ActionEvent.h"
@@ -35,16 +36,15 @@ namespace Konnekt {
     typedef SharedPtr<T> oInstance;
 
   protected:
-    inline iController() {
-      IMessageDispatcher& dispatcher = getIMessageDispatcher();
-      ActionDispatcher& action_dispatcher = getActionDispatcher();
+    inline iController(): _ctrl(0) {
+      _config.attachListeners(_imessage_dispatcher);
 
       // setting/unsetting Ctrl global pointer
-      dispatcher.connect(IM_PLUG_INIT, bind(&iController::_onPlugInit, this, _1));
-      dispatcher.connect(IM_PLUG_DEINIT, bind(&iController::_onPlugDeInit, this, _1));
+      _imessage_dispatcher.connect(IM_PLUG_INIT, bind(&iController::_onPlugInit, this, _1));
+      _imessage_dispatcher.connect(IM_PLUG_DEINIT, bind(&iController::_onPlugDeInit, this, _1));
 
       // actions subclassing
-      dispatcher.connect(IM_UI_PREPARE, bind(&ActionDispatcher::doSubclass, &action_dispatcher, _1));
+      _action_dispatcher.connect(IM_UI_PREPARE, bind(&ActionDispatcher::doSubclass, &_action_dispatcher, _1));
     }
 
   public:
@@ -56,24 +56,31 @@ namespace Konnekt {
     }
 
     /**
+     * Returns Controler tied to the plugin.
+     */
+    inline Controler* getCtrl() {
+      return _ctrl;
+    }
+
+    /**
      * Returns Config class instance.
      */
     inline Config& getConfig() {
-      return Context::getInstance()->getConfig();
+      return _config;
     }
 
     /**
      * Returns reference to IMessageDispatcher.
      */
     inline IMessageDispatcher& getIMessageDispatcher() {
-      return Context::getInstance()->getIMessageDispatcher();
+      return _imessage_dispatcher;
     }
 
     /**
      * Returns reference to IMActionDispatcher.
      */
     inline ActionDispatcher& getActionDispatcher() {
-      return Context::getInstance()->getActionDispatcher();
+      return _action_dispatcher;
     }
 
   public:
@@ -91,12 +98,20 @@ namespace Konnekt {
       return ev->getReturnValue();
     }
 
+  public:
+    inline void registerVirtualPlugin() {
+      Ctrl->IMessage(&sIMessage_plugVirtualAdd(this, &iController::dispatch));
+    }
+
   protected:
     /**
      * Plugin initialization callback
      */
     inline void _onPlugInit(IMEvent& ev) {
-      Plug_Init(ev.getP1(), ev.getP2());
+      if (!Ctrl) {
+        Plug_Init(ev.getP1(), ev.getP2());
+      }
+      _ctrl = (Controler*) ev.getP1();
       ev.setSuccess();
     }
 
@@ -104,12 +119,21 @@ namespace Konnekt {
      * Plugin deinitialization callback
      */
     inline void _onPlugDeInit(IMEvent& ev) {
-      Plug_Deinit(ev.getP1(), ev.getP2());
-      ev.setSuccess();
+      if (Ctrl == getCtrl()) {
+        Plug_Deinit(ev.getP1(), ev.getP2());
+      }
+      _ctrl = 0;
+      ev.setProcessed(true);
     }
 
   protected:
     static oInstance _instance;
+
+  protected:
+    Controler* _ctrl;
+    IMessageDispatcher _imessage_dispatcher;
+    ActionDispatcher _action_dispatcher;
+    Config _config;
   };
 
   template <class T>

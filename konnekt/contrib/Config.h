@@ -40,12 +40,7 @@ namespace Konnekt {
       }
 
     public:
-      inline Item& operator << (int value) {
-        set(value);
-        return *this;
-      }
-
-      inline Item& operator << (__int64 value) {
+      inline Item& operator << (const Item& value) {
         set(value);
         return *this;
       }
@@ -55,18 +50,9 @@ namespace Konnekt {
         return *this;
       }
 
-      inline Item& operator << (const Item& value) {
-        switch (value.getType()) {
-          case ctypeInt:
-            set(value.to_i());
-            break;
-          case ctypeInt64:
-            set(value.to_i64());
-            break;
-          case ctypeString:
-            set(value.to_s());
-            break;
-        }
+      template <typename T>
+      inline Item& operator << (T value) {
+        set(value);
         return *this;
       }
 
@@ -115,24 +101,39 @@ namespace Konnekt {
       }
 
     public:
+      inline bool set(const Item& value, tRowId row) {
+        switch (value.getType()) {
+          case ctypeInt:
+            return set(value.to_i(), row);
+          case ctypeInt64:
+            return set(value.to_i64(), row);
+          case ctypeString:
+            return set(value.to_s(), row);
+          default:
+            return false;
+        }
+        return true;
+      }
+
       inline bool set(int value, tRowId row) {
         return Ctrl->DTsetInt(_table, row, _col, value);
       }
-      inline bool set(int value) {
-        return set(value, getRow());
-      }
-
       inline bool set(__int64 value, tRowId row) {
         return Ctrl->DTsetInt64(_table, row, _col, value);
       }
-      inline bool set(__int64 value) {
-        return set(value, getRow());
-      }
-
       inline bool set(const StringRef& value, tRowId row) {
         return Ctrl->DTsetStr(_table, row, _col, value.a_str());
       }
+
+      inline bool set(const Item& value) {
+        return set(value, getRow());
+      }
       inline bool set(const StringRef& value) {
+        return set(value, getRow());
+      }
+
+      template <typename T>
+      inline bool set(T value) {
         return set(value, getRow());
       }
 
@@ -141,24 +142,6 @@ namespace Konnekt {
       tColId _col;
       tRowId _row;
     };
-
-  public:
-    typedef std::deque<sIMessage_setColumn*> tColumns;
-
-  public:
-    /**
-     * Creates new instance of Config class with column registration listeners attached.
-     */
-    inline Config(IMessageDispatcher& dispatcher) {
-      attachListeners(dispatcher);
-    }
-    inline Config() { }
-
-    inline ~Config() { 
-      for (tColumns::iterator it = _cols.begin(); it != _cols.end(); it++) {
-        delete *it;
-      }
-    }
 
   public:
     /**
@@ -187,6 +170,24 @@ namespace Konnekt {
      */
     static Item get(tColId col, tCntId cnt) {
       return get(tableContacts, col, cnt);
+    }
+
+  public:
+    typedef std::deque<sIMessage_setColumn*> tColumns;
+
+  public:
+    /**
+     * Creates new instance of Config class with column registration listeners attached.
+     */
+    inline Config(IMessageDispatcher& dispatcher) {
+      attachListeners(dispatcher);
+    }
+    inline Config() { }
+
+    inline ~Config() { 
+      for (tColumns::iterator it = _cols.begin(); it != _cols.end(); ++it) {
+        delete *it;
+      }
     }
 
   public:
@@ -224,11 +225,11 @@ namespace Konnekt {
      * @param table Table id to reset
      */
     inline void resetColumns(tTable table) {
-      int count = Ctrl->DTgetCount(table);
-      if (!count || _cols.empty()) {
+      int count = 0;
+      if (_cols.empty() || !(count = Ctrl->DTgetCount(table))) {
         return;
       }
-      for (tColumns::iterator it = _cols.begin(); it != _cols.end(); it++) {
+      for (tColumns::iterator it = _cols.begin(); it != _cols.end(); ++it) {
         if ((*it)->_table == table) {
           for (int i = 0; i < count; i++) {
             _resetColumn(*it, i);
@@ -246,7 +247,7 @@ namespace Konnekt {
      * @param an      sUIAction if applicable
      */
     inline void resetColumn(tTable table, tColId id, tRowId row = 0, sUIAction* an = 0) {
-      for (tColumns::iterator it = _cols.begin(); it != _cols.end(); it++) {
+      for (tColumns::iterator it = _cols.begin(); it != _cols.end(); ++it) {
         if ((*it)->_table == table && (*it)->_id == id) {
           _resetColumn(*it, row, an); break;
         }
@@ -287,7 +288,7 @@ namespace Konnekt {
      * Bulk columns registration
      */
     inline void _registerColumns(IMEvent& ev) {
-      for (tColumns::iterator it = _cols.begin(); it != _cols.end(); it++) {
+      for (tColumns::iterator it = _cols.begin(); it != _cols.end(); ++it) {
         Ctrl->IMessage(*it);
       }
       ev.setSuccess();
@@ -297,7 +298,7 @@ namespace Konnekt {
     tColumns _cols;
   };
 
-  /// smart pointer type
+  /// smart pointer
   typedef SharedPtr<Config> oConfig;
 }
 

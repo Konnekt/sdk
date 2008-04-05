@@ -184,7 +184,7 @@ namespace Konnekt {
      * @return true if the given action is subclassed
      */
     inline bool isSublassed(int id, int parent) const {
-      for (tSubclassed::const_iterator it = _subclassed.begin(); it != _subclassed.end(); it++) {
+      for (tSubclassed::const_iterator it = _subclassed.begin(); it != _subclassed.end(); ++it) {
         if (it->getID() == id && it->getParent() == parent) return true;
       }
       return false;
@@ -199,7 +199,7 @@ namespace Konnekt {
      * @return reference to SubclassInfo
      */
     inline SubclassInfo& getSublassInfo(int id, int parent) {
-      for (tSubclassed::iterator it = _subclassed.begin(); it != _subclassed.end(); it++) {
+      for (tSubclassed::iterator it = _subclassed.begin(); it != _subclassed.end(); ++it) {
         if (it->getID() == id && it->getParent() == parent) return *it;
       }
       throw NotSubclassedException();
@@ -244,7 +244,7 @@ namespace Konnekt {
      * Subclasses all unprocessed/deferred actions
      */
     inline void doSubclass(IMEvent& ev) {
-      for (tSubclassed::iterator it = _subclassed.begin(); it != _subclassed.end(); it++) {
+      for (tSubclassed::iterator it = _subclassed.begin(); it != _subclassed.end(); ++it) {
         it->subclass();
       }
     }

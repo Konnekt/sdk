@@ -136,13 +136,6 @@ namespace Konnekt {
 
   protected:
     /**
-     * Sets action dispatcher for this event.
-     */
-    inline void setDispatcher(ActionDispatcher& dispatcher) {
-      _dispatcher = dispatcher;
-    }
-
-    /**
      * Sets pointer to sUIActionNotify structure.
      */
     inline void setActionNotify(sUIActionNotify* an) {

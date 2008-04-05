@@ -55,7 +55,7 @@ namespace Konnekt {
 
   public:
     inline ~EventDispatcher() {
-      for (tListeners::iterator it = _listeners.begin(); it != _listeners.end(); it++) {
+      for (tListeners::iterator it = _listeners.begin(); it != _listeners.end(); ++it) {
         delete it->second;
       }
     }

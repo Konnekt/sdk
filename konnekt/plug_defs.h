@@ -10,6 +10,10 @@ namespace Konnekt {
   const Stamina::ModuleVersion apiVersion = Stamina::ModuleVersion(Stamina::versionAPI, "KonnektAPI", Stamina::Version(3,0,0,0));
   STAMINA_REGISTER_VERSION(Konnekt, apiVersion);
 
+  const unsigned int sdkVersion = 3;
+  const unsigned int coreVersion = 0;
+  const unsigned int uiVersion = (int) "W98";
+
   class Controler;
 
   typedef unsigned int tIMid;
