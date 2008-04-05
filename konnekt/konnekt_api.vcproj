@@ -272,13 +272,6 @@
 							Name="VCCLCompilerTool"
 						/>
 					</FileConfiguration>
-					<FileConfiguration
-						Name="TeamBuild Debug|Win32"
-						>
-						<Tool
-							Name="VCCLCompilerTool"
-						/>
-					</FileConfiguration>
 				</File>
 			</Filter>
 			<Filter
@@ -348,6 +341,10 @@
 			</File>
 			<File
 				RelativePath=".\core_tools.h"
+				>
+			</File>
+			<File
+				RelativePath=".\core_uid.h"
 				>
 			</File>
 			<File

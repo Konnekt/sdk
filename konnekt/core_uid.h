@@ -15,6 +15,8 @@
 #define __UID_H__
 
 namespace Konnekt {
+  using namespace Stamina;
+
   /**
    *
    */
@@ -24,7 +26,10 @@ namespace Konnekt {
     virtual String toString() const = 0;
   };
 
-  class oUID : SharedPtr<iUID> {
+  /**
+   *
+   */
+  class oUID : public SharedPtr<iUID> {
   public:
     inline bool operator == (const oUID& b) const {
       return get()->equal(b);
@@ -47,7 +52,7 @@ namespace Konnekt {
 
   public:
     inline bool equal(const oUID& b) const {
-      return _uid == b.toString();
+      return _uid == b->toString();
     }
     inline String toString() const {
       return _uid;
