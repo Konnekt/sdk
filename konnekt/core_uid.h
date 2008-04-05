@@ -18,20 +18,25 @@ namespace Konnekt {
   /**
    *
    */
-  class iUID : public iSharedObject {
+  class iUID : public SharedObject<iSharedObject> {
   public:
-    inline bool operator == (const iUID& b) const {
-      return this->equal(b);
+    virtual bool equal(const class oUID& b) const = 0;
+    virtual String toString() const = 0;
+  };
+
+  class oUID : SharedPtr<iUID> {
+  public:
+    inline bool operator == (const oUID& b) const {
+      return get()->equal(b);
     }
-    inline bool operator != (const iUID& b) const {
+    inline bool operator != (const oUID& b) const {
       return !(*this == b);
     }
 
-  public:
-    virtual bool equal(const iUID& b) = 0;
-    virtual String toString() = 0;
+    inline operator String () const {
+      return get()->toString();
+    }
   };
-  typedef SharedObject<iUID> oUID;
 
   /**
    *
@@ -41,10 +46,10 @@ namespace Konnekt {
     UID(const StringRef& uid): _uid(uid) { }
 
   public:
-    inline bool equal(const iUID& b) {
+    inline bool equal(const oUID& b) const {
       return _uid == b.toString();
     }
-    inline String toString() {
+    inline String toString() const {
       return _uid;
     }
 
