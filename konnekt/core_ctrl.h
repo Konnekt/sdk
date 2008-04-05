@@ -348,9 +348,9 @@ namespace Konnekt {
     void logV(enDebugLevel level, const char* module, const char* where, const char *format, va_list p);
 
     // ----
-    int IMessage(unsigned int  id, tNet net = Net::none, enIMessageType type = imtAll, int p1 = 0, int p2 = 0);
-    int ICMessage(unsigned int  id, int p1 = 0, int p2 = 0);
-    int IMessageDirect(unsigned int  id, tPluginId plug, int p1 = 0, int p2 = 0);
+    int IMessage(tIMid id, tNet net = Net::none, enIMessageType type = imtAll, int p1 = 0, int p2 = 0);
+    int ICMessage(tIMCid id, int p1 = 0, int p2 = 0);
+    int IMessageDirect(tIMid id, tPluginId plug, int p1 = 0, int p2 = 0);
 
     int UIActionInsert(int _parent, int _id, int _pos, int _status = 0, const char * _txt = 0, int _p1 = 0, short _w = 0, short _h = 0, int _p2 = 0, int _param = 0);
 

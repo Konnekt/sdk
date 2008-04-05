@@ -47,7 +47,7 @@ namespace Konnekt {
   }
 
   bool Contact::isIgnored() const {
-    return (bool) Ctrl->ICMessage(IM::imcContactIgnored, getNet(), (int) getUid().a_str());
+    return (bool) Ctrl->ICMessage(IM::imcContactIgnored, getNet(), (int) getUid()->toString().a_str());
   }
 
   bool Contact::exists() const {
@@ -62,10 +62,10 @@ namespace Konnekt {
   }
 
   bool Contact::ignore() {
-    return (bool) Ctrl->ICMessage(IM::imcContactIgnore, getNet(), (int) getUid().a_str());
+    return (bool) Ctrl->ICMessage(IM::imcContactIgnore, getNet(), (int) getUid()->toString().a_str());
   }
 
   void Contact::unignore() {
-    Ctrl->ICMessage(IM::imcContactUnignore, getNet(), (int) getUid().a_str());
+    Ctrl->ICMessage(IM::imcContactUnignore, getNet(), (int) getUid()->toString().a_str());
   }
 };

@@ -40,16 +40,16 @@ extern "C" __declspec(dllexport) void __stdcall KonnektApiVersions(fApiVersionCo
 }
 
 
-extern inline int IMessage(unsigned int  id, tNet net, enIMessageType type, int p1, int p2) {
+extern inline int IMessage(tIMid id, tNet net, enIMessageType type, int p1, int p2) {
   return Ctrl->IMessage(id, net, type, p1, p2);
 }
 extern inline int IMessage(sIMessage_base * msg) {
   return Ctrl->IMessage(msg);
 }
-extern inline int ICMessage(tIMid  id, int p1, int p2) {
+extern inline int ICMessage(tIMCid id, int p1, int p2) {
   return Ctrl->ICMessage(id, p1, p2);
 }
-extern inline int IMessageDirect(tIMid  id, tPluginId plug, int p1, int p2) {
+extern inline int IMessageDirect(tIMid id, tPluginId plug, int p1, int p2) {
   return Ctrl->IMessageDirect(id, plug, p1, p2);
 }
 extern inline int IMessageDirect(tPluginId plug, sIMessage_base * msg) {

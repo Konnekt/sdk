@@ -22,16 +22,16 @@ Controler * Ctrl = 0;
 using namespace Konnekt;
 using Stamina::DT::OldValue;
 
-int Controler::IMessage(unsigned int id, tNet net, enIMessageType type, int p1, int p2) {
+int Controler::IMessage(tIMid id, tNet net, enIMessageType type, int p1, int p2) {
   return (this->IMessage)(&sIMessage (id, net, type, p1, p2));
 }
 int Controler::IMessage(sIMessage_base * msg) {
   return this->IMessage(msg);
 }
-int Controler::ICMessage(unsigned int id, int p1, int p2) {
+int Controler::ICMessage(tIMCid id, int p1, int p2) {
   return (this->IMessage)(&sIMessage (id, Net::none, imtNone, p1, p2));
 }
-int Controler::IMessageDirect(unsigned int id, tPluginId plug, int p1, int p2) {
+int Controler::IMessageDirect(tIMid id, tPluginId plug, int p1, int p2) {
   if (!plug) {
     plug = this->ID();
   }

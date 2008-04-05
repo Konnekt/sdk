@@ -3,6 +3,8 @@
 #include <Stamina/Time64.h>
 #include <Stamina/String.h>
 
+#include "core_uid.h"
+
 namespace Konnekt {
   using namespace Stamina;
 
@@ -193,7 +195,7 @@ namespace Konnekt {
        *   - 0 - info powinno byæ wczytywane bezpoœrednio z tabeli.
        *   - 1 - info powinno byæ ustawione jako wartoœci odpowiednich akcji w oknie z informacjami o kontakcie (u¿ywaj¹c UIActionCfgSetValue())
        */
-      static const tIMCid imContactUpload = IM_SHARE + 4000;
+      static const tIMid imContactUpload = IM_SHARE + 4000;
 
       /**
        * Informacje o kontakcie @a p1 powinny zostaæ zaktualizowane (np. pobrane z serwera).
@@ -201,7 +203,7 @@ namespace Konnekt {
        * @param p1 (int) ID kontaktu do pobrania
        * @param p2 (bool) 0 - info powinno zostaæ zapisane bezpoœrednio w tabeli. 
        */
-      static const tIMCid imContactDownload = IM_SHARE + 4001;
+      static const tIMid imContactDownload = IM_SHARE + 4001;
 
       /**
        * Kontakt zaraz zostanie usuniêty.
@@ -209,7 +211,7 @@ namespace Konnekt {
        * @param p1 (int) ID kontaktu
        * @param p2 (bool) true - usuniêcie zosta³o potwierdzone przez uzytkownika.
        */
-      static const tIMCid imContactRemove = IM_BASE + 4002;
+      static const tIMid imContactRemove = IM_BASE + 4002;
  
       /** 
        * Kontakt zosta³ usuniety.
@@ -217,13 +219,13 @@ namespace Konnekt {
        * @param p1 (int) ID kontaktu
        * @param p2 (bool) true - usuniêcie zosta³o potwierdzone przez uzytkownika.
        */
-      static const tIMCid imContactRemoved = IM_BASE + 4005;
+      static const tIMid imContactRemoved = IM_BASE + 4005;
 
       /**
        * Kontakt zosta³ dodany
        * @param p1 (int) ID kontaktu
        */
-      static const tIMCid imContactAdd = IM_BASE + 4003;
+      static const tIMid imContactAdd = IM_BASE + 4003;
 
       /**
        * Kontakt jest w trakcie tworzenia (które mo¿e zostaæ ew. przerwane)
@@ -231,25 +233,25 @@ namespace Konnekt {
        *
        * @param p1 (int) ID kontaktu
        */
-      static const tIMCid imContactAdding = IM_BASE + 4004;
+      static const tIMid imContactAdding = IM_BASE + 4004;
 
       /** 
        * ¯¹danie szukania kontaktu (np. w katalogu sieci)
        * @param p1 (sCNTSEARCH *) parametry wyszukiwania
        */
-      static const tIMCid imContactSearch = IM_BASE + 4010;
+      static const tIMid imContactSearch = IM_BASE + 4010;
 
       /** 
        * Któraœ z cech kontaktu (np. UID) zosta³a zmieniona. Przesy³ane przy pomocy CntChanged. 
        * Je¿eli przecastujesz to na sIMessage_2params to @a p1 jest ID kontaktu.
        */
-      static const tIMCid imContactChanged = IM_BASE + 4006;
+      static const tIMid imContactChanged = IM_BASE + 4006;
 
       /**
        * Status kontaktu zaraz ulegnie zmianie.
        * @return (sIMessage_StatusChange*)
        */
-      static const tIMCid imContactStatusChange = IM_BASE + 4011;
+      static const tIMid imContactStatusChange = IM_BASE + 4011;
 
       /** 
        * U¿ytkownik pisze wiadomoœæ do wskazanego kontaktu. Wys³ane do interfejsu spowoduje 
@@ -258,7 +260,7 @@ namespace Konnekt {
        * 
        * @param p1 (int) ID kontaktu
        */
-      static const tIMCid imContactComposing = IM_SHARE + 4030;
+      static const tIMid imContactComposing = IM_SHARE + 4030;
 
       /** 
        * U¿ytkownik przesta³ pisaæ do wskazanego kontaktu.
@@ -267,7 +269,7 @@ namespace Konnekt {
        *
        * @param p1 (int) ID kontaktu
        */
-      static const tIMCid imContactComposingStop = IM_SHARE + 4031;
+      static const tIMid imContactComposingStop = IM_SHARE + 4031;
 
       /**
        * Lista ignorowanych kontaktów uleg³a zmianie.
@@ -275,7 +277,17 @@ namespace Konnekt {
        * @param p1 (int) sieæ > 0 - kontakt zosta³ dodany, < 0 - usuniêty
        * @param p2 (char*) 
        */
-      static const tIMCid imContactIgnoreChanged = IM_BASE + 4021;
+      static const tIMid imContactIgnoreChanged = IM_BASE + 4021;
+
+      /**
+       * Proœba o zwrócenie wskaŸnika do obiektu oUID.
+       * 
+       * @param p1 (int) id kontaktu
+       * @param p2 (char*) uid w postaci tekstowej
+       *
+       * @return (iUID*) wskaŸnik do iUID lub 0
+       */
+      static const tIMid imGetUID = IM_BASE + 4032;
     };
 
     enum enGender {
@@ -292,16 +304,31 @@ namespace Konnekt {
       return getID();
     }
 
+    inline operator oUID() const {
+      return getUid();
+    }
+
     inline tCntId getID() const {
       return _cntId;
     }
 
   public:
-    inline String getUid() const {
+    inline String getUidString() const {
       return getString(colUid);
     }
-    inline void setUid(const StringRef& uid) {
-      setString(colUid, uid);
+
+    inline oUID getUid() const {
+      oUID uid = (iUID*) Ctrl->IMessage(IM::imGetUID, getNet(), imtProtocol, getID(), (int) getUidString().a_str());
+      if (uid.empty()) {
+        uid = new UID(getUidString());
+      }
+      return uid;
+    }
+    inline void setUid(const oUID& uid) {
+      if (uid.empty()) {
+        return;
+      }
+      setString(colUid, uid->toString());
       changed();
     }
 

@@ -63,28 +63,28 @@ namespace Konnekt {
        * Konto zosta³o dodane
        * @param p1 (tAccountId) ID konta
        */
-      static const tIMCid imAccountAdd = IM_BASE + 4020;
+      static const tIMid imAccountAdd = IM_BASE + 4020;
 
       /**
        * Konto zaraz zostanie usuniête.
        *
        * @param p1 (tAccountId) ID konta
        */
-      static const tIMCid imAccountRemove = IM_BASE + 4021;
+      static const tIMid imAccountRemove = IM_BASE + 4021;
 
       /** 
        * Konto zosta³o usuniête.
        *
        * @param p1 (tAccountId) ID konta
        */
-      static const tIMCid imAccountRemoved = IM_BASE + 4022;
+      static const tIMid imAccountRemoved = IM_BASE + 4022;
 
       /** 
        * Uid przypisany do konta zosta³ zmieniony.
         *
        * @param p1 (tAccountId) ID konta
        */
-      static const tIMCid imAccountChanged = IM_BASE + 4023;
+      static const tIMid imAccountChanged = IM_BASE + 4023;
     };
 
   public:

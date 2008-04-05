@@ -31,15 +31,22 @@ namespace Konnekt {
    */
   class oUID : public SharedPtr<iUID> {
   public:
+    oUID(iUID* obj = 0) : SharedPtr<iUID>(obj) { }
+    oUID(iUID& obj) : SharedPtr<iUID>(obj) { }
+    oUID(const SharedPtr& b) : SharedPtr<iUID>(b) { }
+
+  public:
     inline bool operator == (const oUID& b) const {
-      return get()->equal(b);
+      return (this->empty() || b.empty()) 
+        ? false
+        : get()->equal(b);
     }
     inline bool operator != (const oUID& b) const {
       return !(*this == b);
     }
 
     inline operator String () const {
-      return get()->toString();
+      return this->empty() ? String() : get()->toString();
     }
   };
 
