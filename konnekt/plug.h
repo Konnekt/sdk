@@ -814,6 +814,12 @@ struct sIMessage_plugVirtualAdd : public sIMessage_base {
   void* _proc;
   tPluginId _plugId;
 
+  template <typename T>
+  sIMessage_plugVirtualAdd(void* object, int (T::* proc)(sIMessage_base*), tPluginId plugId = pluginNotFound) : 
+    sIMessage_base(__msgID), _object(object), _proc(*((void**) &proc)), _plugId(plugId) 
+  {
+    s_size = sizeof(*this);
+  }
   sIMessage_plugVirtualAdd(void* object, void* proc, tPluginId plugId = pluginNotFound) : 
     sIMessage_base(__msgID), _object(object), _proc(proc), _plugId(plugId) 
   {
