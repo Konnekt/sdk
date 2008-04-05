@@ -89,8 +89,8 @@ namespace Konnekt {
     }
 
   public:
-    inline void registerVirtualPlugin() {
-      // Ctrl->IMessage(&sIMessage_plugVirtualAdd(this, &iController::dispatch));
+    inline tPluginId registerVirtualPlugin() {
+      return (tPluginId) Ctrl->IMessage(&sIMessage_plugVirtualAdd(this, &iController::dispatch));
     }
 
   protected:
