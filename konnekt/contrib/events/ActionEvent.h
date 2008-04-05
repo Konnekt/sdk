@@ -98,7 +98,7 @@ namespace Konnekt {
     /**
      * Returns true if given code is the same as action's.
      */
-    inline bool isCode(int code) const {
+    inline bool withCode(int code) const {
       return getCode() == code;
     }
 

@@ -22,12 +22,9 @@ using namespace Stamina;
 using namespace boost;
 
 namespace Konnekt {
-  class Config : public SharedObject<iSharedObject>, public signals::trackable {
+  class Config : public iObject, public signals::trackable {
   public:
-    /**
-     * Class version macro
-     */
-    STAMINA_OBJECT_CLASS_VERSION(Config, iSharedObject, Version(0,3,0,0));
+    STAMINA_OBJECT_CLASS_VERSION(Config, iObject, Version(0,3,0,0));
 
   public:
     class Item {
@@ -297,9 +294,6 @@ namespace Konnekt {
   protected:
     tColumns _cols;
   };
-
-  /// smart pointer
-  typedef SharedPtr<Config> oConfig;
 }
 
 #endif // __KONNEKT_CONFIG_H__

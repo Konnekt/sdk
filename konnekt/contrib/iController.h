@@ -15,6 +15,7 @@
 #define __ICONTROLLER_H__
 
 // #include "Context.h"
+#include "Singleton.h"
 #include "Config.h"
 
 #include "Events/IMEvent.h"
@@ -24,18 +25,14 @@ using namespace Stamina;
 using namespace boost;
 
 namespace Konnekt {
-  template <class T>
   class iController : public SharedObject<iSharedObject> {
   public:
     /**
      * Class version macro
      */
-    STAMINA_OBJECT_CLASS_VERSION(iController<T>, iSharedObject, Version(0,3,0,0));
+    STAMINA_OBJECT_CLASS_VERSION(iController, iSharedObject, Version(0,3,0,0));
 
   public:
-    typedef SharedPtr<T> oInstance;
-
-  protected:
     inline iController(): _ctrl(0) {
       _config.attachListeners(_imessage_dispatcher);
 
@@ -48,13 +45,6 @@ namespace Konnekt {
     }
 
   public:
-    inline static T* getInstance() {
-      if (!_instance.isValid()) {
-        _instance = new T;
-      }
-      return _instance;
-    }
-
     /**
      * Returns Controler tied to the plugin.
      */
@@ -100,7 +90,7 @@ namespace Konnekt {
 
   public:
     inline void registerVirtualPlugin() {
-      Ctrl->IMessage(&sIMessage_plugVirtualAdd(this, &iController::dispatch));
+      // Ctrl->IMessage(&sIMessage_plugVirtualAdd(this, &iController::dispatch));
     }
 
   protected:
@@ -127,17 +117,11 @@ namespace Konnekt {
     }
 
   protected:
-    static oInstance _instance;
-
-  protected:
     Controler* _ctrl;
     IMessageDispatcher _imessage_dispatcher;
     ActionDispatcher _action_dispatcher;
     Config _config;
   };
-
-  template <class T>
-  SharedPtr<T> iController<T>::_instance = 0;
 }
 
 #endif // __ICONTROLLER_H__
