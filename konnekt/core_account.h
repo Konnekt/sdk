@@ -183,6 +183,7 @@ namespace Konnekt {
     static bool exists(const StringRef& display);
 
   public:
+    const static tColId colHandler             = 2999; ///< (#ctypeInt | #cflagNoSave) @internal Handler obs³ugi konta.
     const static tColId colUid                 = (unsigned int) 0; ///< (#ctypeString) UID.
     const static tColId colPassword            = 1;  ///< (#ctypeString) Has³o.
     const static tColId colDisplay             = 2;  ///< (#ctypeString) Nazwa.
