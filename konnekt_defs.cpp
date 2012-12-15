@@ -11,11 +11,11 @@
 #include <commctrl.h>
 #include <string>
 
-#include "konnekt/plug.h"
-#include "konnekt/core_assert.h"
+#include "plug.h"
+#include "core_assert.h"
 
-#include "konnekt/ui.h"
-#include "konnekt/plug_func.h"
+#include "ui.h"
+#include "plug_func.h"
 cCtrl * Ctrl = 0;
 
 
